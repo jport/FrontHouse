@@ -1,8 +1,11 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.app.AlertDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +17,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.sql.Time;
+import java.util.Calendar;
+
 import java.util.HashSet;
+
+import javax.xml.validation.Validator;
 
 public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
@@ -82,6 +90,26 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                 }
             });
 
+            am.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean hasFocus) {
+
+                    if(!hasFocus){
+                        if(!validate(am.getText().toString())) {
+                            am.setText("");
+
+                            // --- Dialog box: FAILURE ---//
+                            AlertDialog.Builder builder = new AlertDialog.Builder(am.getContext());
+
+                            builder.setMessage("Incorrect format: (12:00-11:59)\nPlease try again");
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        }
+                    }
+                }
+            });
+
             pm.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2){
@@ -105,6 +133,82 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                     }
                 }
             });
+
+            pm.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean hasFocus) {
+
+                    if(!hasFocus){
+                        if(!validate(pm.getText().toString())) {
+                            pm.setText("");
+
+                            // --- Dialog box: FAILURE ---//
+                            AlertDialog.Builder builder = new AlertDialog.Builder(pm.getContext());
+
+                            builder.setMessage("Incorrect format: (12:00-11:59)\nPlease try again");
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        }
+                    }
+                }
+            });
+        }
+
+        boolean validate(String time){
+
+            if(time.equals("")) return true;
+            if (time.length() < 3 || time.charAt(time.length()-1) == '-') return false;
+
+            boolean hyphen = false;
+            int mid = 0;
+
+            for(int i = 0; i < time.length(); i++){
+
+                if(time.charAt(i) == '-' && !hyphen){
+                    hyphen = true;
+                    mid = i;
+                }
+                else if(time.charAt(i) == '-' && hyphen)
+                    return false;
+
+            }
+
+            if(!hyphen) return false;
+
+            String sub1 = time.substring(0,mid), sub2 = time.substring(mid+1);
+
+            Calendar cal = Calendar.getInstance();
+
+            Log.d("TIME1", "sub1 = " + sub1);
+            Log.d("TIME2", "sub2 = " + sub2);
+
+            return checkTime(sub1) && checkTime(sub2);
+        }
+
+        boolean checkTime(String time){
+
+            if(time.charAt(0) == ':' || time.length() < 4) return false;
+
+            int colon= 0;
+
+            for(int i = 0; i < time.length(); i++)
+                if(time.charAt(i) == ':')
+                    colon = i;
+
+            String hours, minutes;
+
+            hours = time.substring(0, colon);
+            minutes = time.substring(colon+1);
+
+            if(minutes.length() < 2)
+                return false;
+            if(hours.compareTo("12") > 0 || hours.compareTo("1")<0)
+                return false;
+            if(hours.compareTo("59") > 0 || hours.compareTo("00")<0)
+                return false;
+
+            return true;
         }
     }
 }
