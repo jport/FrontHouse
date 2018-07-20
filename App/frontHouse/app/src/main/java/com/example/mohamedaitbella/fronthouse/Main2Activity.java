@@ -22,10 +22,11 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onStart() {
 
-        if(userId < 1 && getIntent().getIntExtra("userId", 0) < 1){
+        /*if(userId < 1 && getIntent().getIntExtra("userId", 0) < 1){
             Log.d("STOP", "Here");
             startActivity(new Intent(this, MainActivity.class));
         }
+        */
 
         super.onStart();
     }
