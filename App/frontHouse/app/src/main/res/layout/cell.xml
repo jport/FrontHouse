@@ -62,4 +62,5 @@
         android:hint="Current status"
         app:layout_constraintLeft_toRightOf="@id/pm_button"
         app:layout_constraintTop_toBottomOf="@id/am_button" />
+
 </android.support.constraint.ConstraintLayout>
