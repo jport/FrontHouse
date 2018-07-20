@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:padding="15dp"
+    android:id="@+id/cell_layout">
+
+    <TextView
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="DOW, date"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintBottom_toTopOf="@id/am_button"
+        app:layout_constraintLeft_toLeftOf="@id/cell_layout"
+
+        />
+
+    <TextView
+        android:id="@+id/am_button"
+        android:layout_width="44dp"
+        android:layout_height="21dp"
+        android:text="AM"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/cell_layout"
+        />
+
+    <TextView
+        android:id="@+id/pm_button"
+        android:layout_width="43dp"
+        android:layout_height="19dp"
+        android:layout_toEndOf="@+id/am_button"
+        android:text="PM"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/am_button"
+        tools:layout_editor_absoluteX="0dp"
+        android:layout_marginLeft="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/cell_layout"
+        />
+
+    <TextView
+        android:id="@+id/am_shift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Current status"
+        android:layout_marginLeft="50dp"
+        app:layout_constraintTop_toBottomOf="@id/day"
+        app:layout_constraintLeft_toRightOf="@id/am_button"
+        />
+    <TextView
+        android:id="@+id/pm_shift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Current status"
+        android:layout_marginLeft="50dp"
+        app:layout_constraintTop_toBottomOf="@id/am_button"
+        app:layout_constraintLeft_toRightOf="@id/pm_button"/>
+</android.support.constraint.ConstraintLayout>
