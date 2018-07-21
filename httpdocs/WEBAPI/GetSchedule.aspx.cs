@@ -9,29 +9,30 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.IO;
 
-public partial class WISAAPI_GetAvailability : System.Web.UI.Page
+public partial class WISAAPI_GetSchedule : System.Web.UI.Page
 {
-	public struct GetAvailabilityRequest
+	public struct GetScheduleRequest
 	{
-		public int EmployeeID;
+		public int StoreID;
 	}
 
-	public struct GetAvailabilityResponse
+	public struct GetScheduleResponse
 	{
-		public List<Availability> days;
+		public List<Schedule> schedules;
 		public string error;
 	}
 
-	public struct Availability
+	public struct Schedule
 	{
-		public int AvailabilityID, Day;
-		public DateTime StartTime, EndTime;
+		public int ScheduleID, EmployeeID;
+		public String EmpFirstName, EmpLastName;
+		public DateTime StartOfShift, EndOfShift;
 	}
 
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		GetAvailabilityRequest req;
-		GetAvailabilityResponse res = new GetAvailabilityResponse();
+		GetScheduleRequest req;
+		GetScheduleResponse res = new GetScheduleResponse();
 		res.error = String.Empty;
 		
 		// 1. Deserialize the incoming Json.
@@ -53,24 +54,26 @@ public partial class WISAAPI_GetAvailability : System.Web.UI.Page
 		{
 			connection.Open();
 
-			string sql = "SELECT AvailID, EmployeeID, DayOfWeek, StartTime, EndTime FROM AvailabilityTbl WHERE EmployeeID = @EmployeeID AND Status = 1 ORDER BY DayOfWeek";
+			string sql = "SELECT s.ScheduleID,s.StartOfShift,s.EndOfShift,s.EmployeeID,e.FirstName EmpFirstName,e.LastName EmpLastName FROM Schedule s LEFT JOIN Employee e ON s.EmployeeID = e.EmployeeID WHERE s.StoreID = @StoreID AND ShiftStatus = 1";
 			SqlCommand command = new SqlCommand(sql, connection);
-			command.Parameters.Add("@EmployeeID", SqlDbType.Int);
-			command.Parameters["@EmployeeID"].Value = req.EmployeeID;
+			command.Parameters.Add("@StoreID", SqlDbType.Int);
+			command.Parameters["@StoreID"].Value = req.StoreID;
 			
-			res.days = new List<Availability>();
+			res.schedules = new List<Schedule>();
 			SqlDataReader reader = command.ExecuteReader();
 			if(reader.HasRows)
 			{
 				while(reader.Read())
 				{
-					Availability a = new Availability();
-					a.AvailabilityID = Convert.ToInt32(reader["AvailID"]);
-					a.Day = Convert.ToInt32(reader["DayOfWeek"]);
-					DateTime.TryParse(Convert.ToString(reader["StartTime"]), out a.StartTime);
-					DateTime.TryParse(Convert.ToString(reader["EndTime"]), out a.EndTime);
+					Schedule s = new Schedule();
+					s.ScheduleID = Convert.ToInt32(reader["ScheduleID"]);
+					s.EmployeeID = Convert.ToInt32(reader["EmployeeID"]);
+					s.EmpFirstName = Convert.ToString(reader["EmpFirstName"]);
+					s.EmpLastName = Convert.ToString(reader["EmpLastName"]);
+					DateTime.TryParse(Convert.ToString(reader["StartOfShift"]), out s.StartOfShift);
+					DateTime.TryParse(Convert.ToString(reader["EndOfShift"]), out s.EndOfShift);
 					
-					res.days.Add(a);
+					res.schedules.Add(s);
 				}
 			}
 			else
@@ -93,7 +96,7 @@ public partial class WISAAPI_GetAvailability : System.Web.UI.Page
 		SendResultInfoAsJson(res);
 	}
 	
-	GetAvailabilityRequest GetRequestInfo()
+	GetScheduleRequest GetRequestInfo()
 	{
 		// Get the Json from the POST.
 		string strJson = String.Empty;
@@ -105,12 +108,12 @@ public partial class WISAAPI_GetAvailability : System.Web.UI.Page
 		}
 
 		// Deserialize the Json.
-		GetAvailabilityRequest req = JsonConvert.DeserializeObject<GetAvailabilityRequest>(strJson);
+		GetScheduleRequest req = JsonConvert.DeserializeObject<GetScheduleRequest>(strJson);
 
 		return (req);
 	}
 	
-	void SendResultInfoAsJson(GetAvailabilityResponse res)
+	void SendResultInfoAsJson(GetScheduleResponse res)
 	{
 		string strJson = JsonConvert.SerializeObject(res);
 		Response.ContentType = "application/json; charset=utf-8";
