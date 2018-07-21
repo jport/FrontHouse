@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+
 import java.sql.Time;
 import java.util.Calendar;
 
@@ -28,10 +30,41 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
 
     String[] days = {"Monday", "Tuesday", "Wedsnesday", "Thusday", "Friday", "Saturday", "Sunday"};
+    String[] am_shifts = new String[7], pm_shifts = new String[7];
     HashSet<Integer> hash = new HashSet<>();
 
     public Adapter2(){
 
+    }
+
+    public Adapter2(JSONArray json){
+
+        JSONArray data = null;
+        Log.d("GET_AVAIL-", json.toString());
+        try {
+            data = json.getJSONObject(0).getJSONArray("days");
+        }catch(Exception e){
+            Log.d("BLAH", e.getMessage());
+        }
+
+        for(int i = 0; i < data.length(); i++){
+            try {
+                Log.d("GET_AVAIL-", "json.object[0] = " + data.getJSONObject(0).toString());
+                Log.d("Debug", "Start " + data.getJSONObject(i).getString("StartTime"));
+            }catch(Exception e){
+                Log.d("GET_AVAIL", e.getMessage());
+            }
+            try {
+                am_shifts[i] = data.getJSONObject(i).getString("StartTime").substring(11);
+                Log.d("AvailShift1", am_shifts[i]);
+
+                pm_shifts[i] = data.getJSONObject(i).getString("EndTime").substring(11);
+                Log.d("AvailShift2", pm_shifts[i]);
+            }
+            catch(Exception e){
+                Log.d("AvailabilityPayload", e.getMessage());
+            }
+        }
     }
 
     @NonNull
@@ -46,6 +79,11 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.day.setText(days[i]);
+
+        Log.d("OnBind", "sub1, sub2: " + am_shifts[i] + " " + pm_shifts[i]);
+        viewHolder.am.setText(am_shifts[i]);
+        viewHolder.pm.setText(pm_shifts[i]);
+        viewHolder.setup();
     }
 
     @Override
@@ -67,6 +105,9 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             shift2 = itemView.findViewById(R.id.shift2);
             am = shift1.findViewById(R.id.am);
             pm = shift2.findViewById(R.id.pm);
+        }
+
+        void setup(){
 
             am.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -96,7 +137,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
                     if(!hasFocus){
                         if(!validate(am.getText().toString())) {
-                            am.setText("");
+                            am.setText(am_shifts[getAdapterPosition()]);
 
                             // --- Dialog box: FAILURE ---//
                             AlertDialog.Builder builder = new AlertDialog.Builder(am.getContext());
@@ -105,6 +146,11 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                             AlertDialog dialog = builder.create();
                             dialog.show();
 
+                        }
+                        else {
+                            Log.d("BeforeSet", am_shifts[getAdapterPosition()]);
+                            am_shifts[getAdapterPosition()] = am.getText().toString();
+                            Log.d("AfterSet", am_shifts[getAdapterPosition()]);
                         }
                     }
                 }
@@ -149,6 +195,10 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                             AlertDialog dialog = builder.create();
                             dialog.show();
 
+                        }
+                        else {
+                            pm_shifts[getAdapterPosition()] = pm.getText().toString();
+                            Log.d("ShouldSetB", "GOT HERE");
                         }
                     }
                 }

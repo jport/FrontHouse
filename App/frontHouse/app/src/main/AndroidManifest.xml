@@ -25,11 +25,11 @@
             </intent-filter>
         </activity>
       
-        <activity android:name=".Main2Activity">
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Schedule"
+            android:theme="@style/AppTheme.NoActionBar">
       
             <intent-filter>
-                <action android:name="Main2Activity" />
+                <action android:name="Schedule" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

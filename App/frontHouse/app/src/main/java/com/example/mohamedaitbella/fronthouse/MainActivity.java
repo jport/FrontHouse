@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
          }
 
          if(userId > 0) {
-              Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+              Intent intent = new Intent(MainActivity.this, Schedule.class);
               intent.putExtra("userId", userId);
               startActivity(intent);
          }

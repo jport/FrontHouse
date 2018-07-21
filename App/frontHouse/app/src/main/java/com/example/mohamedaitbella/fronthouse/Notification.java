@@ -58,7 +58,7 @@ public class Notification extends FirebaseMessagingService {
         if(rm.getNotification() != null) {
             if(rm.getNotification().getClickAction() != null) {
                 if (rm.getNotification().getClickAction().equals("Main2Activity"))
-                    intent = new Intent(this, Main2Activity.class);
+                    intent = new Intent(this, Schedule.class);
                 else if (rm.getNotification().getClickAction().equals("MyAvailability"))
                     intent = new Intent(this, MyAvailability.class);
                 else
