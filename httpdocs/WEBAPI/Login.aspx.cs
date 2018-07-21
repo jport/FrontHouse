@@ -111,6 +111,7 @@ public partial class WISAAPI_Login : System.Web.UI.Page
 	{
 		string strJson = JsonConvert.SerializeObject(res);
 		Response.ContentType = "application/json; charset=utf-8";
+		Response.AppendHeader("Access-Control-Allow-Origin", "*");
 		Response.Write(strJson);
 		Response.End();
 	}
