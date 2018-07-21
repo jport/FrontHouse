@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>FrontHouse!</title>
+  <title>Sign up</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
   <script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-  <script src = "index.js"></script>
-
+  <script src = "SignUp.js"> </script>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -19,26 +18,37 @@
 <div class="modal-dialog text-center">
 <div class = "col-sml-8 main-section">
   <div class="modal-content">
-  <div class="col-12 user-img">
-  <img src="img/face.png">
+  <div class="col-12">
+
   </div>
     <form class="col-12">
       <div class="form-group">
-        <input type="text" class="form-control" id = "UserName" placeholder="Enter Username">
+        <input type="text" class="form-control" id = "FirstName" placeholder="Enter First name">
       </div>
       <div class="form-group">
-        <input type="password" id = "Password" class="form-control" placeholder="Enter Password">
+        <input type="text" class="form-control" id = "LastName" placeholder="Enter Last Name">
       </div>
-      <button type="submit" class"btn" id = "loginButton" onclick="doLogin();"> login</button>
+      <div class="form-group">
+        <input type="text" class="form-control" id = "Store" placeholder="Enter Store Name">
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id = "State" placeholder="Enter State">
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id = "Zip" placeholder="Enter your zip code">
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id = "StoreNumber" placeholder="Enter your store number">
+      </div>
+
+      <button type="submit" class"btn" id = "SignUp">Sign up</button>
     </form>
-    <div class="col-12 forgot">
-      <a href="http://knightfinder.com/signup.html">Sign up</a>
-    </div>
+
   </div><!---end of Modal content-->
 </div>
 </div>
 <footer class="container-fluid text-center">
-  <p>Main page Text</p>
+  <p>Footer Text</p>
 </footer>
 
 </body>
