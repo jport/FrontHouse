@@ -1,5 +1,8 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -9,51 +12,28 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
 
-public class Schedule extends AppCompatActivity {
-
+public class Schedule extends Fragment {
     JSONArray result;
     APICall apiCall = new APICall();
     String url = "http://knightfinder.com/WEBAPI/GetSchedule.aspx";
     int userId = -1;
-    private DrawerLayout drawer;
 
+    @Nullable
     @Override
-    protected void onStart() {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.schedule, container, false);
 
-        /*if(userId < 1 && getIntent().getIntExtra("userId", 0) < 1){
-            Log.d("STOP", "Here");
-            startActivity(new Intent(this, MainActivity.class));
-        }
-        */
-
-        super.onStart();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
         Log.d("Activity2", "Started");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.schedule);
-
-        //Toolbar
-        Toolbar toolbar= findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer=findViewById(R.id.drawer_Layout);
-        ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        userId = getIntent().getIntExtra("userId", 0);
 
         String payload = "";
-
-
 
         ArrayList<String> am_shifts = new ArrayList<>();
         ArrayList<String> pm_shifts = new ArrayList<>();
@@ -82,11 +62,15 @@ public class Schedule extends AppCompatActivity {
         //--------------------------------------------------------------------
         */
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        Adapter adapter = new Adapter(am_shifts, pm_shifts, days, this);
+        RecyclerView recyclerView = getActivity().findViewById(R.id.recyclerview);
+        Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getActivity());
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         Log.d("Activity2", "Recyclerview. List size = "+ am_shifts.size());
+
+
+
+        return view;
 
     }
 
@@ -101,14 +85,5 @@ public class Schedule extends AppCompatActivity {
         Log.d("fakeNews", "Finished");
     }
 
-
-    @Override
-    public void onBackPressed() {
-
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 }
+

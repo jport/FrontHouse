@@ -24,19 +24,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-      
-        <activity android:name=".Schedule"
+        <activity
+            android:name=".Schedule"
             android:theme="@style/AppTheme.NoActionBar">
-      
             <intent-filter>
                 <action android:name="Schedule" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ShiftView" />
-
         <activity android:name=".MyAvailability">
             <intent-filter>
                 <action android:name="MyAvailability" />
@@ -46,11 +43,12 @@
         </activity>
 
         <service android:name=".Notification">
-        <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT" />
-        </intent-filter>
-    </service>
-      
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".MyFragment"></activity>
     </application>
 
 </manifest>

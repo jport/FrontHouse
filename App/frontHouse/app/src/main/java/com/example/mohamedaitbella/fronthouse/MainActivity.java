@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
          }
 
          if(userId > 0) {
-              Intent intent = new Intent(MainActivity.this, Schedule.class);
+              Intent intent = new Intent(MainActivity.this, MyFragment.class);
               intent.putExtra("userId", userId);
               startActivity(intent);
          }
