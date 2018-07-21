@@ -1,12 +1,12 @@
-/*$(document).ready(function(){
+$(document).ready(function(){
 
 
   $("#SignUp").click(function()
   {
     var checker ='';
-    var a,b,c,d;
+    var a,b,c,d,e;
     a=$('#FirstName').val();
-    b=$('#lastName').val();
+    b=$('#LastName').val();
     c=$('#State').val();
     d=$('#ZipCode').val();
     e=$('#StoreNumber').val();
@@ -16,7 +16,8 @@
     }
     else
     {
-      //log in stuff here
+			signup();
+
     }
   });
 
@@ -24,7 +25,18 @@
 
 
 })
-*/
+
+
+function signup(){
+
+alert("hello!");
+
+
+
+
+
+}
+/*
 
 var urlBase = 'http://knightfinder.com/WEBAPI';
 var extension = "aspx";
@@ -68,3 +80,4 @@ function doLogin()
 
 	return false;
 }
+*/

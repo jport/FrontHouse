@@ -9,29 +9,24 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.IO;
 
-public partial class WISAAPI_SetAvailability : System.Web.UI.Page
+public partial class WISAAPI_GetStore : System.Web.UI.Page
 {
-	public struct SetAvailabilityRequest
+	public struct GetStoreRequest
 	{
-		public int EmployeeID;
-		public List<Availability> days;
+		public int StoreID;
 	}
 
-	public struct SetAvailabilityResponse
+	public struct GetStoreResponse
 	{
+		public int StoreID, StoreNumber;
+		public string Address, State, City, Zip;
 		public string error;
-	}
-
-	public struct Availability
-	{
-		public int AvailabilityID, Day;
-		public DateTime StartTime, EndTime;
 	}
 
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		SetAvailabilityRequest req;
-		SetAvailabilityResponse res = new SetAvailabilityResponse();
+		GetStoreRequest req;
+		GetStoreResponse res = new GetStoreResponse();
 		res.error = String.Empty;
 		
 		// 1. Deserialize the incoming Json.
@@ -53,22 +48,32 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		{
 			connection.Open();
 
-			string sql = "INSERT INTO AvailabilityTbl (EmployeeID, DayOfWeek, StartTime, EndTime, Status) VALUES (@EmployeeID, @DayOfWeek, @StartTime, @EndTime, 0)";
-			SqlCommand cmd = new SqlCommand(sql, connection);
-			cmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
-			cmd.Parameters.Add("@DayOfWeek", SqlDbType.Int);
-			cmd.Parameters.Add("@StartTime", SqlDbType.DateTime);
-			cmd.Parameters.Add("@EndTime", SqlDbType.DateTime);
-			cmd.Parameters["@EmployeeID"].Value = req.EmployeeID;
-
-			foreach(Availability a in req.days)
+			string getStoreInfo = "SELECT StoreID,StoreNumber,Address,State,City,Zip FROM Store WHERE StoreID = @StoreID";
+			SqlCommand getStoreInfoCommand = new SqlCommand(getStoreInfo, connection);
+			getStoreInfoCommand.Parameters.Add("@StoreID", SqlDbType.Int);
+			getStoreInfoCommand.Parameters["@StoreID"].Value = req.StoreID;
+			
+			SqlDataReader reader = getStoreInfoCommand.ExecuteReader();
+			if(!reader.HasRows)
 			{
-				cmd.Parameters["@DayOfWeek"].Value = a.Day;
-				cmd.Parameters["@StartTime"].Value = a.StartTime;
-				cmd.Parameters["@EndTime"].Value = a.EndTime;
-
-				cmd.ExecuteNonQuery();
+				res.error = "Store not found";
+				SendResultInfoAsJson(res);
+				return;
 			}
+			else
+			{
+				if(reader.Read())
+				{
+					res.Address = Convert.ToString(reader["Address"]);
+					res.State = Convert.ToString(reader["State"]);
+					res.City = Convert.ToString(reader["City"]);
+					res.Zip = Convert.ToString(reader["Zip"]);
+					res.StoreNumber = Convert.ToInt32(reader["StoreNumber"]);
+					res.StoreID = Convert.ToInt32(reader["StoreID"]);
+				}
+			}
+			
+			reader.Close();
 		}
 		catch(Exception ex)
 		{
@@ -86,7 +91,7 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		SendResultInfoAsJson(res);
 	}
 	
-	SetAvailabilityRequest GetRequestInfo()
+	GetStoreRequest GetRequestInfo()
 	{
 		// Get the Json from the POST.
 		string strJson = String.Empty;
@@ -98,12 +103,12 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		}
 
 		// Deserialize the Json.
-		SetAvailabilityRequest req = JsonConvert.DeserializeObject<SetAvailabilityRequest>(strJson);
+		GetStoreRequest req = JsonConvert.DeserializeObject<GetStoreRequest>(strJson);
 
 		return (req);
 	}
 	
-	void SendResultInfoAsJson(SetAvailabilityResponse res)
+	void SendResultInfoAsJson(GetStoreResponse res)
 	{
 		string strJson = JsonConvert.SerializeObject(res);
 		Response.ContentType = "application/json; charset=utf-8";

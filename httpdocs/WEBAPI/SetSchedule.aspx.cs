@@ -9,29 +9,29 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.IO;
 
-public partial class WISAAPI_SetAvailability : System.Web.UI.Page
+public partial class WISAAPI_SetSchedule : System.Web.UI.Page
 {
-	public struct SetAvailabilityRequest
+	public struct SetScheduleRequest
 	{
-		public int EmployeeID;
-		public List<Availability> days;
+		public int StoreID;
+		public List<Schedule> schedules;
 	}
 
-	public struct SetAvailabilityResponse
+	public struct SetScheduleResponse
 	{
 		public string error;
 	}
 
-	public struct Availability
+	public struct Schedule
 	{
-		public int AvailabilityID, Day;
-		public DateTime StartTime, EndTime;
+		public int EmployeeID;
+		public DateTime StartOfShift, EndOfShift;
 	}
 
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		SetAvailabilityRequest req;
-		SetAvailabilityResponse res = new SetAvailabilityResponse();
+		SetScheduleRequest req;
+		SetScheduleResponse res = new SetScheduleResponse();
 		res.error = String.Empty;
 		
 		// 1. Deserialize the incoming Json.
@@ -53,19 +53,19 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		{
 			connection.Open();
 
-			string sql = "INSERT INTO AvailabilityTbl (EmployeeID, DayOfWeek, StartTime, EndTime, Status) VALUES (@EmployeeID, @DayOfWeek, @StartTime, @EndTime, 0)";
+			string sql = "INSERT INTO Schedule (StoreID, StartOfShift, EndOfShift, EmployeeID, ShiftStatus) VALUES (@StoreID, @StartOfShift, @EndOfShift, @EmployeeID, 1)";
 			SqlCommand cmd = new SqlCommand(sql, connection);
+			cmd.Parameters.Add("@StoreID", SqlDbType.Int);
+			cmd.Parameters.Add("@StartOfShift", SqlDbType.DateTime);
+			cmd.Parameters.Add("@EndOfShift", SqlDbType.DateTime);
 			cmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
-			cmd.Parameters.Add("@DayOfWeek", SqlDbType.Int);
-			cmd.Parameters.Add("@StartTime", SqlDbType.DateTime);
-			cmd.Parameters.Add("@EndTime", SqlDbType.DateTime);
-			cmd.Parameters["@EmployeeID"].Value = req.EmployeeID;
-
-			foreach(Availability a in req.days)
+			cmd.Parameters["@StoreID"].Value = req.StoreID;
+			
+			foreach(Schedule s in req.schedules)
 			{
-				cmd.Parameters["@DayOfWeek"].Value = a.Day;
-				cmd.Parameters["@StartTime"].Value = a.StartTime;
-				cmd.Parameters["@EndTime"].Value = a.EndTime;
+				cmd.Parameters["@StartOfShift"].Value = s.StartOfShift;
+				cmd.Parameters["@EndOfShift"].Value = s.EndOfShift;
+				cmd.Parameters["@EmployeeID"].Value = s.EmployeeID;
 
 				cmd.ExecuteNonQuery();
 			}
@@ -86,7 +86,7 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		SendResultInfoAsJson(res);
 	}
 	
-	SetAvailabilityRequest GetRequestInfo()
+	SetScheduleRequest GetRequestInfo()
 	{
 		// Get the Json from the POST.
 		string strJson = String.Empty;
@@ -98,12 +98,12 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		}
 
 		// Deserialize the Json.
-		SetAvailabilityRequest req = JsonConvert.DeserializeObject<SetAvailabilityRequest>(strJson);
+		SetScheduleRequest req = JsonConvert.DeserializeObject<SetScheduleRequest>(strJson);
 
 		return (req);
 	}
 	
-	void SendResultInfoAsJson(SetAvailabilityResponse res)
+	void SendResultInfoAsJson(SetScheduleResponse res)
 	{
 		string strJson = JsonConvert.SerializeObject(res);
 		Response.ContentType = "application/json; charset=utf-8";
