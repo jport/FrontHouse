@@ -26,7 +26,7 @@ public class MyAvailability extends Fragment {
         View view = inflater.inflate(R.layout.my_availability, container, false);
 
 
-        submit = getActivity().findViewById(R.id.submit);
+        submit = view.findViewById(R.id.submit);
 
         submit.setEnabled(false);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +50,7 @@ public class MyAvailability extends Fragment {
             Log.d("GET AVAILABILITY", e.getMessage());
         }
 
-        RecyclerView recyclerView = getActivity().findViewById(R.id.recyclerview2);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerview2);
         Adapter2 adapter = new Adapter2(json);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

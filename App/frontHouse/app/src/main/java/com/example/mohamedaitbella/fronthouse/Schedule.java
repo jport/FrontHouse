@@ -74,12 +74,13 @@ public class Schedule extends Fragment {
         //--------------------------------------------------------------------
         */
 
-        RecyclerView recyclerView = getActivity().findViewById(R.id.recyclerview);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext());
-        if(adapter!=null){
+        if(adapter==null){
             Log.d("Activity2", "null = ");
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        Log.d("Activity2", "PAST LAYOUT_MANAGER");
         recyclerView.setAdapter(adapter);
         //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         Log.d("Activity2", "Recyclerview. List size = "+ am_shifts.size());
