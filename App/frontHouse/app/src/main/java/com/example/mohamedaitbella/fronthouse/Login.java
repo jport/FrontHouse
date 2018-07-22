@@ -2,13 +2,13 @@ package com.example.mohamedaitbella.fronthouse;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.app.AlertDialog;
@@ -29,7 +29,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     EditText userName, password, to, page;
     Button button, sending;
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login);
         userName=(EditText)findViewById(R.id.userName);
         password=(EditText)findViewById(R.id.password);
         button=(Button)findViewById(R.id.button);
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("GET_ID", "" +token );
             }
         });
+
     }
 
     public void clickMe(View view ){
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
          }
 
          if(userId > 0) {
-              Intent intent = new Intent(MainActivity.this, MyFragment.class);
+              Intent intent = new Intent(Login.this, Home.class);
               intent.putExtra("userId", userId);
               startActivity(intent);
          }
