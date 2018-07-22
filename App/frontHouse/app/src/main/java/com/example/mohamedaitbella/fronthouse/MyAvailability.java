@@ -56,8 +56,6 @@ public class MyAvailability extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         Log.d("Activity2", "Recyclerview");
 
-
-
         return view;
     }
 

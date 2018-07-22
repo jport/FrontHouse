@@ -92,7 +92,6 @@ public class Schedule extends Fragment {
             Log.d("IntentFilter", e.getMessage());
         }
 
-
         return view;
 
     }
