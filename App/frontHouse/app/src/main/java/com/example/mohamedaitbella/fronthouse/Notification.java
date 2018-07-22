@@ -57,12 +57,18 @@ public class Notification extends FirebaseMessagingService {
         // If sent from JSON and in foreground
         if(rm.getNotification() != null) {
             if(rm.getNotification().getClickAction() != null) {
-                if (rm.getNotification().getClickAction().equals("Main2Activity"))
-                    intent = new Intent(this, Schedule.class);
+                if (rm.getNotification().getClickAction().equals("Home")) {
+                    intent = new Intent(this, Home.class);
+                    if(rm.getData().get("action") == null)
+                        intent.putExtra("action", "Schedule");
+                    else
+                        intent.putExtra("action", rm.getData().get("action"));
+                }
                 else if (rm.getNotification().getClickAction().equals("MyAvailability"))
                     intent = new Intent(this, MyAvailability.class);
+
                 else
-                    intent = new Intent(this, MainActivity.class);
+                    intent = new Intent(this, Login.class);
             }
             else
                 Log.d("NOT_INENT", "Switching didn't work. Check for typos");
@@ -70,7 +76,7 @@ public class Notification extends FirebaseMessagingService {
 
         sendNotification(message, rm.getNotification().getTitle(), intent);
 
-        // Look at title to determine which page to go to
+        // Look at Extras to determine which page to go to
         // Types: Manager receives request, Worker receives responce,
     }
 

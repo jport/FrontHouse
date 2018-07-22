@@ -1,5 +1,9 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,6 +29,14 @@ public class Schedule extends Fragment {
     APICall apiCall = new APICall();
     String url = "http://knightfinder.com/WEBAPI/GetSchedule.aspx";
     int userId = -1;
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("Schedule", "Received Notification");
+        }
+    };
+
 
     @Nullable
     @Override
@@ -68,6 +80,12 @@ public class Schedule extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         Log.d("Activity2", "Recyclerview. List size = "+ am_shifts.size());
 
+
+        try {
+            getActivity().registerReceiver(broadcastReceiver, new IntentFilter("Schedule", Intent.CATEGORY_DEFAULT));
+        }catch(IntentFilter.MalformedMimeTypeException e){
+            Log.d("IntentFilter", e.getMessage());
+        }
 
 
         return view;
