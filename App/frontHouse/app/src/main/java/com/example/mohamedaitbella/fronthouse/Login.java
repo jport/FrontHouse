@@ -82,39 +82,39 @@ public class Login extends AppCompatActivity {
 
     public void clickMe(View view ){
         Log.d("CLICKME", "Started login");
-         String url = "http://knightfinder.com/WEBAPI/Login.aspx";
+        String url = "http://knightfinder.com/WEBAPI/Login.aspx";
 
-         APICall apiCall = new APICall();
-         JSONObject result;
+        APICall apiCall = new APICall();
+        JSONObject result;
 
-         try {
-              result = apiCall.execute(url, "{login:\""+userName.getText().toString()+"\",password:\""+password.getText().toString()+"\"}").get().getJSONObject(0);
-              Log.d("CHECK", "Result = " + result);
-         }catch (Exception e){
-              Log.d("Debug: API_Call", e.getMessage());
-              return;
-         }
+        try {
+             result = apiCall.execute(url, "{login:\""+userName.getText().toString()+"\",password:\""+password.getText().toString()+"\"}").get().getJSONObject(0);
+             Log.d("CHECK", "Result = " + result);
+        }catch (Exception e){
+             Log.d("Debug: API_Call", e.getMessage());
+             return;
+        }
 
-         int userId = -1;
+        int userId = -1;
 
-         try { userId = result.getInt("EmployeeID"); }
-         catch (Exception e){
-              Log.d("Debug: Get Emp ID", e.getMessage());
-              return;
-         }
+        try { userId = result.getInt("EmployeeID"); }
+        catch (Exception e){
+             Log.d("Debug: Get Emp ID", e.getMessage());
+             return;
+        }
 
-         if(userId > 0) {
-              Intent intent = new Intent(Login.this, Home.class);
-              intent.putExtra("userId", userId);
-              startActivity(intent);
-         }
-         else{
-              AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if(userId > 0) {
+             Intent intent = new Intent(Login.this, Home.class);
+             intent.putExtra("userId", userId);
+             startActivity(intent);
+        }
+        else{
+             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-              builder.setMessage("Incorrect user/password. Please try again.");
-              AlertDialog dialog = builder.create();
-              dialog.show();
-         }
+             builder.setMessage("Incorrect user/password. Please try again.");
+             AlertDialog dialog = builder.create();
+             dialog.show();
+        }
     }
 
     public void sending(View view){
