@@ -1,5 +1,6 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,7 +15,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONObject;
 
@@ -23,13 +31,12 @@ import java.io.File;
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     static final String pref = "DEFAULT";
-
+    static protected String token;
     private DrawerLayout drawer;
 
     @Override
     protected void onStart() {
         super.onStart();
-
 
         if(getIntent().getExtras() == null )
             Log.d("MY_EXTRAS", "There were no extras");
@@ -53,8 +60,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         //Toolbar
         Toolbar toolbar= findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setFocusable(true);
-        toolbar.requestFocusFromTouch();
 
         Log.d("Toolbar_Check:", toolbar.toString());
 
@@ -140,8 +145,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
-    static protected void authen(String user, String pass, Context context){
+    static protected void authen(String user, String pass, Context context, Activity main, ProgressBar load){
 
+        load.setVisibility(View.VISIBLE);
+        Log.d("PROGRESSBAR", "Passed second one");
         Log.d("AUTHEN", "getPath = " + context.getFilesDir().getPath() );
         String filepath = context.getFilesDir().getPath()+ "data/" + context.getPackageName() + "/shared_prefs/"+ Home.pref;
         Log.d("AUTHEN", "Filepath = " + filepath);
@@ -154,7 +161,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
         SharedPreferences share = context.getSharedPreferences(Home.pref, 0);
+        SharedPreferences.Editor editor = share.edit();
 
+        if(user.length()==0 || pass.length()==0){
+            editor.putInt("userId", -1);
+            editor.commit();
+            return;
+        }
 
         Log.d("AUTEHN", "Started login");
         String url = "http://knightfinder.com/WEBAPI/Login.aspx";
@@ -170,13 +183,27 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             return;
         }
 
-        SharedPreferences.Editor editor = share.edit();
 
         try {  editor.putInt("userId", result.getInt("EmployeeID")); }
         catch (Exception e){
             Log.d("Debug: Get Emp ID", e.getMessage());
             return;
         }
+
+        if(share.getInt("userId", -1) > 0){
+            final Task task =
+                    (FirebaseInstanceId.getInstance().getInstanceId());
+
+            task.addOnSuccessListener(main, new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+                    InstanceIdResult result = (InstanceIdResult)task.getResult();
+                    token = result.getToken();
+                    Log.d("GET_ID", "" +token );
+                }
+            });
+        }
+
         Log.d("EDITOR:", "Commit returned - " + editor.commit());
 
     }

@@ -2,6 +2,7 @@ package com.example.mohamedaitbella.fronthouse;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.app.AlertDialog;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,9 +35,8 @@ import java.net.URL;
 
 public class Login extends AppCompatActivity {
     EditText userName, password, to, page;
-    Button button, sending, clear;
-
-    String token;
+    Button login, clear;
+    ProgressBar load;
 
     @Override
     protected void onStart() {
@@ -46,7 +47,7 @@ public class Login extends AppCompatActivity {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) ) {
                     Log.d("LISTENER","Here");
-                    return button.callOnClick();
+                    return login.callOnClick();
                 }
                 return false;
             }
@@ -84,32 +85,28 @@ public class Login extends AppCompatActivity {
 
         userName=(EditText)findViewById(R.id.userName);
         password=(EditText)findViewById(R.id.password);
-        button=(Button)findViewById(R.id.button);
-        sending = (Button)findViewById(R.id.send);
-        to = (EditText)findViewById(R.id.to);
-        page = (EditText)findViewById(R.id.page);
+        login=(Button)findViewById(R.id.button);
+        load = findViewById(R.id.load);
 
-        final Task task =
-                (FirebaseInstanceId.getInstance().getInstanceId());
 
-        final Activity main = this;
-        task.addOnSuccessListener(main, new OnSuccessListener() {
-            @Override
-            public void onSuccess(Object o) {
-                InstanceIdResult result = (InstanceIdResult)task.getResult();
-                token = result.getToken();
-                Log.d("GET_ID", "" +token );
-            }
-        });
 
     }
 
     public void clickMe(View view ){
 
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("LOAD", "Got here");
+                load.setVisibility(View.VISIBLE);
+            }
+        });
+
         Context context = getApplicationContext();
 
-        Home.authen(userName.getText().toString(), password.getText().toString(), context);
+        Home.authen(userName.getText().toString(), password.getText().toString(), context, Login.this, load);
 
+        Log.d("MyLogin", "After authen()");
 
         SharedPreferences share = context.getSharedPreferences(Home.pref, 0);
 
@@ -117,32 +114,31 @@ public class Login extends AppCompatActivity {
         else Log.d("Login", "DAMN");
 
         if(share.getInt("userId", -1) > 0) {
-             Intent intent = new Intent(Login.this, Home.class);
-             startActivity(intent);
+            Intent intent = new Intent(Login.this, Home.class);
+            startActivity(intent);
         }
-        else{
-             AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-             builder.setMessage("Incorrect user/password. Please try again.");
-             AlertDialog dialog = builder.create();
-             dialog.show();
+            builder.setMessage("Incorrect user/password. Please try again.");
+            AlertDialog dialog = builder.create();
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialogInterface) {
+                    getCurrentFocus().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("LOAD", "Got here");
+                            load.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                }
+            });
+            dialog.show();
+
         }
     }
 
-    public void sending(View view){
-
-        Send send = new Send();
-        String url = "https://fcm.googleapis.com/fcm/send";
-
-        String payload =
-                "{\"to\":\"/topics/"
-                        +to.getText().toString()+
-                        "\",\"notification\": {\"title\": \"This is the title\",\"text\": \"Did you make it?!\",\"click_action\": \""
-                        +page.getText().toString()+
-                        "\"}}";
-
-        send.execute(url, payload , token );
-    }
 }
 
 class APICall extends AsyncTask<String, String, JSONArray> {
@@ -211,9 +207,22 @@ class APICall extends AsyncTask<String, String, JSONArray> {
 
 class Send extends AsyncTask<String, String, Boolean>{
 
-    private String key = "key=AAAAjmnq9XU:APA91bF4uWqQchNv6IkWiGyn93uwUzXjh3PaKNoYxEkAO5o9GG5I2v2f9CB7aPl7g4v2NtX5uJ4Hm397pPT5rvWIXDalow7tvEJa_lpusuXwXAIaIRToxFfJuQ6_6gCwZijxuVaHAkSgwmRFe1XX8JokYNM2sILuHQ";
+    final private String key = "key=AAAAjmnq9XU:APA91bF4uWqQchNv6IkWiGyn93uwUzXjh3PaKNoYxEkAO5o9GG5I2v2f9CB7aPl7g4v2NtX5uJ4Hm397pPT5rvWIXDalow7tvEJa_lpusuXwXAIaIRToxFfJuQ6_6gCwZijxuVaHAkSgwmRFe1XX8JokYNM2sILuHQ";
 
-    public Send(){}
+    Send(){}
+
+    static public void sending(String to, String page, String token){
+
+        Send send = new Send();
+        String url = "https://fcm.googleapis.com/fcm/send";
+
+        String payload =
+                "{\"to\":\"/topics/" +to+
+                        "\",\"notification\": {\"title\": \"This is the title\",\"text\": \"Did you make it?!\",\"click_action\": \""
+                        +page+ "\"}}";
+
+        send.execute(url, payload , token );
+    }
 
     @Override
     protected void onPreExecute(){

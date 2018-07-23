@@ -85,6 +85,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
         Log.d("OnBind", "sub1, sub2: " + am_shifts[i] + " " + pm_shifts[i]);
         viewHolder.am.setText(am_shifts[i]);
         viewHolder.pm.setText(pm_shifts[i]);
+
         viewHolder.setup();
     }
 
@@ -118,6 +119,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     Log.d("ENABLE_BUTTON", "HERE");
+                    Log.d("ENABLE_BUTTON", "itemview = " + itemView.toString());
                     if(!am.getText().equals("") && !itemView.getRootView().findViewById(R.id.submit).isEnabled()){
                         itemView.getRootView().findViewById(R.id.submit).setEnabled(true);
                     }
@@ -140,16 +142,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                     if(!hasFocus){
                         if(!validate(am.getText().toString())) {
                             am.setText(am_shifts[getAdapterPosition()]);
-
-
-                            // --- Dialog box: FAILURE ---//
-                            AlertDialog.Builder builder = new AlertDialog.Builder(am.getContext());
-
-                            builder.setMessage("Incorrect format: (12:00-11:59)\nPlease try again");
-                            dialog = builder.create();
-                            Log.d("WhichFirst", "Adapter2");
-                            dialog.show();
-
+                            am.setError("Incorrect format: (12:00-11:59)\nPlease try again");
                         }
                         else {
                             Log.d("BeforeSet", am_shifts[getAdapterPosition()]);
@@ -191,16 +184,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                     if(!hasFocus){
                         if(!validate(pm.getText().toString())) {
                             pm.setText(pm_shifts[getAdapterPosition()]);
-
-                            // --- Dialog box: FAILURE ---//
-                            AlertDialog.Builder builder = new AlertDialog.Builder(pm.getContext());
-
-                            builder.setMessage("Incorrect format: (12:00-11:59)\nPlease try again");
-                            dialog = builder.create();
-                            dialog.setCancelable(true);
-                            Log.d("WhichFirst", "Adapter2");
-                            dialog.show();
-                            dialog.onContentChanged();
+                            pm.setError("Incorrect format: (12:00-11:59)\nPlease try again");
 
                         }
                         else {

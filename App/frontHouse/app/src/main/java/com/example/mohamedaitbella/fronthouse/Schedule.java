@@ -29,7 +29,6 @@ public class Schedule extends Fragment {
     JSONArray result;
     APICall apiCall = new APICall();
     String url = "http://knightfinder.com/WEBAPI/GetSchedule.aspx";
-    int userId = -1;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
