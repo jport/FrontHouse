@@ -67,6 +67,7 @@ public class MyAvailability extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                submit.requestFocus();
                 Log.d("submitAvail", "Got here");
             }
         });

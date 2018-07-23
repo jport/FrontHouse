@@ -141,6 +141,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                         if(!validate(am.getText().toString())) {
                             am.setText(am_shifts[getAdapterPosition()]);
 
+
                             // --- Dialog box: FAILURE ---//
                             AlertDialog.Builder builder = new AlertDialog.Builder(am.getContext());
 
@@ -189,7 +190,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
                     if(!hasFocus){
                         if(!validate(pm.getText().toString())) {
-                            pm.setText("");
+                            pm.setText(pm_shifts[getAdapterPosition()]);
 
                             // --- Dialog box: FAILURE ---//
                             AlertDialog.Builder builder = new AlertDialog.Builder(pm.getContext());
@@ -211,6 +212,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             });
         }
 
+        // Validate time inputs
         boolean validate(String time){
 
             if(time.equals("")) return true;
@@ -242,6 +244,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             return checkTime(sub1) && checkTime(sub2);
         }
 
+        // Checking times
         boolean checkTime(String time){
 
             if(time.charAt(0) == ':' || time.length() < 4) return false;
@@ -254,14 +257,14 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
             String hours, minutes;
 
-            hours = time.substring(0, colon);
+            hours = (time.charAt(0) == 0)?time.substring(1,colon) : time.substring(0, colon);
             minutes = time.substring(colon+1);
 
-            if(minutes.length() < 2)
+            if(minutes.length() != 2 || hours.length()>2)
                 return false;
             if(hours.compareTo("12") > 0 || hours.compareTo("1")<0)
                 return false;
-            if(hours.compareTo("59") > 0 || hours.compareTo("00")<0)
+            if(minutes.compareTo("59") > 0 || hours.compareTo("00")<0)
                 return false;
 
             return true;
