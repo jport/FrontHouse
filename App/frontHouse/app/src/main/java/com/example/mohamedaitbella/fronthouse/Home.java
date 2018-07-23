@@ -1,7 +1,11 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,26 +16,45 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.File;
+
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+    static final String pref = "DEFAULT";
+
     private DrawerLayout drawer;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        if(getIntent().getExtras() == null )
+            Log.d("MY_EXTRAS", "There were no extras");
+        else
+            Log.d("MY_EXTRAS", "CONTAINS:" +getIntent().getExtras().keySet());
+
+        if(getApplicationContext().getSharedPreferences(Home.pref, 0).getInt("userId", -1) < 1){
+            Intent intent = new Intent(this, Login.class);
+            finish();
+            startActivity(intent);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
         Log.d("Frag", "Starts toolbar");
-/*
-        if (getIntent().getExtras() == null)
-            Log.d("Frag", "DIDN'T WORK");
-        else {
-            Log.d("Frag", "WORK!");
-            Log.d("Frag", getIntent().getExtras().toString());
-            Log.d("Frag", getIntent().getExtras().getString("action"));
-        }
-        */
+
         //Toolbar
         Toolbar toolbar= findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setFocusable(true);
+        toolbar.requestFocusFromTouch();
 
         Log.d("Toolbar_Check:", toolbar.toString());
 
@@ -42,7 +65,30 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        if(savedInstanceState==null) {
+        if(getIntent().hasExtra("action")){
+
+            Fragment page;
+            int layout;
+
+            Log.d("MY_HOME", "Caught extras");
+
+            switch ((String)getIntent().getExtras().get("action")){
+
+                case "MyAvailability":
+                    page = new MyAvailability();
+                    layout = R.id.nav_availability;
+                    break;
+                default:
+                    page = new Schedule();
+                    layout = R.id.nav_schedule;
+                    break;
+
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    page).commit();
+            navigationView.setCheckedItem(layout);
+        }
+        else if(savedInstanceState==null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new Schedule()).commit();
             navigationView.setCheckedItem(R.id.nav_schedule);
@@ -89,7 +135,49 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            finish();
             super.onBackPressed();
         }
+    }
+
+    static protected void authen(String user, String pass, Context context){
+
+        Log.d("AUTHEN", "getPath = " + context.getFilesDir().getPath() );
+        String filepath = context.getFilesDir().getPath()+ "data/" + context.getPackageName() + "/shared_prefs/"+ Home.pref;
+        Log.d("AUTHEN", "Filepath = " + filepath);
+        File f = new File(filepath );
+
+        if (f.exists())
+            Log.d("AUTHEN", "Preferences_File_Existed");
+        else{
+            Log.d("AUTHEN", "Preferences_File_Did_Not_Exist");
+        }
+
+        SharedPreferences share = context.getSharedPreferences(Home.pref, 0);
+
+
+        Log.d("AUTEHN", "Started login");
+        String url = "http://knightfinder.com/WEBAPI/Login.aspx";
+
+        APICall apiCall = new APICall();
+        JSONObject result;
+
+        try {
+            result = apiCall.execute(url, "{login:\""+user+"\",password:\""+pass+"\"}").get().getJSONObject(0);
+            Log.d("AUTHEN", "Result = " + result);
+        }catch (Exception e){
+            Log.d("Debug: API_Call", e.getMessage());
+            return;
+        }
+
+        SharedPreferences.Editor editor = share.edit();
+
+        try {  editor.putInt("userId", result.getInt("EmployeeID")); }
+        catch (Exception e){
+            Log.d("Debug: Get Emp ID", e.getMessage());
+            return;
+        }
+        Log.d("EDITOR:", "Commit returned - " + editor.commit());
+
     }
 }

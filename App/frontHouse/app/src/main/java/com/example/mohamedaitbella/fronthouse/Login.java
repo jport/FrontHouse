@@ -1,8 +1,10 @@
 package com.example.mohamedaitbella.fronthouse;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,13 +33,14 @@ import java.net.URL;
 
 public class Login extends AppCompatActivity {
     EditText userName, password, to, page;
-    Button button, sending;
+    Button button, sending, clear;
 
     String token;
 
     @Override
     protected void onStart() {
         super.onStart();
+
         password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -49,15 +52,36 @@ public class Login extends AppCompatActivity {
             }
         });
 
+    }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+        finish();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+
         FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
 
-        setContentView(R.layout.login);
+
+        clear = findViewById(R.id.clear);
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("userId").commit();
+                Log.d("Dialog", "Pasted commit");
+                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+
+                builder.setMessage("Current User has been removed.");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
         userName=(EditText)findViewById(R.id.userName);
         password=(EditText)findViewById(R.id.password);
         button=(Button)findViewById(R.id.button);
@@ -81,31 +105,19 @@ public class Login extends AppCompatActivity {
     }
 
     public void clickMe(View view ){
-        Log.d("CLICKME", "Started login");
-        String url = "http://knightfinder.com/WEBAPI/Login.aspx";
 
-        APICall apiCall = new APICall();
-        JSONObject result;
+        Context context = getApplicationContext();
 
-        try {
-             result = apiCall.execute(url, "{login:\""+userName.getText().toString()+"\",password:\""+password.getText().toString()+"\"}").get().getJSONObject(0);
-             Log.d("CHECK", "Result = " + result);
-        }catch (Exception e){
-             Log.d("Debug: API_Call", e.getMessage());
-             return;
-        }
+        Home.authen(userName.getText().toString(), password.getText().toString(), context);
 
-        int userId = -1;
 
-        try { userId = result.getInt("EmployeeID"); }
-        catch (Exception e){
-             Log.d("Debug: Get Emp ID", e.getMessage());
-             return;
-        }
+        SharedPreferences share = context.getSharedPreferences(Home.pref, 0);
 
-        if(userId > 0) {
+        if(share.contains("userId")) Log.d("Login", "got it.");
+        else Log.d("Login", "DAMN");
+
+        if(share.getInt("userId", -1) > 0) {
              Intent intent = new Intent(Login.this, Home.class);
-             intent.putExtra("userId", userId);
              startActivity(intent);
         }
         else{
@@ -151,7 +163,6 @@ class APICall extends AsyncTask<String, String, JSONArray> {
         String data = params[1];    // Data to post
 
         Log.d("INPUT CHECK", "URL:" + urlString + ", post: " + data);
-
 
         try{
             URL url = new URL(urlString);

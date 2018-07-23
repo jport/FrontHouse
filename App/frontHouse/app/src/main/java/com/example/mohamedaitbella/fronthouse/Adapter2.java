@@ -33,6 +33,8 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
     String[] am_shifts = new String[7], pm_shifts = new String[7];
     HashSet<Integer> hash = new HashSet<>();
 
+    static AlertDialog dialog;
+
     public Adapter2(){
 
     }
@@ -143,7 +145,8 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                             AlertDialog.Builder builder = new AlertDialog.Builder(am.getContext());
 
                             builder.setMessage("Incorrect format: (12:00-11:59)\nPlease try again");
-                            AlertDialog dialog = builder.create();
+                            dialog = builder.create();
+                            Log.d("WhichFirst", "Adapter2");
                             dialog.show();
 
                         }
@@ -192,8 +195,11 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                             AlertDialog.Builder builder = new AlertDialog.Builder(pm.getContext());
 
                             builder.setMessage("Incorrect format: (12:00-11:59)\nPlease try again");
-                            AlertDialog dialog = builder.create();
+                            dialog = builder.create();
+                            dialog.setCancelable(true);
+                            Log.d("WhichFirst", "Adapter2");
                             dialog.show();
+                            dialog.onContentChanged();
 
                         }
                         else {
