@@ -42,7 +42,12 @@ public partial class WISAAPI_SendRequest : System.Web.UI.Page
 			return;
 		}
 		
-		Response.Write("VALUE: " + req.ScheduleID2 + "\n");
+		if(req.RequestType <= 0 || req.RequestType > 4)
+		{
+			res.error = "Invalid request type";
+			SendResultInfoAsJson(res);
+			return;
+		}
 
 		SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
 		try
@@ -62,7 +67,7 @@ public partial class WISAAPI_SendRequest : System.Web.UI.Page
 			createReq.Parameters["@RequestType"].Value = req.RequestType;
 			createReq.Parameters["@RequestText"].Value = req.RequestText;
 			createReq.Parameters["@ScheduleID1"].Value = req.ScheduleID1;
-			createReq.Parameters["@ScheduleID2"].Value = req.ScheduleID2;
+			createReq.Parameters["@ScheduleID2"].Value = req.ScheduleID2 == 0 ? req.ScheduleID1 : req.ScheduleID2;
 			createReq.ExecuteNonQuery();
 		}
 		catch(Exception ex)
