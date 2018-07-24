@@ -1,0 +1,134 @@
+
+
+<html>
+	<head>
+		<title>New Employee Form</title>
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+		<style type="text/css">
+			body {
+				background-color: #F8F8FF;
+				margin-left: 20%;
+				margin-right: 20%;
+				border: 1px dotted gray;
+				padding: 10px 10px 10px 10px;
+				font-family: sans-serif;
+			}
+		</style>
+		
+	</head>
+	
+	<body>
+	<h1><center>Create a New Employee</center></h1>
+	
+	</br>
+	
+	<form class="col-12">
+		<h4>Employee First Name
+			<div class="form-group">
+				<input type="text" class="form-control" id = "employee_first_name" placeholder="Enter Employee First Name" size="40">
+			</div>
+		</h4>
+		
+		<h4>Employee Last Name
+			<div class="form-group">
+				<input type="text" class="form-control" id = "employee_last_name" placeholder="Enter Employee Last Name" size="40">
+			</div> 
+		</h4>
+				
+		<h4>Employee Primary Email Address
+			<div class="form-group">
+				<input type="text" class="form-control" id = "employee_email_1" placeholder="Enter PRIMARY E-MAIL" size="40">
+			</div> 
+		</h4>
+		
+		<h4>Employee Phone Number
+			<div class="form-group">
+				<input type="text" class="form-control" id = "employee_phone" placeholder="Enter Phone Number" size="40">
+			</div> 
+		</h4>
+		
+		<h4>Employee <em>UserName *</em>
+			<div class="form-group">
+				<input type="text" class="form-control" id = "employee_username" placeholder="Enter Employee UserName" size="40">
+			</div> 
+		</h4>
+		
+
+		<h4>Employee <em>Password *</em>
+			<div class="form-group">
+				<input type="password" class="form-control" id = "employee_password" placeholder="Enter Employee Password" size="40">
+			</div> 
+		</h4>
+	</form>
+	
+
+	<p>
+	
+		</br>
+		<button type="button" id="b_submit" title="Submit information to create new employee">SUBMIT</button>
+		</br>
+		</br>
+		Return to the <a href="m1test_home_1.html"
+			title="Home">FrontHouse Homepage</a>
+		</br>
+	
+	</p>
+
+	</br>	
+	
+	<script type="text/javascript">
+	
+		$(document).ready(function() {
+
+			//get storeID from login, set defaults for values
+			
+			var store_id, job_type, user_name, pass_word, first_name, last_name, email_primary, phone_number;
+			
+			$("#b_submit").click(function() {
+				//These hardcoded for now
+				//store_id = $("#").val();
+				//job_type = $("#").val();
+				user_name = $("#employee_username").val();
+				pass_word = $("#employee_password").val();
+				first_name = $("#employee_first_name").val();
+				last_name = $("#employee_last_name").val();
+				email_primary = $("#employee_email_1").val();
+				phone_number = $("#employee_phone").val();
+				
+				
+				var json_payload = 
+				{"StoreId" : 1 , "JobType" : 1, "UserName" : user_name , "Password" : pass_word , "FirstName" : first_name , "LastName" : last_name , "Email" : email_primary , "Phone" : phone_number };
+				
+				json_payload = JSON.stringify(json_payload);
+				
+				$.ajax({
+					type: 'POST',
+					url: 'http://knightfinder.com/WEBAPI/CreateEmployee.aspx',
+					data: json_payload,
+					success: function(data) {
+						if(data.EmployeeID < 1)
+						{
+							alert("error message: " + data.error);
+						}
+						else
+						{
+							alert("New Employee ID: " + data.EmployeeID + " is now in database for ");
+						}
+					},
+					error: function() {
+						alert("error message: " + data.error);
+					}
+				});
+			});
+
+		});	
+	</script>
+
+
+	</body>
+</html>
