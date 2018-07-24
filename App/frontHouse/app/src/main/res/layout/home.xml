@@ -9,6 +9,12 @@
     tools:context=".Schedule"
     tools:openDrawer="start">
 
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/load2"
+        android:indeterminate="true"
+        android:visibility="invisible"/>
 
 
     <LinearLayout
@@ -25,10 +31,6 @@
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-
-
-
 
         <FrameLayout
             android:id="@+id/fragment_container"

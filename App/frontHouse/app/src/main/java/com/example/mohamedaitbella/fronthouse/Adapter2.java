@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,14 +33,12 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
     String[] days = {"Monday", "Tuesday", "Wedsnesday", "Thusday", "Friday", "Saturday", "Sunday"};
     String[] am_shifts = new String[7], pm_shifts = new String[7];
     HashSet<Integer> hash = new HashSet<>();
+    Button submit;
 
-    static AlertDialog dialog;
 
-    public Adapter2(){
+    public Adapter2(JSONArray json, Button b){
 
-    }
-
-    public Adapter2(JSONArray json){
+        submit = b;
 
         JSONArray data = null;
         Log.d("GET_AVAIL-", json.toString());
@@ -51,7 +50,6 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
         for(int i = 0; i < data.length(); i++){
             try {
-                Log.d("GET_AVAIL-", "json.object[0] = " + data.getJSONObject(0).toString());
                 Log.d("Debug", "Start " + data.getJSONObject(i).getString("StartTime"));
             }catch(Exception e){
                 Log.d("GET_AVAIL", e.getMessage());
@@ -120,8 +118,8 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     Log.d("ENABLE_BUTTON", "HERE");
                     Log.d("ENABLE_BUTTON", "itemview = " + itemView.toString());
-                    if(!am.getText().equals("") && !itemView.getRootView().findViewById(R.id.submit).isEnabled()){
-                        itemView.getRootView().findViewById(R.id.submit).setEnabled(true);
+                    if(!am.getText().equals("") && !submit.isEnabled()){
+                        submit.setEnabled(true);
                     }
                 }
                 @Override
@@ -131,7 +129,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                     if(am.getText().toString().equals(""))
                         hash.remove(getAdapterPosition());
                     if(am.getText().toString().equals("") && hash.isEmpty())
-                        itemView.getRootView().findViewById(R.id.submit).setEnabled(false);
+                        submit.setEnabled(false);
                 }
             });
 
@@ -160,8 +158,8 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     Log.d("ENABLE_BUTTON", "HERE");
-                    if(!pm.getText().equals("") && !itemView.getRootView().findViewById(R.id.submit).isEnabled()){
-                        itemView.getRootView().findViewById(R.id.submit).setEnabled(true);
+                    if(!pm.getText().equals("") && !submit.isEnabled()){
+                       submit.setEnabled(true);
                     }
                 }
                 @Override
@@ -172,7 +170,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                     if(pm.getText().toString().equals(""))
                         hash.remove(getAdapterPosition()+getItemCount());
                     if(pm.getText().toString().equals("") && hash.isEmpty()){
-                        itemView.getRootView().findViewById(R.id.submit).setEnabled(false);
+                        submit.setEnabled(false);
                     }
                 }
             });

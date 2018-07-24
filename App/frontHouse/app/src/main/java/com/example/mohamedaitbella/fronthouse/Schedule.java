@@ -43,6 +43,9 @@ public class Schedule extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule, container, false);
 
+        Home.startLoading();
+        Home.stopLoading();
+
         Log.d("WhichFirst", "Schdule");
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);

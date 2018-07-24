@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 
@@ -23,10 +24,12 @@ public class MyAvailability extends Fragment {
     Button submit;
     RecyclerView recyclerView;
     Adapter2 adapter;
+    ProgressBar load;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_availability, container, false);
+        Home.startLoading();
 
         // Hide keyboard on switch
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
@@ -56,11 +59,12 @@ public class MyAvailability extends Fragment {
         catch (Exception e){
             Log.d("GET AVAILABILITY", e.getMessage());
         }
+        Home.stopLoading();
 
         recyclerView = view.findViewById(R.id.recyclerview2);
 
 
-        adapter = new Adapter2(json);
+        adapter = new Adapter2(json, submit);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         Log.d("Activity2", "Recyclerview");

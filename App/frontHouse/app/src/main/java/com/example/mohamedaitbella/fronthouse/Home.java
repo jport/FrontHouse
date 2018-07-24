@@ -32,7 +32,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     static final String pref = "DEFAULT";
     static protected String token;
-    private DrawerLayout drawer;
+    static private DrawerLayout drawer;
+    static ProgressBar load;
 
     @Override
     protected void onStart() {
@@ -43,6 +44,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         else
             Log.d("MY_EXTRAS", "CONTAINS:" +getIntent().getExtras().keySet());
 
+        // Stops unauthorized access to home
         if(getApplicationContext().getSharedPreferences(Home.pref, 0).getInt("userId", -1) < 1){
             Intent intent = new Intent(this, Login.class);
             finish();
@@ -54,6 +56,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
+        load = findViewById(R.id.load2);
 
         Log.d("Frag", "Starts toolbar");
 
@@ -70,12 +74,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        // Redirects if called from notification
         if(getIntent().hasExtra("action")){
 
             Fragment page;
             int layout;
-
-            Log.d("MY_HOME", "Caught extras");
 
             switch ((String)getIntent().getExtras().get("action")){
 
@@ -87,8 +91,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     page = new Schedule();
                     layout = R.id.nav_schedule;
                     break;
-
             }
+
+            // Starting loading
+            startLoading();
+
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     page).commit();
             navigationView.setCheckedItem(layout);
@@ -123,9 +130,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 Toast.makeText(this, "You clicked settings", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_Logout:
-                Toast.makeText(this, "You clicked logout", Toast.LENGTH_SHORT).show();
-
-
+                Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("userId").commit();
+                finish();
+                startActivity(new Intent(this, Login.class));
                 break;
             //
 
@@ -145,20 +153,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    // Authorizes sign in to hide results from login page
     static protected void authen(String user, String pass, Context context, Activity main, ProgressBar load){
 
         load.setVisibility(View.VISIBLE);
-        Log.d("PROGRESSBAR", "Passed second one");
-        Log.d("AUTHEN", "getPath = " + context.getFilesDir().getPath() );
-        String filepath = context.getFilesDir().getPath()+ "data/" + context.getPackageName() + "/shared_prefs/"+ Home.pref;
-        Log.d("AUTHEN", "Filepath = " + filepath);
-        File f = new File(filepath );
-
-        if (f.exists())
-            Log.d("AUTHEN", "Preferences_File_Existed");
-        else{
-            Log.d("AUTHEN", "Preferences_File_Did_Not_Exist");
-        }
 
         SharedPreferences share = context.getSharedPreferences(Home.pref, 0);
         SharedPreferences.Editor editor = share.edit();
@@ -206,5 +204,29 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         Log.d("EDITOR:", "Commit returned - " + editor.commit());
 
+    }
+
+    // Stops loading image after page has been loaded
+    public static void stopLoading(){
+
+        drawer.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("LOAD", "CLOSING, IS OPEN?: " + (load.getVisibility() == View.VISIBLE));
+                load.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+    // Starts loading, assumes view given is of Home.
+    public static void startLoading(){
+        drawer.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("LOAD", "Got here");
+                load.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }

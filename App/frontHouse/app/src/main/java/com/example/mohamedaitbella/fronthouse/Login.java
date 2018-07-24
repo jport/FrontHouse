@@ -68,21 +68,6 @@ public class Login extends AppCompatActivity {
 
         FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
 
-
-        clear = findViewById(R.id.clear);
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("userId").commit();
-                Log.d("Dialog", "Pasted commit");
-                AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
-
-                builder.setMessage("Current User has been removed.");
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
-
         userName=(EditText)findViewById(R.id.userName);
         password=(EditText)findViewById(R.id.password);
         login=(Button)findViewById(R.id.button);
@@ -97,7 +82,7 @@ public class Login extends AppCompatActivity {
         view.post(new Runnable() {
             @Override
             public void run() {
-                Log.d("LOAD", "Got here");
+                Log.d("LOAD", "OPENING");
                 load.setVisibility(View.VISIBLE);
             }
         });
@@ -128,7 +113,7 @@ public class Login extends AppCompatActivity {
                     getCurrentFocus().post(new Runnable() {
                         @Override
                         public void run() {
-                            Log.d("LOAD", "Got here");
+                            Log.d("LOAD", "CLOSING");
                             load.setVisibility(View.INVISIBLE);
                         }
                     });
