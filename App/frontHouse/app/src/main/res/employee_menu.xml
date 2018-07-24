@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_schedule"
+            android:icon="@drawable/ic_schedule"
+            android:title="Schedule"/>
+
+        <item android:id="@+id/nav_availability"
+            android:icon="@drawable/ic_availability"
+            android:title="My Availability"/>
+
+        <item android:id="@+id/nav_myinfo"
+            android:icon="@drawable/ic_myinfo"
+            android:title="My Info"/>
+
+        <item android:id="@+id/nav_Schedule"
+            android:icon="@drawable/ic_schedule"
+            android:title="Schedule"/>
+
+        <item android:id="@+id/nav_AvailabilityRequests"
+            android:icon="@drawable/ic_requests"
+            android:title="Requests"/>
+
+        <item android:id="@+id/nav_MyInfo"
+            android:icon="@drawable/ic_mmyinfo"
+            android:title="My Info"/>
+
+        <item android:id="@+id/nav_AddEmployee"
+            android:icon="@drawable/ic_addemployee"
+            android:title="Add Employees"/>
+
+
+
+
+    </group>
+
+    <item android:title="More">
+        <menu>
+
+
+            <item android:id="@+id/nav_Settings"
+                android:icon="@drawable/ic_settings"
+                android:title="Settings"/>
+            <item android:id="@+id/nav_Logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Logout"/>
+
+
+        </menu>
+    </item>
+</menu>
