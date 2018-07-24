@@ -59,15 +59,18 @@ public class MyAvailability extends Fragment {
         catch (Exception e){
             Log.d("GET AVAILABILITY", e.getMessage());
         }
-        Home.stopLoading();
 
         recyclerView = view.findViewById(R.id.recyclerview2);
 
+        Log.d("MY_TIME", "ABOUT TO START");
+        Log.d("TIME", Home.tempTime("1:00"));
 
         adapter = new Adapter2(json, submit);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         Log.d("Activity2", "Recyclerview");
+
+        Home.stopLoading();
 
         return view;
     }

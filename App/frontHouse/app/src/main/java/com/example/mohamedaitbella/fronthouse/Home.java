@@ -27,6 +27,8 @@ import com.google.firebase.iid.InstanceIdResult;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -228,5 +230,29 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 load.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    // Takes in a time and prints results of conversion attempt
+    static protected String tempTime(String time) {
+        String[] fuckarray = time.split(":", 2);
+        String newfuckthisshitnigga = fuckarray[0] + fuckarray[1];
+        int fuckinginteger = Integer.parseInt(newfuckthisshitnigga);
+        Date date = new Date();
+        try {
+            date = new SimpleDateFormat("hhmm").parse(String.format("%04d", fuckinginteger));
+        } catch (Exception e) {
+            Log.d("TIME", e.getMessage());
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+
+        /*
+        if (fuckinginteger < 1200) {
+            System.out.println(sdf.format(date));
+
+        }
+        */
+        Log.d("TIME", "Got here");
+        return sdf.format(date);
+
     }
 }
