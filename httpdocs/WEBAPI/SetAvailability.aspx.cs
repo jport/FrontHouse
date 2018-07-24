@@ -24,7 +24,7 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 
 	public struct Availability
 	{
-		public int AvailabilityID, Day;
+		public int Day;
 		public DateTime StartTime, EndTime;
 	}
 
