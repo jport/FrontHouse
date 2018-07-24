@@ -9,29 +9,23 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.IO;
 
-public partial class WISAAPI_SetAvailability : System.Web.UI.Page
+public partial class WISAAPI_CreateStore : System.Web.UI.Page
 {
-	public struct SetAvailabilityRequest
+	public struct CreateStoreRequest
 	{
-		public int EmployeeID;
-		public List<Availability> days;
+		public int StoreNumber;
+		public string StoreName, Address, State, City, Zip;
 	}
 
-	public struct SetAvailabilityResponse
+	public struct CreateStoreResponse
 	{
 		public string error;
 	}
 
-	public struct Availability
-	{
-		public int Day;
-		public DateTime StartTime, EndTime;
-	}
-
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		SetAvailabilityRequest req;
-		SetAvailabilityResponse res = new SetAvailabilityResponse();
+		CreateStoreRequest req;
+		CreateStoreResponse res = new CreateStoreResponse();
 		res.error = String.Empty;
 		
 		// 1. Deserialize the incoming Json.
@@ -53,22 +47,21 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		{
 			connection.Open();
 
-			string sql = "INSERT INTO AvailabilityTbl (EmployeeID, DayOfWeek, StartTime, EndTime, Status) VALUES (@EmployeeID, @DayOfWeek, @StartTime, @EndTime, 0)";
-			SqlCommand cmd = new SqlCommand(sql, connection);
-			cmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
-			cmd.Parameters.Add("@DayOfWeek", SqlDbType.Int);
-			cmd.Parameters.Add("@StartTime", SqlDbType.DateTime);
-			cmd.Parameters.Add("@EndTime", SqlDbType.DateTime);
-			cmd.Parameters["@EmployeeID"].Value = req.EmployeeID;
-
-			foreach(Availability a in req.days)
-			{
-				cmd.Parameters["@DayOfWeek"].Value = a.Day;
-				cmd.Parameters["@StartTime"].Value = a.StartTime;
-				cmd.Parameters["@EndTime"].Value = a.EndTime;
-
-				cmd.ExecuteNonQuery();
-			}
+			string sql = "INSERT INTO Store (StoreName, StoreNumber, Address, State, City, Zip) VALUES (@StoreName, @StoreNumber, @Address, @State, @City, @Zip)";
+			SqlCommand createStore = new SqlCommand(sql, connection);
+			createStore.Parameters.Add("@StoreName", SqlDbType.NVarChar);
+			createStore.Parameters.Add("@StoreNumber", SqlDbType.NVarChar);
+			createStore.Parameters.Add("@Address", SqlDbType.NVarChar);
+			createStore.Parameters.Add("@State", SqlDbType.NVarChar);
+			createStore.Parameters.Add("@City", SqlDbType.NVarChar);
+			createStore.Parameters.Add("@Zip", SqlDbType.NVarChar);
+			createStore.Parameters["@StoreName"].Value = req.StoreName;
+			createStore.Parameters["@StoreNumber"].Value = req.StoreNumber;
+			createStore.Parameters["@Address"].Value = req.Address;
+			createStore.Parameters["@State"].Value = req.State;
+			createStore.Parameters["@City"].Value = req.City;
+			createStore.Parameters["@Zip"].Value = req.Zip;
+			createStore.ExecuteNonQuery();
 		}
 		catch(Exception ex)
 		{
@@ -86,7 +79,7 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		SendResultInfoAsJson(res);
 	}
 	
-	SetAvailabilityRequest GetRequestInfo()
+	CreateStoreRequest GetRequestInfo()
 	{
 		// Get the Json from the POST.
 		string strJson = String.Empty;
@@ -98,12 +91,12 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		}
 
 		// Deserialize the Json.
-		SetAvailabilityRequest req = JsonConvert.DeserializeObject<SetAvailabilityRequest>(strJson);
+		CreateStoreRequest req = JsonConvert.DeserializeObject<CreateStoreRequest>(strJson);
 
 		return (req);
 	}
 	
-	void SendResultInfoAsJson(SetAvailabilityResponse res)
+	void SendResultInfoAsJson(CreateStoreResponse res)
 	{
 		string strJson = JsonConvert.SerializeObject(res);
 		Response.ContentType = "application/json; charset=utf-8";

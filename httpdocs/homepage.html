@@ -18,12 +18,23 @@ body {font-family: "Lato", sans-serif}
 <div class="w3-top">
   <div class="w3-bar w3-black w3-card">
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-    <a href="#" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+    <a href="homepage.html" class="w3-bar-item w3-button w3-padding-large">HOME</a>
     <a href="#Managers" class="w3-bar-item w3-button w3-padding-large w3-hide-small">MANAGERS</a>
     <a href="#Employees" class="w3-bar-item w3-button w3-padding-large w3-hide-small">EMPLOYEES</a>
-    <a href="#Schedule" class="w3-bar-item w3-button w3-padding-large w3-hide-small">SCHEDULE</a>
+    <a href="m1test_scheduleView_1.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">SCHEDULE</a>
+	<div class="w3-dropdown-hover w3-hide-small">
+      <button class="w3-padding-large w3-button" title="Actions">MANAGER ACTIONS<i class="fa fa-caret-down"></i></button>     
+      <div class="w3-dropdown-content w3-bar-block w3-card-4">
+		<a href="#" class="w3-bar-item w3-button w3-hover-blue"><b>Edit</b> Store Info</a>
+        <a href="#" class="w3-bar-item w3-button w3-hover-blue"><b>View</b> Current Employees</a>
+		<a href="#" class="w3-bar-item w3-button w3-hover-blue"><b>Manage</b> Schedule</a>
+        <a href="createNewEmployee.html" class="w3-bar-item w3-button w3-hover-green"><b>Create</b> Employee</a>
+		<a href="#" class="w3-bar-item w3-button w3-hover-yellow"><b>Edit</b> Employee</a>
+        <a href="#" class="w3-bar-item w3-button w3-hover-red"><b>Delete</b> Employee</a>
+      </div>
+    </div>
     <div class="w3-dropdown-hover w3-hide-small">
-      <button class="w3-padding-large w3-button" title="More">REQUESTS <i class="fa fa-caret-down"></i></button>
+      <button class="w3-padding-large w3-button" title="More">OTHER STUFF <i class="fa fa-caret-down"></i></button>     
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
         <a href="#" class="w3-bar-item w3-button">View All - MyRequests</a>
 		<a href="#" class="w3-bar-item w3-button" onclick="argTest(100,5.4)">Check Status</a>
@@ -40,15 +51,16 @@ body {font-family: "Lato", sans-serif}
 <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
   <a href="#Managers" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">MANAGERS</a>
   <a href="#Employees" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">EMPLOYEES</a>
-  <a href="#Schedule" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">SCHEDULE</a>
+  <a href="m1test_scheduleView_1.html" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">SCHEDULE</a>
   <div class="w3-dropdown-hover">
-      <button class="w3-padding-large w3-button" title="Requests" onclick="myFunction()">REQUESTS <i class="fa fa-caret-down"></i></button>
+      <button class="w3-padding-large w3-button" title="Actions" onclick="myFunction()">MANAGER ACTIONS <i class="fa fa-caret-down"></i></button>     
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
-        <a href="#ViewAll" class="w3-bar-item w3-button" onclick="myFunction()">View All - MyRequests</a>
-		<a href="#CheckStatus" class="w3-bar-item w3-button" onclick="myFunction()">Check Status</a>
-        <a href="#PickupShift" class="w3-bar-item w3-button w3-hover-green" onclick="myFunction()"><b>Pickup</b> Shift</a>
-		<a href="#SwapShift" class="w3-bar-item w3-button w3-hover-yellow" onclick="myFunction()"><b>Swap</b> Shift</a>
-        <a href="#DropShift" class="w3-bar-item w3-button w3-hover-red" onclick="myFunction()"><b>Drop</b> Shift</a>
+		<a href="#EditStore" class="w3-bar-item w3-button" onclick="myFunction()"><b>Edit</b> Store Info</a>
+        <a href="#ViewAllCurEmps" class="w3-bar-item w3-button w3-hover-blue" onclick="myFunction()"><b>View</b> Current Employees</a>
+		<a href="#ManagSched" class="w3-bar-item w3-button w3-hover-purple" onclick="myFunction()"><b>Manage</b> Schedule</a>
+        <a href="createNewEmployee.html" class="w3-bar-item w3-button w3-hover-green" onclick="myFunction()"><b>Create</b> Employee</a>
+		<a href="#EditEmp" class="w3-bar-item w3-button w3-hover-yellow" onclick="myFunction()"><b>Edit</b> Employee</a>
+        <a href="#DeleteEmp" class="w3-bar-item w3-button w3-hover-red" onclick="myFunction()"><b>Delete</b> Employee</a>
       </div>
     </div>
 </div>
@@ -60,49 +72,25 @@ body {font-family: "Lato", sans-serif}
   <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
     <h2 class="w3-wide">FrontHouse</h2>
     <p class="w3-opacity"><i>Scheduling Made Easy</i></p>
-    <p class="w3-justify">We have revolutionized how scheduling works for those in the service industry</p>
+    <p class="w3-justify"><center>We have revolutionized how scheduling works for those in the service industry</center></p>
     <div class="w3-row w3-padding-32">
       <div class="w3-third">
-        <p>Fast</p>
-        <img src="" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+        <p><em>Fast</em></p>
+        <img src="fast_img_2.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
       </div>
       <div class="w3-third">
-        <p>Easy</p>
-        <img src="" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+        <p><em>Easy</em></p>
+        <img src="easy_img_1.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
       </div>
       <div class="w3-third">
-        <p>Shift</p>
-        <img src="" class="w3-round" alt="Random Name" style="width:60%">
+        <p><em>Scheduling<em></p>
+        <img src="scheduling_img_5.png" class="w3-round" alt="Random Name" style="width:60%">
       </div>
     </div>
   </div>
 
-
 <!-- End Page Content -->
 </div>
-<!-- Add Google Maps -->
-<div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
-<script>
-function myMap() {
-  myCenter=new google.maps.LatLng(41.878114, -87.629798);
-  var mapOptions= {
-    center:myCenter,
-    zoom:12, scrollwheel: false, draggable: false,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapOptions);
-
-  var marker = new google.maps.Marker({
-    position: myCenter,
-  });
-  marker.setMap(map);
-}
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
-<!--
-To use this code on your website, get a free API key from Google.
-Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
--->
 
 <!-- Footer -->
 <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
@@ -115,33 +103,30 @@ Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
   <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
 </footer>
 
-<script>
+	<script>
+		// Used to toggle the menu on small screens when clicking on the menu button
+		function myFunction() {
+			var x = document.getElementById("navDemo");
+			if (x.className.indexOf("w3-show") == -1) {
+				x.className += " w3-show";
+			} else { 
+				x.className = x.className.replace(" w3-show", "");
+			}
+		}
+	</script>
 
-// Used to toggle the menu on small screens when clicking on the menu button
-function myFunction() {
-    var x = document.getElementById("navDemo");
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-    } else {
-        x.className = x.className.replace(" w3-show", "");
-    }
-}
-
-</script>
-
-<script language = "javascript" type = "text/javascript">
-	<!-- Start hiding java script stuff and statements
-	function argTest()
-	{
-		var msgString = "That shift unavailable!! \n The function has been passed " + arguments.length + " arguments.\n";
-
-		for (i = 0; i < arguments.length; i++)
-			msgString += "argument " + i + " = " + arguments[i] + " (" + typeof(arguments[i]) + ")\n";
-			window.alert(msgString);
-	}
-
-	//end hiding JavaScript statements -->
-</script>
+	<script language = "javascript" type = "text/javascript">
+		<!-- Start hiding java script stuff and statements
+		function argTest()
+		{
+			var msgString = "That shift unavailable!! \n The function has been passed " + arguments.length + " arguments.\n";
+			
+			for (i = 0; i < arguments.length; i++)
+				msgString += "argument " + i + " = " + arguments[i] + " (" + typeof(arguments[i]) + ")\n";
+				window.alert(msgString);
+		}	
+		// end hiding JavaScript statements -->
+	</script>
 
 </body>
 </html>

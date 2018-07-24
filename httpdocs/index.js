@@ -1,5 +1,5 @@
 
-var urlBase = 'http://knightfinder.com/WEBAPI';
+var urlBase = '/WEBAPI';
 var extension = "aspx";
 
 var userId = 0;
@@ -23,7 +23,7 @@ alert(jsonPayload);
 	$.post(url, jsonPayload)
 		.done(function(data){
 			userId = data.EmployeeID;
-      alert(userID);
+            alert(userId);
 			if(userId < 1)
 			{
 				alert("User/Password combination incorrect");
