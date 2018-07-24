@@ -19,6 +19,7 @@ public partial class WISAAPI_CreateStore : System.Web.UI.Page
 
 	public struct CreateStoreResponse
 	{
+		public int StoreID;
 		public string error;
 	}
 
@@ -62,6 +63,32 @@ public partial class WISAAPI_CreateStore : System.Web.UI.Page
 			createStore.Parameters["@City"].Value = req.City;
 			createStore.Parameters["@Zip"].Value = req.Zip;
 			createStore.ExecuteNonQuery();
+
+			string getStoreInfo = "SELECT StoreID FROM Store WHERE StoreNumber = @StoreNumber AND StoreName = @StoreName AND Address = @Address AND State = @State AND City = @City AND Zip = @Zip";
+			SqlCommand getStoreInfoCommand = new SqlCommand(getStoreInfo, connection);
+			getStoreInfoCommand.Parameters.Add("@StoreName", SqlDbType.NVarChar);
+			getStoreInfoCommand.Parameters.Add("@StoreNumber", SqlDbType.NVarChar);
+			getStoreInfoCommand.Parameters.Add("@Address", SqlDbType.NVarChar);
+			getStoreInfoCommand.Parameters.Add("@State", SqlDbType.NVarChar);
+			getStoreInfoCommand.Parameters.Add("@City", SqlDbType.NVarChar);
+			getStoreInfoCommand.Parameters.Add("@Zip", SqlDbType.NVarChar);
+			getStoreInfoCommand.Parameters["@StoreName"].Value = req.StoreName;
+			getStoreInfoCommand.Parameters["@StoreNumber"].Value = req.StoreNumber;
+			getStoreInfoCommand.Parameters["@Address"].Value = req.Address;
+			getStoreInfoCommand.Parameters["@State"].Value = req.State;
+			getStoreInfoCommand.Parameters["@City"].Value = req.City;
+			getStoreInfoCommand.Parameters["@Zip"].Value = req.Zip;
+			
+			SqlDataReader reader = getStoreInfoCommand.ExecuteReader();
+			if(!reader.HasRows)
+			{
+				res.error = "Store not found";
+				SendResultInfoAsJson(res);
+				return;
+			}
+			else
+				if(reader.Read())
+					res.StoreID = Convert.ToInt32(reader["StoreID"]);
 		}
 		catch(Exception ex)
 		{
