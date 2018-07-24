@@ -1,5 +1,6 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,11 +26,14 @@ public class MyAvailability extends Fragment {
     RecyclerView recyclerView;
     Adapter2 adapter;
     ProgressBar load;
+    SharedPreferences share;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_availability, container, false);
         Home.startLoading();
+
+        share = getContext().getApplicationContext().getSharedPreferences(Home.pref, 0);
 
         // Hide keyboard on switch
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
@@ -53,7 +57,7 @@ public class MyAvailability extends Fragment {
         JSONArray json = null;
 
         try {
-            json = apicall.execute(url, "{EmployeeID:\"3\"}").get();
+            json = apicall.execute(url, "{EmployeeID:\""+ share.getInt("EmployeeID", 0) +"\"}").get();
             Log.d("GET_AVAIL-", "Result: " + json.toString());
         }
         catch (Exception e){
@@ -61,9 +65,6 @@ public class MyAvailability extends Fragment {
         }
 
         recyclerView = view.findViewById(R.id.recyclerview2);
-
-        Log.d("MY_TIME", "ABOUT TO START");
-        Log.d("TIME", Home.tempTime("1:00"));
 
         adapter = new Adapter2(json, submit);
         recyclerView.setAdapter(adapter);

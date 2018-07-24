@@ -41,7 +41,6 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
         submit = b;
 
         JSONArray data = null;
-        Log.d("GET_AVAIL-", json.toString());
         try {
             data = json.getJSONObject(0).getJSONArray("days");
         }catch(Exception e){
@@ -54,11 +53,14 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             }catch(Exception e){
                 Log.d("GET_AVAIL", e.getMessage());
             }
+
+            String [] shifts = Home.Time(data, i);
+
             try {
-                am_shifts[i] = data.getJSONObject(i).getString("StartTime").substring(11);
+                am_shifts[i] = shifts[0];
                 Log.d("AvailShift1", am_shifts[i]);
 
-                pm_shifts[i] = data.getJSONObject(i).getString("EndTime").substring(11);
+                pm_shifts[i] = shifts[1];
                 Log.d("AvailShift2", pm_shifts[i]);
             }
             catch(Exception e){
@@ -136,7 +138,6 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             am.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
-
                     if(!hasFocus){
                         if(!validate(am.getText().toString())) {
                             am.setText(am_shifts[getAdapterPosition()]);

@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -36,6 +37,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     static protected String token;
     static private DrawerLayout drawer;
     static ProgressBar load;
+    SharedPreferences share;
 
     @Override
     protected void onStart() {
@@ -46,23 +48,25 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         else
             Log.d("MY_EXTRAS", "CONTAINS:" +getIntent().getExtras().keySet());
 
-        // Stops unauthorized access to home
-        if(getApplicationContext().getSharedPreferences(Home.pref, 0).getInt("userId", -1) < 1){
-            Intent intent = new Intent(this, Login.class);
-            finish();
-            startActivity(intent);
-        }
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        share = getApplicationContext().getSharedPreferences(Home.pref, 0);
+
+        // Stops unauthorized access to home
+        if(share.getInt("EmployeeID", -1) < 1 || share.getInt("StoreID", -1)< 1){
+            Intent intent = new Intent(this, Login.class);
+            finish();
+            startActivity(intent);
+        }
 
         load = findViewById(R.id.load2);
 
         Log.d("Frag", "Starts toolbar");
-
         //Toolbar
         Toolbar toolbar= findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -133,7 +137,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_Logout:
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
-                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("userId").commit();
+                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("EmployeeID").commit();
                 finish();
                 startActivity(new Intent(this, Login.class));
                 break;
@@ -164,7 +168,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         SharedPreferences.Editor editor = share.edit();
 
         if(user.length()==0 || pass.length()==0){
-            editor.putInt("userId", -1);
+            editor.putInt("EmployeeID", -1);
             editor.commit();
             return;
         }
@@ -184,13 +188,18 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
 
-        try {  editor.putInt("userId", result.getInt("EmployeeID")); }
+        try {  editor.putInt("EmployeeID", result.getInt("EmployeeID")); }
         catch (Exception e){
             Log.d("Debug: Get Emp ID", e.getMessage());
             return;
         }
 
-        if(share.getInt("userId", -1) > 0){
+        if(share.getInt("EmployeeID", -1) > 0){
+            try {
+                editor.putInt("StoreID", result.getInt("StoreID"));
+            }catch(Exception e){
+                Log.d("SHARE", e.getMessage());
+            }
             final Task task =
                     (FirebaseInstanceId.getInstance().getInstanceId());
 
@@ -232,27 +241,38 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
     }
 
-    // Takes in a time and prints results of conversion attempt
-    static protected String tempTime(String time) {
-        String[] fuckarray = time.split(":", 2);
-        String newfuckthisshitnigga = fuckarray[0] + fuckarray[1];
-        int fuckinginteger = Integer.parseInt(newfuckthisshitnigga);
-        Date date = new Date();
+    // Takes in a time(XX:XX - XX:XX) and prints results of conversion attempt
+    static public String[] Time(JSONArray data, int i) {
+
+        String[] shifts = new String[2];
+
         try {
-            date = new SimpleDateFormat("hhmm").parse(String.format("%04d", fuckinginteger));
-        } catch (Exception e) {
+            String am_test = data.getJSONObject(i).getString("StartTime").substring(11);
+            String pm_test = data.getJSONObject(i).getString("EndTIme").substring(11);
+            String[] split_array_am = am_test.split(":", 2);
+            String str_am = split_array_am[0] + split_array_am[1];
+            int time = Integer.parseInt(str_am);
+            Date date = new Date();
+            try {
+                date = new SimpleDateFormat("hhmm").parse(String.format("%04d", time));
+            } catch (Exception e) {
+                Log.d("TIME", e.getMessage());
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+
+            if (time < 1200) {
+                shifts[0] = sdf.format(date) + " - 12:00";
+                Log.d("AMShift", shifts[i]);
+            } else {
+                int converted = time - 1200;
+                shifts[1] = sdf.format(date) + " - 12:00";
+                Log.d("PMShift", shifts[i]);
+            }
+        }catch(Exception e){
             Log.d("TIME", e.getMessage());
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
 
-        /*
-        if (fuckinginteger < 1200) {
-            System.out.println(sdf.format(date));
-
-        }
-        */
-        Log.d("TIME", "Got here");
-        return sdf.format(date);
-
+        return shifts;
     }
 }

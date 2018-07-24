@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,7 @@ public class Schedule extends Fragment {
     JSONArray result;
     APICall apiCall = new APICall();
     String url = "http://knightfinder.com/WEBAPI/GetSchedule.aspx";
+    SharedPreferences share;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -38,12 +40,17 @@ public class Schedule extends Fragment {
     };
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule, container, false);
+        share = getContext().getApplicationContext().getSharedPreferences(Home.pref, 0);
 
         Home.startLoading();
+
+        String url = "http://knightfinder.com/WEBAPI/GetSchedule.aspx";
+        String paylod = "{StoreID : \""+ share.getInt("StoreID", 0) +"\"}";
         Home.stopLoading();
 
         Log.d("WhichFirst", "Schdule");

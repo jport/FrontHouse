@@ -72,9 +72,6 @@ public class Login extends AppCompatActivity {
         password=(EditText)findViewById(R.id.password);
         login=(Button)findViewById(R.id.button);
         load = findViewById(R.id.load);
-
-
-
     }
 
     public void clickMe(View view ){
