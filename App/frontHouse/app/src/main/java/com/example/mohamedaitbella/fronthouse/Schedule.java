@@ -22,13 +22,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Schedule extends Fragment {
-    JSONArray result;
-    APICall apiCall = new APICall();
+
     String url = "http://knightfinder.com/WEBAPI/GetSchedule.aspx";
     SharedPreferences share;
 
@@ -44,23 +48,37 @@ public class Schedule extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.schedule, container, false);
-        share = getContext().getApplicationContext().getSharedPreferences(Home.pref, 0);
-
-        Home.startLoading();
-
-        String url = "http://knightfinder.com/WEBAPI/GetSchedule.aspx";
-        String paylod = "{StoreID : \""+ share.getInt("StoreID", 0) +"\"}";
-        Home.stopLoading();
-
-        Log.d("WhichFirst", "Schdule");
+        Log.d("Activity2", "Started");
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-        Log.d("Activity2", "Started");
 
-        String payload = "";
+        share = getContext().getApplicationContext().getSharedPreferences(Home.pref, 0);
+
+        Home.startLoading();
+
+        String payload = "{StoreID : \""+ share.getInt("StoreID", 0) +"\"}";
+
+        APICall apicall = new APICall();
+        JSONObject result = new JSONObject();
+        try {
+            result = apicall.execute(url, payload).get().getJSONObject(0);
+            Log.d("SCHEDULE", result.toString());
+        }catch(Exception e){
+            Log.d("Schedule", e.getMessage());
+
+        }
+
+        Home.stopLoading();
+
+        Gson gson = new Gson();
+
+        Shift[] json = gson.fromJson(result.toString(), GetSchedule.class).schedules;
+
+        Log.d("JSON", json[0].EmpFirstName);
 
         ArrayList<String> am_shifts = new ArrayList<>();
         ArrayList<String> pm_shifts = new ArrayList<>();
@@ -68,14 +86,9 @@ public class Schedule extends Fragment {
 
         fakeNews(am_shifts, pm_shifts);
         /*
-        try {
-            result = apiCall.execute(url, payload).get();
-        }catch (Exception e){
-            Log.d("SchedCall", e.getMessage());
-        }
 
         //--------------- Add shifts here -----------------------------------
-        for(int i = 0; i < result.length(); i++){
+        for(int i = 0; i < json.length(); i++){
             try {
                 // -------------- Still need to edit ----------------------
                 am_shifts.add(result.getJSONObject(i).getString(""));

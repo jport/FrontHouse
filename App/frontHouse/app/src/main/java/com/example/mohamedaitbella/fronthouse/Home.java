@@ -245,7 +245,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
     }
 
-    // Takes in a time(XX:XX - XX:XX) and prints results of conversion attempt
+    // Takes in a time(XX:XX - XX:XX) and returns results of conversion attempt,
+    // am shift =  shifts[0], pm shift = shifts[1]
     static public String[] Time(JSONObject data, int i) {
 
         String[] shifts = {"",""};
