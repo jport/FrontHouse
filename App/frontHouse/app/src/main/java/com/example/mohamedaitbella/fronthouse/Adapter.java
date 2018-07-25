@@ -15,13 +15,13 @@ import java.util.Calendar;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    private ArrayList<String> am_shifts;
-    private ArrayList<String> pm_shifts;
-    private ArrayList<String> days;     // In case dates are passed
+    private String[] am_shifts;
+    private String[] pm_shifts;
+    private String[] days;     // In case dates are passed
     private Context context;
     private String[] week = {"Monday","Tuesday","Wedsnesday","Thursday","Friday","Saturday","Sunday"};
 
-    public Adapter(ArrayList<String> shifts1, ArrayList<String> shifts2, ArrayList<String> days, Context context){
+    public Adapter(String[] shifts1, String[] shifts2, String[] days, Context context){
         am_shifts = shifts1;
         pm_shifts = shifts2;
         this.days = days;
@@ -43,15 +43,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         viewHolder.day_date.setText(week[i]);
         Log.d("Adapter", "week[i] = " + week[i]);
         // Assuming unscheduled shifts shall be saved as empty strings
-        viewHolder.am_shift.setText(am_shifts.get(i));
-        viewHolder.pm_shift.setText(pm_shifts.get(i));
+        viewHolder.am_shift.setText(am_shifts[i]);
+        viewHolder.pm_shift.setText(pm_shifts[i]);
 
         Log.d("Adapter", "finished binding viewholder");
     }
 
     @Override
     public int getItemCount() {
-        return am_shifts.size();
+        return am_shifts.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

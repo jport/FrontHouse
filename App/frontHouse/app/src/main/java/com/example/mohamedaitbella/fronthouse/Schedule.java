@@ -80,27 +80,36 @@ public class Schedule extends Fragment {
 
         Log.d("JSON", Arrays.toString(json));
 
-        ArrayList<String> am_shifts = new ArrayList<>();
-        ArrayList<String> pm_shifts = new ArrayList<>();
-        ArrayList<String> days = new ArrayList<>();     // In case dates are passed
+        String am_shifts[] = new String[7];
+        String pm_shifts[] = new String[7];
+        String days[] = new String[7];     // In case dates are passed
 
-        fakeNews(am_shifts, pm_shifts);
-        /*
+        //fakeNews(am_shifts, pm_shifts);
+
 
         //--------------- Add shifts here -----------------------------------
-        for(int i = 0; i < json.length(); i++){
+        for(int i = 0; i < json.length; i++){
+
+            /*
+            int sLength = json[i].StartTime.length();
+            int eLength = json[i].EndTime.length();
+            String interval = json[i].StartTime.substring(11, sLength-3) + "-" + json[i].EndTime.substring(11, sLength-3);
+
+            Log.d("SCHEDULE", interval);
+            */
+
+            String shifts[];
             try {
-                // -------------- Still need to edit ----------------------
-                am_shifts.add(result.getJSONObject(i).getString(""));
-                pm_shifts.add(result.getJSONObject(i).getString(""));
-                days.add(result.getJSONObject(i).getString(""));
-                //---------------------------------------------------------
-            }catch(Exception e){
-                Log.d("SetSched", e.getMessage());
+                shifts = Home.Time( new JSONObject(gson.toJson(json[i]) ), 0);
+                am_shifts[i] = shifts[0];
+                pm_shifts[i] = shifts[1];
+                days[i] = json[i].StartTime.substring(5,11);
+            }catch (Exception e){
+                Log.d("SCHEDULE_catch", e.getMessage());
             }
         }
         //--------------------------------------------------------------------
-        */
+
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext());
@@ -111,7 +120,7 @@ public class Schedule extends Fragment {
         Log.d("Activity2", "PAST LAYOUT_MANAGER");
         recyclerView.setAdapter(adapter);
         //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        Log.d("Activity2", "Recyclerview. List size = "+ am_shifts.size());
+        Log.d("Activity2", "Recyclerview. List size = "+ am_shifts.length);
 
 
         try {
@@ -124,12 +133,12 @@ public class Schedule extends Fragment {
 
     }
 
-    private void fakeNews(ArrayList<String> am_shifts, ArrayList<String> pm_shifts){
+    private void fakeNews(String[] am_shifts, String[] pm_shifts){
 
         Log.d("fakeNews", "Started");
         for(int i = 0; i < 7; i++){
-            am_shifts.add("9:30 am");
-            pm_shifts.add("3:30 pm");
+            am_shifts[i] = "9:30 am";
+            pm_shifts[i] = "3:30 pm";
 
         }
         Log.d("fakeNews", "Finished");
