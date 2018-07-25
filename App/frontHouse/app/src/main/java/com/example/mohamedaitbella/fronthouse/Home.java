@@ -40,6 +40,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     static private DrawerLayout drawer;
     static ProgressBar load;
     SharedPreferences share;
+    static NavigationView navigationView;
 
     @Override
     protected void onStart() {
@@ -56,7 +57,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        //Gson gson = new Gson();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         share = getApplicationContext().getSharedPreferences(Home.pref, 0);
@@ -78,7 +78,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Log.d("Toolbar_Check:", toolbar.toString());
 
         drawer=findViewById(R.id.drawer_Layout);
-        NavigationView navigationView= findViewById(R.id.nav_view);
+        navigationView= findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -104,7 +104,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             }
 
             // Starting loading
-            startLoading();
+            //startLoading();
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     page).commit();
@@ -224,7 +224,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     // Stops loading image after page has been loaded
     public static void stopLoading(){
 
-        drawer.post(new Runnable() {
+        navigationView.post(new Runnable() {
             @Override
             public void run() {
                 Log.d("LOAD", "CLOSING, IS OPEN?: " + (load.getVisibility() == View.VISIBLE));
@@ -236,7 +236,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     // Starts loading, assumes view given is of Home.
     public static void startLoading(){
-        drawer.post(new Runnable() {
+        navigationView.post(new Runnable() {
             @Override
             public void run() {
                 Log.d("LOAD", "Got here");
@@ -246,7 +246,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     // Takes in a time(XX:XX - XX:XX) and returns results of conversion attempt,
-    // am shift =  shifts[0], pm shift = shifts[1]
+    // am shift =  shif
     static public String[] Time(JSONObject data, int i) {
 
         String[] shifts = {"",""};

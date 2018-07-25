@@ -78,7 +78,7 @@ public class Schedule extends Fragment {
 
         Shift[] json = gson.fromJson(result.toString(), GetSchedule.class).schedules;
 
-        Log.d("JSON", json[0].EmpFirstName);
+        Log.d("JSON", Arrays.toString(json));
 
         ArrayList<String> am_shifts = new ArrayList<>();
         ArrayList<String> pm_shifts = new ArrayList<>();
