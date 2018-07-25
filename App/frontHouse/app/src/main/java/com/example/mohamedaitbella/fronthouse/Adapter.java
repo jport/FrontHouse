@@ -40,13 +40,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.day_date.setText(week[i]);
+        viewHolder.day_date.setText(week[i] + ": " + days[i]);
         Log.d("Adapter", "week[i] = " + week[i]);
         // Assuming unscheduled shifts shall be saved as empty strings
         viewHolder.am_shift.setText(am_shifts[i]);
         viewHolder.pm_shift.setText(pm_shifts[i]);
 
-        Log.d("Adapter", "am_shift[i] = " + am_shifts[i]);
         Log.d("Adapter", "finished binding viewholder");
     }
 
