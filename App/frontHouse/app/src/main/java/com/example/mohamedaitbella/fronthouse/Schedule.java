@@ -96,7 +96,7 @@ public class Schedule extends Fragment {
                 shifts = Home.Time( new JSONObject(gson.toJson(json[i]) ), 0);
                 am_shifts[i] = shifts[0];
                 pm_shifts[i] = shifts[1];
-                days[i] = json[i].StartTime.substring(5,11);
+                days[i] = json[i].StartTime.substring(5,10);
             }catch (Exception e){
                 Log.d("SCHEDULE_catch", e.getMessage());
             }
