@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -242,16 +243,17 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     // Takes in a time(XX:XX - XX:XX) and prints results of conversion attempt
-    static public String[] Time(JSONArray data, int i) {
+    static public String[] Time(JSONObject data, int i) {
 
-        String[] shifts = new String[2];
+        String[] shifts = {"",""};
 
         try {
-            String am_test = data.getJSONObject(i).getString("StartTime").substring(11);
-            String pm_test = data.getJSONObject(i).getString("EndTIme").substring(11);
+            String am_test = data.getString("StartTime").substring(11);
+            String pm_test = data.getString("EndTime").substring(11);
             String[] split_array_am = am_test.split(":", 2);
-            String str_am = split_array_am[0] + split_array_am[1];
+            String str_am = split_array_am[0] + split_array_am[1].substring(0,2);
             int time = Integer.parseInt(str_am);
+
             Date date = new Date();
             try {
                 date = new SimpleDateFormat("hhmm").parse(String.format("%04d", time));
@@ -263,16 +265,18 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             if (time < 1200) {
                 shifts[0] = sdf.format(date) + " - 12:00";
-                Log.d("AMShift", shifts[i]);
-            } else {
+                Log.d("AMShift", shifts[0]);
+            }
+            else {
                 int converted = time - 1200;
-                shifts[1] = sdf.format(date) + " - 12:00";
-                Log.d("PMShift", shifts[i]);
+                shifts[1] = "12:00 - " + pm_test.substring(0,5);
+                Log.d("PMShift", shifts[1]);
             }
         }catch(Exception e){
-            Log.d("TIME", e.getMessage());
+            Log.d("TIME-ERROR", e.getMessage());
         }
 
+        Log.d("TIME", "Returns:" + Arrays.toString(shifts));
         return shifts;
     }
 }
