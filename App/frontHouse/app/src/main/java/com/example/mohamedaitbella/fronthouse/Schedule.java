@@ -90,14 +90,6 @@ public class Schedule extends Fragment {
         //--------------- Add shifts here -----------------------------------
         for(int i = 0; i < json.length; i++){
 
-            /*
-            int sLength = json[i].StartTime.length();
-            int eLength = json[i].EndTime.length();
-            String interval = json[i].StartTime.substring(11, sLength-3) + "-" + json[i].EndTime.substring(11, sLength-3);
-
-            Log.d("SCHEDULE", interval);
-            */
-
             String shifts[];
             try {
                 // For now, use '0' for Schedule and '1' for MyAvailability
