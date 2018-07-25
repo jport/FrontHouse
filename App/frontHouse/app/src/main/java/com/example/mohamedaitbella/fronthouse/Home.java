@@ -142,6 +142,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_Logout:
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
                 getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("EmployeeID").commit();
+                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("StoreID").commit();
                 finish();
                 startActivity(new Intent(this, Login.class));
                 break;
