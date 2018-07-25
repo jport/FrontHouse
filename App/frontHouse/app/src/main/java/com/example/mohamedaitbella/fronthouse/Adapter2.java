@@ -63,7 +63,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             String[] shifts = {};
             try {
                 // For now, use '0' for Schedule and '1' for MyAvailability
-                shifts = Home.Time(data.getJSONObject(i), 0);
+                shifts = Home.Time(data.getJSONObject(i), 1);
             }catch (Exception e){
                 Log.d("TIME", e.getMessage());
             }
