@@ -87,13 +87,14 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.day.setText(days[i]);
 
-        Log.d("OnBind", "sub1, sub2: " + am_shifts[i] + " " + pm_shifts[i]);
+        viewHolder.day.setText(days[i]);
         viewHolder.am.setText(am_shifts[i]);
         viewHolder.pm.setText(pm_shifts[i]);
-
+        // Adding required listeners to am and pm
         viewHolder.setup();
+
+        Log.d("OnBind", "sub1, sub2: " + am_shifts[i] + " " + pm_shifts[i]);
     }
 
     @Override
@@ -110,6 +111,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
+            // Assigning fields
             day = itemView.findViewById(R.id.title_Day);
             shift1 = itemView.findViewById(R.id.shift1);
             shift2 = itemView.findViewById(R.id.shift2);
@@ -117,6 +119,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             pm = shift2.findViewById(R.id.pm);
         }
 
+        // Adding required listeners to am and pm
         void setup(){
 
             am.addTextChangedListener(new TextWatcher() {
@@ -124,6 +127,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2){
                 }
                 @Override
+                // While typing new entry keep Submit disabled
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     Log.d("ENABLE_BUTTON", "HERE");
                     if(!validate(am.getText().toString()))
@@ -131,6 +135,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                     else submit.setEnabled(true);
                 }
                 @Override
+                // Keeping hash updated and turning off Submit if all fields empty
                 public void afterTextChanged(Editable editable) {
                     if(!am.getText().toString().equals("") && !hash.contains(getAdapterPosition()))
                         hash.add(getAdapterPosition());
@@ -144,6 +149,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             am.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
+                    // Send error if not in right format, enable Submit otherwise
                     if(!hasFocus){
                         if(!validate(am.getText().toString())) {
                             am.setText(am_shifts[getAdapterPosition()]);
@@ -162,6 +168,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2){
                 }
                 @Override
+                // While typing new entry keep Submit disabled
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     Log.d("ENABLE_BUTTON", "HERE");
                     if(!validate(pm.getText().toString()))
@@ -169,6 +176,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                     else submit.setEnabled(true);
                 }
                 @Override
+                // Keeping hash updated and turning off Submit if all fields empty
                 public void afterTextChanged(Editable editable) {
 
                     if(!pm.getText().toString().equals("") && !hash.contains(getAdapterPosition()+getItemCount()))
@@ -186,10 +194,10 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                 public void onFocusChange(View view, boolean hasFocus) {
 
                     if(!hasFocus){
+                        // Send error if not in right format, enable Submit otherwise
                         if(!validate(pm.getText().toString())) {
                             pm.setText(pm_shifts[getAdapterPosition()]);
                             pm.setError("Incorrect format: (12:00-23:59)\nPlease try again");
-
                         }
                         else {
                             pm_shifts[getAdapterPosition()] = pm.getText().toString();
@@ -252,6 +260,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                 return false;
             if(minutes.compareTo("59") > 0 || hours.compareTo("00")<0)
                 return false;
+            // If ~(10 < x < 23) & ~(00 < x < 09)
             if(!(hours.compareTo("10") >= 0 && hours.compareTo("23")<=0) && !(hours.compareTo("00") >= 0 && hours.compareTo("09") <= 0))
                 return false;
 
