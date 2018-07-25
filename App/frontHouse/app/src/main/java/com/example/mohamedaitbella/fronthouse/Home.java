@@ -249,11 +249,27 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     // am shift =  shif
     static public String[] Time(JSONObject data, int i) {
 
+        String Start, End;
+
+        switch (i){
+
+            // Schedule
+            case 0:
+                Start = "StartOfShift";
+                End = "EndOfShift";
+                break;
+            //MyAvailability and others
+            default :
+                Start = "StartTime";
+                End = "EndTime";
+                break;
+        }
+
         String[] shifts = {"",""};
 
         try {
-            String am_test = data.getString("StartTime").substring(11);
-            String pm_test = data.getString("EndTime").substring(11);
+            String am_test = data.getString(Start).substring(11);
+            String pm_test = data.getString(End).substring(11);
             String[] split_array_am = am_test.split(":", 2);
             String str_am = split_array_am[0] + split_array_am[1].substring(0,2);
             int time = Integer.parseInt(str_am);

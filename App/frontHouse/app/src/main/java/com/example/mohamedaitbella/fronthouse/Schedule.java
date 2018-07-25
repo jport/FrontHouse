@@ -100,6 +100,7 @@ public class Schedule extends Fragment {
 
             String shifts[];
             try {
+                // For now, use '0' for Schedule and '1' for MyAvailability
                 shifts = Home.Time( new JSONObject(gson.toJson(json[i]) ), 0);
                 am_shifts[i] = shifts[0];
                 pm_shifts[i] = shifts[1];

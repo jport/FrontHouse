@@ -46,6 +46,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         viewHolder.am_shift.setText(am_shifts[i]);
         viewHolder.pm_shift.setText(pm_shifts[i]);
 
+        Log.d("Adapter", "am_shift[i] = " + am_shifts[i]);
         Log.d("Adapter", "finished binding viewholder");
     }
 
