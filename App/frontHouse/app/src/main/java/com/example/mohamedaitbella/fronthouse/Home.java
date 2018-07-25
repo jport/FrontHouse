@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
+
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     static final String pref = "DEFAULT";
@@ -54,6 +55,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        //Gson gson = new Gson();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         share = getApplicationContext().getSharedPreferences(Home.pref, 0);
