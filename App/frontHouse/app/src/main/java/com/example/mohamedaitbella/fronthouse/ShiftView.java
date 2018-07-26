@@ -1,5 +1,6 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,25 +11,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class ShiftView extends Fragment {
+import com.google.firebase.messaging.FirebaseMessaging;
+
+public class ShiftView extends AppCompatActivity {
 
     TextView time, job, state;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.shift_view, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.shift_view);
+
+        time = findViewById(R.id.Time);
+        time.setText(getIntent().getStringExtra("Time"));
+        job = findViewById(R.id.Title);
+        job.setText(getIntent().getStringExtra("job"));
+        state = findViewById(R.id.State);
+        state.setText(getIntent().getStringExtra("state"));
+
+        FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
+
+        getIncomingIntentAndSet();
 
 
-        time = view.findViewById(R.id.Time);
-        //time.setText(getIntent().getStringExtra("Time"));
-        job = view.findViewById(R.id.Title);
-        //job.setText(getIntent().getStringExtra("job"));
-        state = view.findViewById(R.id.State);
-        //state.setText(getIntent().getStringExtra("state"));
+    }
 
-        return view;
+    private void getIncomingIntentAndSet(){
 
+        Intent intent = getIntent();
+        String str = intent.getStringExtra("am_shifts");
 
+        if(str=="am_shifts"){
+            TextView Time = findViewById(R.id.Time);
+            Time.setText(str);
+        }
     }
 
 }
