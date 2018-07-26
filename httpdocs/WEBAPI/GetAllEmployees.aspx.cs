@@ -12,15 +12,14 @@ using System.IO;
 //Example JSON Payload:
 //{StoreID:1, StartDate:"2018-07-22 12:00:00.00", EndDate:"2018-07-22 23:00:00.00"}
 
-public partial class WISAAPI_GetEmployeesAvailBtwn : System.Web.UI.Page
+public partial class WISAAPI_GetAllEmployees : System.Web.UI.Page
 {
-	public struct GetEmployeesAvailBtwnRequest
+	public struct GetAllEmployeesRequest
 	{
 		public int StoreID;
-		public DateTime StartDate, EndDate;
 	}
 
-	public struct GetEmployeesAvailBtwnResponse
+	public struct GetAllEmployeesResponse
 	{
 		public List<Employee> employees;
 		public String error;
@@ -28,14 +27,14 @@ public partial class WISAAPI_GetEmployeesAvailBtwn : System.Web.UI.Page
 
 	public struct Employee
 	{
-		public int EmployeeID;
-		public String FirstName, LastName;
+		public int JobType;
+		public String FirstName, LastName, Phone;
 	}
 
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		GetEmployeesAvailBtwnRequest req;
-		GetEmployeesAvailBtwnResponse res = new GetEmployeesAvailBtwnResponse();
+		GetAllEmployeesRequest req;
+		GetAllEmployeesResponse res = new GetAllEmployeesResponse();
 		res.error = String.Empty;
 		
 		// 1. Deserialize the incoming Json.
@@ -57,46 +56,20 @@ public partial class WISAAPI_GetEmployeesAvailBtwn : System.Web.UI.Page
 		{
 			connection.Open();
 
-			string getAvailEmps = @"SELECT EmployeeID, FirstName, LastName
-				FROM Employee
-				WHERE EmployeeID IN
-				    (
-					SELECT DISTINCT e.EmployeeID
-					FROM Employee e
-					LEFT JOIN AvailabilityTbl a ON e.EmployeeID = a.EmployeeID
-					    AND a.DayOfWeek = DATEPART(WEEKDAY, @StartDate)
-					WHERE
-					    Cast(a.StartTime as time) >= Cast(@StartDate as time)
-					    AND Cast(@EndDate as time) >= Cast(a.EndTime as time)
-				    )
-				    AND EmployeeID NOT IN
-				    (
-					SELECT DISTINCT e.EmployeeID
-					FROM Employee e
-					LEFT JOIN Schedule s ON e.EmployeeID = s.EmployeeID
-					WHERE
-					    s.StartOfShift >= @StartDate
-					    AND @EndDate >= s.EndOfShift
-				    )
-				    AND StoreID = @StoreID
-				    --AND JobType = 1";
+			string getAllEmps = @"SELECT FirstName, LastName, Phone, JobType FROM Employee WHERE StoreID = @StoreID AND Status = 0";
+			SqlCommand getAllEmpsCmd = new SqlCommand(getAllEmps, connection);
+			getAllEmpsCmd.Parameters.Add("@StoreID", SqlDbType.Int);
+			getAllEmpsCmd.Parameters["@StoreID"].Value = req.StoreID;
 			
-			SqlCommand getAvailEmpsCmd = new SqlCommand(getAvailEmps, connection);
-			getAvailEmpsCmd.Parameters.Add("@StoreID", SqlDbType.Int);
-			getAvailEmpsCmd.Parameters.Add("@StartDate", SqlDbType.DateTime);
-			getAvailEmpsCmd.Parameters.Add("@EndDate", SqlDbType.DateTime);
-			getAvailEmpsCmd.Parameters["@StoreID"].Value = req.StoreID;
-			getAvailEmpsCmd.Parameters["@StartDate"].Value = req.StartDate;
-			getAvailEmpsCmd.Parameters["@EndDate"].Value = req.EndDate;
-			
-			SqlDataReader reader = getAvailEmpsCmd.ExecuteReader();
+			SqlDataReader reader = getAllEmpsCmd.ExecuteReader();
 			res.employees = new List<Employee>();
 			while(reader.Read())
 			{
 				Employee curE = new Employee();
-				curE.EmployeeID = Convert.ToInt32(reader["EmployeeID"]);
 				curE.FirstName = Convert.ToString(reader["FirstName"]);
 				curE.LastName = Convert.ToString(reader["LastName"]);
+				curE.Phone = Convert.ToString(reader["Phone"]);
+				curE.JobType = Convert.ToInt32(reader["JobType"]);
 
 				res.employees.Add(curE);
 			}
@@ -119,7 +92,7 @@ public partial class WISAAPI_GetEmployeesAvailBtwn : System.Web.UI.Page
 		SendResultInfoAsJson(res);
 	}
 	
-	GetEmployeesAvailBtwnRequest GetRequestInfo()
+	GetAllEmployeesRequest GetRequestInfo()
 	{
 		// Get the Json from the POST.
 		string strJson = String.Empty;
@@ -131,12 +104,12 @@ public partial class WISAAPI_GetEmployeesAvailBtwn : System.Web.UI.Page
 		}
 
 		// Deserialize the Json.
-		GetEmployeesAvailBtwnRequest req = JsonConvert.DeserializeObject<GetEmployeesAvailBtwnRequest>(strJson);
+		GetAllEmployeesRequest req = JsonConvert.DeserializeObject<GetAllEmployeesRequest>(strJson);
 
 		return (req);
 	}
 	
-	void SendResultInfoAsJson(GetEmployeesAvailBtwnResponse res)
+	void SendResultInfoAsJson(GetAllEmployeesResponse res)
 	{
 		string strJson = JsonConvert.SerializeObject(res);
 		Response.ContentType = "application/json; charset=utf-8";

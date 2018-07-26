@@ -1,0 +1,23 @@
+Table		FieldName	Key	Value
+AvailabilityTbl	DayOfWeek	1	Sunday
+AvailabilityTbl	DayOfWeek	2	Monday
+AvailabilityTbl	DayOfWeek	3	Tuesday
+AvailabilityTbl	DayOfWeek	4	Wednesday
+AvailabilityTbl	DayOfWeek	5	Thursday
+AvailabilityTbl	DayOfWeek	6	Friday
+AvailabilityTbl	DayOfWeek	7	Satday
+
+Schedule	ShiftStatus	0	Shift dropped
+Schedule	ShiftStatus	1	Active
+
+Employee	JobType		0	Manager
+Employee	JobType		1	Employee
+Employee	Status		0	Active
+Employee	Status		1	Deleted
+
+Request		RequestType	1	Drop Shift
+Request		RequestType	2	Pickup Shift
+Request		RequestType	3	Swap Shift
+Request		RequestType	4	Accept Availability
+
+
