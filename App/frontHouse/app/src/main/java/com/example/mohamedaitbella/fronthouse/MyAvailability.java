@@ -1,5 +1,6 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,9 +17,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class MyAvailability extends Fragment {
 
@@ -45,10 +51,19 @@ public class MyAvailability extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent intent = getActivity().getIntent();
+                String[] amShifts = intent.getStringArrayExtra("am_shifts");
+                String[] pmShifts = intent.getStringArrayExtra("pm_shifts");
                 Log.d("submitAvail", "Got here");
-                for(int i = 0; i < adapter.getItemCount(); i++){
-                    
-                }
+                Gson gson = new GsonBuilder().create();
+                String jsonArray = gson.toJson(amShifts);
+                String jsonArray1 = gson.toJson(pmShifts);
+                Log.d(TAG, "onClick: json arrays created");
+
+
+
+
             }
         });
 
@@ -77,6 +92,7 @@ public class MyAvailability extends Fragment {
 
         return view;
     }
+
 
 
 }

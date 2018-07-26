@@ -1,6 +1,8 @@
 package com.example.mohamedaitbella.fronthouse;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -27,6 +29,8 @@ import java.util.HashSet;
 
 import javax.xml.validation.Validator;
 
+import static android.support.constraint.Constraints.TAG;
+
 public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
 
@@ -34,9 +38,12 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
     String[] am_shifts = new String[7], pm_shifts = new String[7];
     HashSet<Integer> hash = new HashSet<>();
     Button submit;
+    private Context context;
 
 
-    public Adapter2(JSONArray json, Button b){
+    public Adapter2(JSONArray json, Button b, Context context){
+
+        this.context= context;
 
         submit = b;
 
@@ -95,6 +102,16 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
         viewHolder.setup();
 
         Log.d("OnBind", "sub1, sub2: " + am_shifts[i] + " " + pm_shifts[i]);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: submit listner entered");
+                Intent intent = new Intent(context, MyAvailability.class);
+                intent.putExtra("am_shifts", am_shifts);
+                intent.putExtra("pm_shifts", pm_shifts);
+            }
+        });
     }
 
     @Override
