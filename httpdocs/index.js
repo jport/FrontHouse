@@ -1,4 +1,3 @@
-
 var urlBase = '/WEBAPI';
 var extension = "aspx";
 
@@ -10,35 +9,44 @@ function doLogin()
 {
 
 	userId = 0;
-	firstName = "";
-	lastName = "";
+    var $login = $('#UserName');
+    var $password = $('#Password');
+    
+    var jsonPayload = {
+        login: $login.val(),
+        password: $password.val(),
+    }
 
-	var login = document.getElementById("UserName").value;
-	var password = document.getElementById("Password").value;
-	//document.getElementById("loginResult").innerHTML = "";
+    var url = urlBase + '/Login.' + extension;
+    var payloadString = JSON.stringify(jsonPayload);
 
-	var jsonPayload = '{"login" : "' + login + '", "password" : "' + password + '"}';
-	var url = urlBase + '/Login.' + extension;
-alert(jsonPayload);
-	$.post(url, jsonPayload)
-		.done(function(data){
-			userId = data.EmployeeID;
-            alert(userId);
-			if(userId < 1)
-			{
-				alert("User/Password combination incorrect");
-				//document.getElementById("loginResult").innerHTML = " User/Password combination incorrect";
-				return;
-			}
-			else
-			{
-				localStorage.setItem("EmployeeID", userId);
-				location.href = "homepage.html";
-			}
-		})
-		.fail(function(error){
-			alert("Error:" + eval(error));
-		});
+	$.ajax({
+        type: 'POST',
+        url: url,
+        data: payloadString,
 
-	return false;
+        success: function(data) {
+            userId = data.EmployeeID;
+           
+
+            if(userId < 1)
+            {
+                alert("UserName/Password combination is incorrect")
+                return;
+            }
+            else{
+                localStorage.setItem("EmployeeID", userId);
+                localStorage.setItem("StoreID", data.StoreID);
+                localStorage.setItem("JobType", data.JobType);
+                location.href = "homepage.html";
+            }
+        },
+
+        error: function(error) {
+            alert("Error contacting api: " + error);
+        }
+        
+    
+    });
+    return false;
 }
