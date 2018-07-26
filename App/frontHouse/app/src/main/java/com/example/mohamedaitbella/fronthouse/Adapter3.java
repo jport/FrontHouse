@@ -6,11 +6,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
 
-    Adapter3(){
+    Shift[] list;
+    String state;
 
+    Adapter3(String json, String state){
+
+        Gson gson = new Gson();
+        list = gson.fromJson(json, Shift[].class);
+        this.state = state;
     }
 
     @NonNull
@@ -25,6 +36,18 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
+        viewHolder.state.setText(state);
+        viewHolder.employee.setText(list[i].EmpFirstName + " " + list[i].EmpLastName);
+        //viewHolder.job.setText(list[i].);
+        Gson gson = new Gson();
+
+        String shifts[] = {"", ""};
+        try{
+        Home.Time(new JSONObject(gson.toJson(list[i])), 0);
+        }catch (Exception e){
+            Log.d("Adapter3", e.getMessage());
+        }
+        viewHolder.shift.setText(state.equals("AM")? shifts[0] : shifts[1]);
     }
 
     @Override
@@ -34,9 +57,16 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
+        TextView state, employee, shift, job;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
+
+        public ViewHolder(@NonNull View view) {
+            super(view);
+            state = view.findViewById(R.id.State);
+            employee = view.findViewById(R.id.MyShift);
+            shift = view.findViewById(R.id.Time);
+            job = view.findViewById(R.id.Title);
+
         }
     }
 }

@@ -2,7 +2,7 @@ package com.example.mohamedaitbella.fronthouse;
 
 import com.google.gson.annotations.SerializedName;
 
-class GetSchedule{
+public class GetSchedule{
 
     Shift[] schedules;
     String error;
