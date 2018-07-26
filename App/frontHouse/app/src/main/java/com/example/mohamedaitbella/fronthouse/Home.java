@@ -251,7 +251,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     static public String[] Time(JSONObject data, int i) {
 
         String Start, End;
-
+        Log.d("TIME", "Switch case = " + i);
         switch (i){
 
             // Schedule
