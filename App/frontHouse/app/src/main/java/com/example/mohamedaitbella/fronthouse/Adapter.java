@@ -1,17 +1,21 @@
 package com.example.mohamedaitbella.fronthouse;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
@@ -39,7 +43,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         viewHolder.day_date.setText(week[i] + ": " + days[i]);
         Log.d("Adapter", "week[i] = " + week[i]);
         // Assuming unscheduled shifts shall be saved as empty strings
@@ -47,6 +51,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         viewHolder.pm_shift.setText(pm_shifts[i]);
 
         Log.d("Adapter", "finished binding viewholder");
+
+        viewHolder.cell_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Clicked on: " + am_shifts[i]);
+
+                Intent intent = new Intent(context, ShiftView.class);
+                intent.putExtra("am_shifts", am_shifts[i]);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -57,6 +72,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView am, pm, am_shift, pm_shift, day_date;
+        LinearLayout cell_layout;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +81,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             am_shift = itemView.findViewById(R.id.am_shift);
             pm_shift = itemView.findViewById(R.id.pm_shift);
             day_date = itemView.findViewById(R.id.day);
+            cell_layout = itemView.findViewById(R.id.shift_view_button);
         }
     }
 }
