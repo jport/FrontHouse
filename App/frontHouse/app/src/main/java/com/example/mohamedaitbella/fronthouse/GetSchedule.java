@@ -1,5 +1,7 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class GetSchedule{
@@ -14,7 +16,7 @@ public class GetSchedule{
 }
 
 
-class Shift {
+class Shift implements Comparable<Shift> {
 
     int ScheduleID, EmployeeID;
     String EmpFirstName, EmpLastName;
@@ -32,4 +34,8 @@ class Shift {
         EndTime = EndOfShift;
     }
 
+    @Override
+    public int compareTo(@NonNull Shift other) {
+        return StartTime.substring(0,10).compareTo(other.StartTime.substring(0,10));
+    }
 }

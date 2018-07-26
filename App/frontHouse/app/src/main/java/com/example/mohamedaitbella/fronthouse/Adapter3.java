@@ -17,10 +17,9 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
     Shift[] list;
     String state;
 
-    Adapter3(String json, String state){
+    Adapter3(Shift[] list, String state){
 
-        Gson gson = new Gson();
-        list = gson.fromJson(json, Shift[].class);
+        this.list = list;
         this.state = state;
     }
 
@@ -38,12 +37,11 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
 
         viewHolder.state.setText(state);
         viewHolder.employee.setText(list[i].EmpFirstName + " " + list[i].EmpLastName);
-        //viewHolder.job.setText(list[i].);
-        Gson gson = new Gson();
 
         String shifts[] = {"", ""};
         try{
-        Home.Time(new JSONObject(gson.toJson(list[i])), 0);
+            Gson gson = new Gson();
+            Home.Time(new JSONObject(gson.toJson(list[i])), 0);
         }catch (Exception e){
             Log.d("Adapter3", e.getMessage());
         }
@@ -52,7 +50,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return list.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
