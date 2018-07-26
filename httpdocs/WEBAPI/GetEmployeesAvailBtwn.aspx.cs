@@ -78,7 +78,8 @@ public partial class WISAAPI_GetEmployeesAvailBtwn : System.Web.UI.Page
 					    s.StartOfShift >= @StartDate
 					    AND @EndDate >= s.EndOfShift
 				    )
-				    AND StoreID = @StoreID";
+				    AND StoreID = @StoreID
+				    --AND JobType = 1";
 			
 			SqlCommand getAvailEmpsCmd = new SqlCommand(getAvailEmps, connection);
 			getAvailEmpsCmd.Parameters.Add("@StoreID", SqlDbType.Int);

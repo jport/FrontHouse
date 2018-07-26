@@ -86,7 +86,6 @@ public partial class WISAAPI_SetRequestStatus : System.Web.UI.Page
 			
 			if(req.RequestStatus == 1)
 			{
-				
 				if(requestType == 1) //drop shift
 				{
 					string updateSql = "UPDATE Schedule SET ShiftStatus = 0 WHERE ScheduleID = @ScheduleID";
