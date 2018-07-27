@@ -5,10 +5,10 @@
         <item android:id="@+id/nav_Schedule"
             android:icon="@drawable/ic_schedule"
             android:title="Schedule"/>
-
+<!--
         <item android:id="@+id/nav_AvailabilityRequests"
             android:icon="@drawable/ic_requests"
-            android:title="Requests"/>
+            android:title="Requests"/>-->
 
         <item android:id="@+id/nav_MyInfo"
             android:icon="@drawable/ic_myinfo"

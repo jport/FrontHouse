@@ -41,6 +41,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     static ProgressBar load;
     SharedPreferences share;
     static NavigationView navigationView;
+    MenuItem hello;
 
     @Override
     protected void onStart() {
@@ -60,6 +61,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         share = getApplicationContext().getSharedPreferences(Home.pref, 0);
+
+        hello = findViewById(R.id.nav_AvailabilityRequests);
 
         // Stops unauthorized access to home
         if(share.getInt("EmployeeID", -1) < 1 || share.getInt("StoreID", -1)< 1){
@@ -138,6 +141,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_Settings:
                 Toast.makeText(this, "You clicked settings", Toast.LENGTH_SHORT).show();
+                hello.setVisible(false);
                 break;
             case R.id.nav_Logout:
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
