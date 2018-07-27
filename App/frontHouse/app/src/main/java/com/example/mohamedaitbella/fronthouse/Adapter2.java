@@ -38,12 +38,12 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
     String[] am_shifts = new String[7], pm_shifts = new String[7];
     HashSet<Integer> hash = new HashSet<>();
     Button submit;
-    private Context context;
+    //private Context context;
 
+    public Adapter2(JSONArray json, Button b){
+    //public Adapter2(JSONArray json, Button b, Context context){
 
-    public Adapter2(JSONArray json, Button b, Context context){
-
-        this.context= context;
+        //this.context= context;
 
         submit = b;
 
@@ -107,9 +107,9 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: submit listner entered");
-                Intent intent = new Intent(context, MyAvailability.class);
-                intent.putExtra("am_shifts", am_shifts);
-                intent.putExtra("pm_shifts", pm_shifts);
+                //Intent intent = new Intent(context, MyAvailability.class);
+                //intent.putExtra("am_shifts", am_shifts);
+                //intent.putExtra("pm_shifts", pm_shifts);
             }
         });
     }
