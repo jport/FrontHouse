@@ -21,13 +21,13 @@
         />
 
     <LinearLayout
+        android:id="@+id/shift_view_button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="5dp"
         android:clickable="true"
         android:focusable="true"
-        android:id="@+id/shift_view_button">
+        android:orientation="horizontal"
+        android:paddingVertical="5dp">
 
         <TextView
             android:id="@+id/am_button"
@@ -40,6 +40,7 @@
             app:layout_constraintTop_toBottomOf="@id/day"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="16dp" />
+
         <TextView
             android:id="@+id/am_shift"
             android:layout_width="wrap_content"
@@ -51,6 +52,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/shift_view_button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="5dp">
@@ -67,7 +69,6 @@
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintLeft_toLeftOf="@id/cell_layout"
             app:layout_constraintTop_toBottomOf="@+id/am_button" />
-
 
 
         <TextView

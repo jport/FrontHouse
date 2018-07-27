@@ -2,6 +2,7 @@ package com.example.mohamedaitbella.fronthouse;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 public class GetSchedule{
@@ -37,5 +38,10 @@ class Shift implements Comparable<Shift> {
     @Override
     public int compareTo(@NonNull Shift other) {
         return StartTime.substring(0,10).compareTo(other.StartTime.substring(0,10));
+    }
+
+    @Override
+    public String toString(){
+        return new Gson().toJson(this);
     }
 }

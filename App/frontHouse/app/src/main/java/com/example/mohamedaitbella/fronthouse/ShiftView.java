@@ -17,6 +17,8 @@ import com.google.gson.Gson;
 import com.google.firebase.messaging.FirebaseMessaging;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 // Receives current Employee's shift and other employees of that day
 // as json in extras of intent
 public class ShiftView extends AppCompatActivity {
@@ -34,39 +36,38 @@ public class ShiftView extends AppCompatActivity {
         state = findViewById(R.id.State);
         name = findViewById(R.id.MyShift);
 
-        /*
-        // Deserialize your shift
-        Shift yours = new Gson().fromJson(getIntent().getStringExtra("MyShift"), Shift.class);
-
-        // Deserialize everyone else's shift
-        //Shift[] temp = new Gson().fromJson(getIntent().getStringExtra("OtherShifts"), Shift[].class), everyone = new Shift[temp.length-1];
-
-
-        name.setText(yours.EmpFirstName + " " + yours.EmpLastName);
+        name.setText(getSharedPreferences(Home.pref,0).getString("Name", "DIDN'T RECEIVE A NAME"));
         state.setText(getIntent().getStringExtra("State"));
 
-        try {
-            String[] shifts = Home.Time(new JSONObject(getIntent().getStringExtra("MyShift")),0);
-            time.setText( state.equals("AM")? shifts[0] : shifts[1] );
-        }catch (Exception e){
-            Log.d("ShiftView", e.getMessage());
-        }
+        // Grab your shift
+        String yours = getIntent().getStringExtra("MyShift");
+        time.setText(yours);
 
-        for(int i = 0, j = 0; i < temp.length; i++) {
-            if (temp[i].EmployeeID == yours.EmployeeID)
-                j++;
-            everyone[j++] = temp[i];
+        // Deserialize everyone else's shift; 'temp' entire list of shifts,
+        // 'everyone' (arraylist)list of shifts at same time
+        Gson gson = new Gson();
+        Shift[] temp = gson.fromJson(getIntent().getStringExtra("Others"), Shift[].class);
+        ArrayList<Shift> everyone = new ArrayList<>();
+
+
+        for(int i = 0; i < temp.length; i++) {
+            try {
+                if (Home.Time(new JSONObject(gson.toJson(temp[i])), 0).equals(yours))
+                    everyone.add(temp[i]);
+            }catch(Exception e){
+                Log.d("ShiftView_ERROR", e.getMessage());
+            }
         }
 
         recyclerView = findViewById(R.id.recyclerview3);
-        adapter = new Adapter3(everyone, state.getText().toString());
+        Shift[] send = new Shift[everyone.size()];
+        for(int i = 0; i < send.length; i++)
+            send[i] = everyone.get(i);
+        adapter = new Adapter3(send, state.getText().toString());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        time.setText(getIntent().getStringExtra("Time"));
-        state = findViewById(R.id.State);
-        state.setText(getIntent().getStringExtra("state"));
-        */
+
         FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
 
         getIncomingIntentAndSet();

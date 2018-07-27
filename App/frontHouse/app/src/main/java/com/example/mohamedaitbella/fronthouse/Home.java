@@ -143,6 +143,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
                 getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("EmployeeID").commit();
                 getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("StoreID").commit();
+                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("Name").commit();
                 finish();
                 startActivity(new Intent(this, Login.class));
                 break;
@@ -193,7 +194,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
 
-        try {  editor.putInt("EmployeeID", result.getInt("EmployeeID")); }
+        try {
+            editor.putInt("EmployeeID", result.getInt("EmployeeID"));
+        }
         catch (Exception e){
             Log.d("Debug: Get Emp ID", e.getMessage());
             return;
@@ -202,6 +205,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         if(share.getInt("EmployeeID", -1) > 0){
             try {
                 editor.putInt("StoreID", result.getInt("StoreID"));
+                editor.putString("Name", result.getString("FirstName")+" " + result.getString("LastName"));
             }catch(Exception e){
                 Log.d("SHARE", e.getMessage());
             }
@@ -255,7 +259,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Log.d("TIME", "Switch case = " + i);
         switch (i){
 
-            // Schedule
+            // Schedule/Shift
             case 0:
                 Start = "StartOfShift";
                 End = "EndOfShift";

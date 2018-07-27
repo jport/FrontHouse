@@ -89,9 +89,9 @@ public class Schedule extends Fragment {
         Arrays.sort(json);
         Log.d("JSON", Arrays.toString(json));
 
-        ArrayList<Shift>[] week = new ArrayList[7];
-        for(int i = 0; i < week.length; i++)
-            week[i] = new ArrayList<Shift>();
+        ArrayList<Shift>[] weekShifts = new ArrayList[7];
+        for(int i = 0; i < weekShifts.length; i++)
+            weekShifts[i] = new ArrayList<Shift>();
         Shift[] mine = new Shift[7];
 
         Calendar cal = Calendar.getInstance();
@@ -106,35 +106,38 @@ public class Schedule extends Fragment {
 
 
         // Sort shifts into days  and store the current employee's shifts(in order)
-        week[start].add(json[0]);
+        weekShifts[start].add(json[0]);
         for(int i = 1, j = start; i < json.length; i++){
             if(!json[i-1].StartTime.substring(0,10).equals(json[i].StartTime.substring(0,10)))
                 j++;
             if(json[i].EmployeeID == share.getInt("EmployeeID", 0))
                 mine[j] = json[i];
 
-            week[j].add(json[i]);
+            weekShifts[j].add(json[i]);
         }
 
         String am_shifts[] = new String[7];
         String pm_shifts[] = new String[7];
         String days[] = new String[7];
 
-        // Calendar to keep track of the date the first day of the week
+        // Calendar to keep track of the date the first day of the weekShifts
         int temp = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
         Log.d("CAL", "temp = " + temp);
 
+        Log.d("TESTY", Arrays.toString(mine));
         //--------------- Add  shifts to arrays here -----------------------------------
         for(int i = 0; i < mine.length; i++){
 
-            Log.d("NewDebug", (mine[i] == null)? "NOTHING" : mine[i].StartTime );
-            String shifts[];
+            days[i] = mine[1].StartTime.substring(5,7)+"/"+ (temp+i);
+
+            if(mine[i] == null) continue;
             try {
+                String shifts[];
+
                 // For now, use '0' for Schedule and '1' for MyAvailability
                 shifts = Home.Time( new JSONObject(gson.toJson(mine[i]) ), 0);
                 am_shifts[i] = shifts[0];
                 pm_shifts[i] = shifts[1];
-                days[i] = mine[start].StartTime.substring(5,8) + (temp+i);
             }catch (Exception e){
                 Log.d("SCHEDULE_catch", e.getMessage());
             }
@@ -143,9 +146,8 @@ public class Schedule extends Fragment {
 
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
-
-        // Need to add 'week' to adapter for shift click actions
-        Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext());
+        // 'weekShifts' holds all shifts for week, placed into right days
+        Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext(), weekShifts);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);

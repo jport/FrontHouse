@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -46,6 +47,17 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
             Log.d("Adapter3", e.getMessage());
         }
         viewHolder.shift.setText(state.equals("AM")? shifts[0] : shifts[1]);
+
+        viewHolder.click.setOnClickListener(new View.OnClickListener() {
+            @Override
+            // Should open swap/pickup dialog box, with cancel button
+            // Button determined by employee shift status
+            // Send to firebase on completion (for pickup)
+            public void onClick(View view) {
+                // Do buttons. Link:
+                // https://stackoverflow.com/questions/17622622/how-to-pass-data-from-a-fragment-to-a-dialogfragment
+            }
+        });
     }
 
     @Override
@@ -56,7 +68,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView state, employee, shift, job;
-
+        LinearLayout click;
 
         public ViewHolder(@NonNull View view) {
             super(view);
@@ -64,6 +76,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
             employee = view.findViewById(R.id.MyShift);
             shift = view.findViewById(R.id.Time);
             job = view.findViewById(R.id.Title);
+            click = view.findViewById(R.id.other_shift);
 
         }
     }
