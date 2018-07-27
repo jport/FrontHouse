@@ -3,6 +3,7 @@ package com.example.mohamedaitbella.fronthouse;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -38,12 +39,14 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
     String[] am_shifts = new String[7], pm_shifts = new String[7];
     HashSet<Integer> hash = new HashSet<>();
     Button submit;
-    //private Context context;
+    SharedPreferences share;
+    Context context;
+    String url="http://knightfinder.com/WEBAPI/SetAvailability.aspx";
 
-    public Adapter2(JSONArray json, Button b){
-    //public Adapter2(JSONArray json, Button b, Context context){
+    //public Adapter2(JSONArray json, Button b){
+    public Adapter2(JSONArray json, Button b, Context context){
 
-        //this.context= context;
+        this.context= context;
 
         submit = b;
 
@@ -107,9 +110,12 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: submit listner entered");
-                //Intent intent = new Intent(context, MyAvailability.class);
-                //intent.putExtra("am_shifts", am_shifts);
-                //intent.putExtra("pm_shifts", pm_shifts);
+                String payLoad;
+
+                payLoad= getPayLoad(days, am_shifts,pm_shifts);
+
+                APICall apicall = new APICall();
+                apicall.execute(url,payLoad);
             }
         });
     }
@@ -283,5 +289,47 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
             return true;
         }
+    }
+
+    private String getPayLoad(String[] days, String[] am_shifts, String[] pm_shifts){
+        String load;
+        StringBuilder sb = new StringBuilder();
+        share = context.getApplicationContext().getSharedPreferences(Home.pref, 0);
+
+        sb.append("EmployeeID:");
+        sb.append(share.getString("EmployeeID","Default Value"));
+        sb.append("[");
+
+        for(int i=0; i<days.length; i++){
+            String hardcoded = "1900-01-01T";
+            String counter = Integer.toString(i);
+            sb.append("{");
+            sb.append("\"Day\":");
+            sb.append(counter);
+            sb.append(",");
+            sb.append("\"StartTime\":");
+            sb.append("\""+hardcoded);
+            sb.append(am_shifts[i]);
+            sb.append(":00\"");
+            sb.append(",");
+            sb.append("\"EndTime\":");
+            sb.append("\""+hardcoded);
+            sb.append(pm_shifts[i]);
+            sb.append(":00\"");
+            sb.append(",");
+            sb.append("}");
+
+            if(i!=6) {
+            sb.append(",");
+            }
+
+
+        }
+
+        sb.append("]");
+
+        load = sb.toString();
+
+        return load;
     }
 }

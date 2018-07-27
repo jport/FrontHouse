@@ -1,5 +1,6 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -83,7 +84,7 @@ public class MyAvailability extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerview2);
 
-        adapter = new Adapter2(json, submit);
+        adapter = new Adapter2(json, submit, getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         Log.d("Activity2", "Recyclerview");
