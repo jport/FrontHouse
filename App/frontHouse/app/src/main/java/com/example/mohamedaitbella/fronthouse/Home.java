@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -41,6 +42,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     static ProgressBar load;
     SharedPreferences share;
     static NavigationView navigationView;
+    Menu menu;
     MenuItem hello;
 
     @Override
@@ -61,8 +63,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         share = getApplicationContext().getSharedPreferences(Home.pref, 0);
-
-        hello = findViewById(R.id.nav_AvailabilityRequests);
 
         // Stops unauthorized access to home
         if(share.getInt("EmployeeID", -1) < 1 || share.getInt("StoreID", -1)< 1){
@@ -141,6 +141,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_Settings:
                 Toast.makeText(this, "You clicked settings", Toast.LENGTH_SHORT).show();
+
+                menu = navigationView.getMenu();
+                hello = menu.findItem(R.id.nav_AvailabilityRequests);
                 hello.setVisible(false);
                 break;
             case R.id.nav_Logout:
