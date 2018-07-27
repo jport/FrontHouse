@@ -34,11 +34,12 @@ public class ShiftView extends AppCompatActivity {
         state = findViewById(R.id.State);
         name = findViewById(R.id.MyShift);
 
+        /*
         // Deserialize your shift
         Shift yours = new Gson().fromJson(getIntent().getStringExtra("MyShift"), Shift.class);
 
         // Deserialize everyone else's shift
-        Shift[] temp = new Gson().fromJson(getIntent().getStringExtra("OtherShifts"), Shift[].class), everyone = new Shift[temp.length-1];
+        //Shift[] temp = new Gson().fromJson(getIntent().getStringExtra("OtherShifts"), Shift[].class), everyone = new Shift[temp.length-1];
 
 
         name.setText(yours.EmpFirstName + " " + yours.EmpLastName);
@@ -65,7 +66,7 @@ public class ShiftView extends AppCompatActivity {
         time.setText(getIntent().getStringExtra("Time"));
         state = findViewById(R.id.State);
         state.setText(getIntent().getStringExtra("state"));
-
+        */
         FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
 
         getIncomingIntentAndSet();

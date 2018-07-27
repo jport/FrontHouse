@@ -23,7 +23,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private String[] pm_shifts;
     private String[] days;     // In case dates are passed
     private Context context;
-    private String[] week = {"Monday","Tuesday","Wedsnesday","Thursday","Friday","Saturday","Sunday"};
+    private String[] week = {"Sunday", "Monday","Tuesday","Wedsnesday","Thursday","Friday","Saturday"};
 
     public Adapter(String[] shifts1, String[] shifts2, String[] days, Context context){
         am_shifts = shifts1;

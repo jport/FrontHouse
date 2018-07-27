@@ -73,7 +73,7 @@
 		<button type="button" id="b_submit" title="Submit information to create new employee">SUBMIT</button>
 		</br>
 		</br>
-		Return to the <a href="m1test_home_1.html"
+		Return to the <a href="Homepage.html"
 			title="Home">FrontHouse Homepage</a>
 		</br>
 	
@@ -90,9 +90,7 @@
 			var store_id, job_type, user_name, pass_word, first_name, last_name, email_primary, phone_number;
 			
 			$("#b_submit").click(function() {
-				//These hardcoded for now
-				//store_id = $("#").val();
-				//job_type = $("#").val();
+				store_id = localStorage.getItem("StoreID");
 				user_name = $("#employee_username").val();
 				pass_word = $("#employee_password").val();
 				first_name = $("#employee_first_name").val();
@@ -102,10 +100,9 @@
 				
 				
 				var json_payload = 
-				{"StoreId" : 1 , "JobType" : 1, "UserName" : user_name , "Password" : pass_word , "FirstName" : first_name , "LastName" : last_name , "Email" : email_primary , "Phone" : phone_number };
+				{"StoreId" : store_id , "JobType" : 1, "UserName" : user_name , "Password" : pass_word , "FirstName" : first_name , "LastName" : last_name , "Email" : email_primary , "Phone" : phone_number };
 				
 				json_payload = JSON.stringify(json_payload);
-				
 				$.ajax({
 					type: 'POST',
 					url: 'http://knightfinder.com/WEBAPI/CreateEmployee.aspx',
@@ -117,7 +114,7 @@
 						}
 						else
 						{
-							alert("New Employee ID: " + data.EmployeeID + " is now in database for ");
+							alert("New Employee ID: " + data.EmployeeID + " is now in database");
 						}
 					},
 					error: function() {

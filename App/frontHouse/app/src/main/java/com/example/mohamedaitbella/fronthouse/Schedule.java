@@ -28,8 +28,14 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Schedule extends Fragment {
 
@@ -78,27 +84,57 @@ public class Schedule extends Fragment {
 
         Shift[] json = gson.fromJson(result.toString(), GetSchedule.class).schedules;
 
+        // Sort all shifts by day
         Log.d("JSON", Arrays.toString(json));
         Arrays.sort(json);
         Log.d("JSON", Arrays.toString(json));
 
+        ArrayList<Shift>[] week = new ArrayList[7];
+        for(int i = 0; i < week.length; i++)
+            week[i] = new ArrayList<Shift>();
+        Shift[] mine = new Shift[7];
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Integer.parseInt(json[0].StartTime.substring(0,4))+0,
+                Integer.parseInt(json[0].StartTime.substring(5,7)) -1,
+                Integer.parseInt(json[0].StartTime.substring(8,10) )+0);
+
+        // Get first day of work
+        // ------------------- CHANGE LATER!! ----------------------------
+        /*-------------*/  int start = 0; //cal.DAY_OF_WEEK-1; -----------
+        // ---------------------------------------------------------------
+
+
+        // Sort shifts into days  and store the current employee's shifts(in order)
+        week[start].add(json[0]);
+        for(int i = 1, j = start; i < json.length; i++){
+            if(!json[i-1].StartTime.substring(0,10).equals(json[i].StartTime.substring(0,10)))
+                j++;
+            if(json[i].EmployeeID == share.getInt("EmployeeID", 0))
+                mine[j] = json[i];
+
+            week[j].add(json[i]);
+        }
+
         String am_shifts[] = new String[7];
         String pm_shifts[] = new String[7];
-        String days[] = new String[7];     // In case dates are passed
+        String days[] = new String[7];
 
-        //fakeNews(am_shifts, pm_shifts);
+        // Calendar to keep track of the date the first day of the week
+        int temp = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
+        Log.d("CAL", "temp = " + temp);
 
+        //--------------- Add  shifts to arrays here -----------------------------------
+        for(int i = 0; i < mine.length; i++){
 
-        //--------------- Add shifts here -----------------------------------
-        for(int i = 0; i < json.length; i++){
-
+            Log.d("NewDebug", (mine[i] == null)? "NOTHING" : mine[i].StartTime );
             String shifts[];
             try {
                 // For now, use '0' for Schedule and '1' for MyAvailability
-                shifts = Home.Time( new JSONObject(gson.toJson(json[i]) ), 0);
+                shifts = Home.Time( new JSONObject(gson.toJson(mine[i]) ), 0);
                 am_shifts[i] = shifts[0];
                 pm_shifts[i] = shifts[1];
-                days[i] = json[i].StartTime.substring(5,10);
+                days[i] = mine[start].StartTime.substring(5,8) + (temp+i);
             }catch (Exception e){
                 Log.d("SCHEDULE_catch", e.getMessage());
             }
@@ -107,22 +143,16 @@ public class Schedule extends Fragment {
 
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
+
+        // Need to add 'week' to adapter for shift click actions
         Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext());
-        if(adapter==null){
-            Log.d("Activity2", "null = ");
-        }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        Log.d("Activity2", "PAST LAYOUT_MANAGER");
         recyclerView.setAdapter(adapter);
         //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         Log.d("Activity2", "Recyclerview. List size = "+ am_shifts.length);
 
 
-        try {
-            getActivity().registerReceiver(broadcastReceiver, new IntentFilter("Schedule", Intent.CATEGORY_DEFAULT));
-        }catch(IntentFilter.MalformedMimeTypeException e){
-            Log.d("IntentFilter", e.getMessage());
-        }
 
         return view;
 
