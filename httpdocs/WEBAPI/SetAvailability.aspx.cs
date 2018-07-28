@@ -52,22 +52,28 @@ public partial class WISAAPI_SetAvailability : System.Web.UI.Page
 		try
 		{
 			connection.Open();
+			
+			string delSql = "DELETE FROM AvailabilityTbl WHERE EmployeeID = @EmployeeID AND Status = 0";
+			SqlCommand delCmd = new SqlCommand(delSql, connection);
+			delCmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
+			delCmd.Parameters["@EmployeeID"].Value = req.EmployeeID;
+			delCmd.ExecuteNonQuery();
 
-			string sql = "INSERT INTO AvailabilityTbl (EmployeeID, DayOfWeek, StartTime, EndTime, Status) VALUES (@EmployeeID, @DayOfWeek, @StartTime, @EndTime, 0)";
-			SqlCommand cmd = new SqlCommand(sql, connection);
-			cmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
-			cmd.Parameters.Add("@DayOfWeek", SqlDbType.Int);
-			cmd.Parameters.Add("@StartTime", SqlDbType.DateTime);
-			cmd.Parameters.Add("@EndTime", SqlDbType.DateTime);
-			cmd.Parameters["@EmployeeID"].Value = req.EmployeeID;
+			string insSql = "INSERT INTO AvailabilityTbl (EmployeeID, DayOfWeek, StartTime, EndTime, Status) VALUES (@EmployeeID, @DayOfWeek, @StartTime, @EndTime, 0)";
+			SqlCommand insCmd = new SqlCommand(insSql, connection);
+			insCmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
+			insCmd.Parameters.Add("@DayOfWeek", SqlDbType.Int);
+			insCmd.Parameters.Add("@StartTime", SqlDbType.DateTime);
+			insCmd.Parameters.Add("@EndTime", SqlDbType.DateTime);
+			insCmd.Parameters["@EmployeeID"].Value = req.EmployeeID;
 
 			foreach(Availability a in req.days)
 			{
-				cmd.Parameters["@DayOfWeek"].Value = a.Day;
-				cmd.Parameters["@StartTime"].Value = a.StartTime;
-				cmd.Parameters["@EndTime"].Value = a.EndTime;
+				insCmd.Parameters["@DayOfWeek"].Value = a.Day;
+				insCmd.Parameters["@StartTime"].Value = a.StartTime;
+				insCmd.Parameters["@EndTime"].Value = a.EndTime;
 
-				cmd.ExecuteNonQuery();
+				insCmd.ExecuteNonQuery();
 			}
 		}
 		catch(Exception ex)
