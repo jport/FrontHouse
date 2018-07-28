@@ -122,6 +122,19 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
         Log.d("Frag", "Ends toolbar");
+
+
+        // Getting the job type int from shared preferences.
+        int jobtype = getApplicationContext().getSharedPreferences(Home.pref, 0).getInt("JobType", 0);
+
+
+        // Clause for showing the manager or employee. 
+        if(jobtype==0){
+            hideManager();
+        } else{
+            hideEmployee();
+        }
+
     }
 
 
@@ -143,6 +156,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_Settings:
                 Toast.makeText(this, "You clicked settings", Toast.LENGTH_SHORT).show();
+
 
                 menu = navigationView.getMenu();
                 hello = menu.findItem(R.id.nav_AvailabilityRequests);
@@ -315,9 +329,22 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return shifts;
     }
 
-    private void hideItem(){
+    public void hideManager(){
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.nav_Settings).setVisible(false);
+        menu.findItem(R.id.nav_AddEmployee).setVisible(false);
+        menu.findItem(R.id.nav_AvailabilityRequests).setVisible(false);
+        menu.findItem(R.id.nav_MyInfo).setVisible(false);
+
     }
+
+    public void hideEmployee(){
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_availability).setVisible(false);
+        menu.findItem(R.id.nav_myinfo).setVisible(false);
+        menu.findItem(R.id.nav_schedule).setVisible(false);
+    }
+
+
 }

@@ -19,6 +19,26 @@
 
     </group>
 
+
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/nav_AvailabilityRequests"
+            android:icon="@drawable/ic_requests"
+            android:title="Requests"/>
+
+        <item android:id="@+id/nav_MyInfo"
+            android:icon="@drawable/ic_myinfo"
+            android:title="My Info"/>
+
+        <item android:id="@+id/nav_AddEmployee"
+            android:icon="@drawable/ic_addemployee"
+            android:title="My Employees"/>
+
+
+
+
+    </group>
+
     <item android:title="More">
         <menu>
 
@@ -36,24 +56,6 @@
         </menu>
     </item>
 
-    <group android:checkableBehavior="single">
-
-        <item android:id="@+id/nav_AvailabilityRequests"
-              android:icon="@drawable/ic_requests"
-             android:title="Requests"/>
-
-        <item android:id="@+id/nav_MyInfo"
-            android:icon="@drawable/ic_myinfo"
-            android:title="My Info"/>
-
-        <item android:id="@+id/nav_AddEmployee"
-            android:icon="@drawable/ic_addemployee"
-            android:title="My Employees"/>
-
-
-
-
-    </group>
 
 
 </menu>
