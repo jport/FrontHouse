@@ -112,6 +112,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     page).commit();
             navigationView.setCheckedItem(layout);
+
+
         }
         else if(savedInstanceState==null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -311,5 +313,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         Log.d("TIME", "Returns:" + Arrays.toString(shifts));
         return shifts;
+    }
+
+    private void hideItem(){
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_Settings).setVisible(false);
     }
 }

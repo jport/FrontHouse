@@ -303,18 +303,29 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
         for(int i=0; i<days.length; i++){
             String hardcoded = "1900-01-01T";
             String counter = Integer.toString(i);
+            if(am_shifts[i]== null && pm_shifts[i] == null ){
+                continue;
+            }
             sb.append("{");
             sb.append("\"Day\":");
             sb.append(counter);
             sb.append(",");
             sb.append("\"StartTime\":");
             sb.append("\""+hardcoded);
-            sb.append(am_shifts[i]);
+            if(am_shifts[i]==null){
+                sb.append(pm_shifts[i].substring(0,4));
+            }else{
+                sb.append(am_shifts[i].substring(0,4));
+            }
             sb.append(":00\"");
             sb.append(",");
             sb.append("\"EndTime\":");
             sb.append("\""+hardcoded);
-            sb.append(pm_shifts[i]);
+            if(pm_shifts[i]==null){
+                sb.append(am_shifts[i].substring(6,9));
+            }else{
+                sb.append(pm_shifts[i].substring(6,9));
+            }
             sb.append(":00\"");
             sb.append(",");
             sb.append("}");
