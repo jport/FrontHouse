@@ -297,7 +297,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
         share = context.getApplicationContext().getSharedPreferences(Home.pref, 0);
 
         sb.append("EmployeeID:");
-        sb.append(share.getString("EmployeeID","Default Value"));
+        sb.append(share.getInt("EmployeeID",-1));
         sb.append("[");
 
         for(int i=0; i<days.length; i++){
