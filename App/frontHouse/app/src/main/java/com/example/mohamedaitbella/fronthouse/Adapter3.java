@@ -24,12 +24,14 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
     Shift[] list;
     String state;
     Context context;
+    int myShiftID;
 
-    Adapter3(Shift[] list, String state, Context context){
+    Adapter3(Shift[] list, String state, Context context, int myShiftID){
 
         this.list = list;
         this.state = state;
         this.context = context;
+        this.myShiftID = myShiftID;
     }
 
     @NonNull
@@ -96,6 +98,18 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                                 String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
                                         shift = viewHolder.shift.getText().toString();
                                 Send.pickup(accepter, giver, shift, scheID );
+
+                                // API call
+                                int send1 = myShiftID;
+
+                                APICall apicall = new APICall();
+                                String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
+                                        payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
+                                                "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
+                                                "\"RequestType\":\"3\", "+
+                                                "\"ScheduleID1\": \"" +send1+ "\", " +
+                                                "\"RequestText\":\"\"}";
+                                apicall.execute(url, payload);
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -116,15 +130,15 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 SharedPreferences share = context.getSharedPreferences(Home.pref,0);
-                                int send1 = list[viewHolder.getAdapterPosition()].ScheduleID,
-                                        send2 = list[viewHolder.getAdapterPosition()].EmployeeID;
+                                int send1 = myShiftID;
+                                int send2 = list[viewHolder.getAdapterPosition()].ScheduleID;
 
                                 APICall apicall = new APICall();
                                 String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
-                                        payload = "{\"StoreID\" :\""+ share.getInt("StoreID", -1) + "\", " +
-                                                "\"EmployeeID\": \""+share.getInt("EmployeeID", -1)+"\"," +
-                                                "\"RequestType\" :\"3\","+
-                                                "\"ScheduleID\": \"" +send1+ "\", \"ScheduleID\": \""+send2+"\"," +
+                                        payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
+                                                "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
+                                                "\"RequestType\":\"3\", "+
+                                                "\"ScheduleID1\": \"" +send1+ "\", \"ScheduleID2\":\""+send2+"\", " +
                                                 "\"RequestText\":\"\"}";
                                 apicall.execute(url, payload);
                             }
@@ -142,6 +156,9 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                 }
             }
         });
+
+        if(viewHolder.shift.getText().toString().equals(""))
+            viewHolder.click.setEnabled(false);
     }
 
     @Override

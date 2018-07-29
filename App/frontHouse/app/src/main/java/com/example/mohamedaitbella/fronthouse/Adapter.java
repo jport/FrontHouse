@@ -27,13 +27,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private Context context;
     private String[] week = {"Sunday", "Monday","Tuesday","Wedsnesday","Thursday","Friday","Saturday"};
     private ArrayList<Shift>[] weekShifts;
+    private int[] ScheduleIDs;
 
-    public Adapter(String[] shifts1, String[] shifts2, String[] days, Context context, ArrayList<Shift>[] weekShifts){
+    public Adapter(String[] shifts1, String[] shifts2, String[] days, Context context, ArrayList<Shift>[] weekShifts, int[] ScheduleIDs){
         am_shifts = shifts1;
         pm_shifts = shifts2;
         this.days = days;
         this.context = context;
         this.weekShifts = weekShifts;
+        this.ScheduleIDs = ScheduleIDs;
     }
 
     @NonNull
@@ -65,6 +67,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 intent.putExtra("MyShift", (am_shifts[viewHolder.getAdapterPosition()]== null)?
                         "":
                         am_shifts[viewHolder.getAdapterPosition()] + pm_shifts[viewHolder.getAdapterPosition()]);
+                intent.putExtra("MyShiftID", ScheduleIDs[viewHolder.getAdapterPosition()]);
                 // Send all shifts for the day and have ShiftView control the ones to be displayed
                 // by using Home.Time() and [String].equals()
                 intent.putExtra("Others", new Gson().toJson(weekShifts[viewHolder.getAdapterPosition()]));

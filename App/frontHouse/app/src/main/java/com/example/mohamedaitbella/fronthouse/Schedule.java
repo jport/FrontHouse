@@ -141,6 +141,7 @@ public class Schedule extends Fragment {
         String am_shifts[] = new String[7];
         String pm_shifts[] = new String[7];
         String days[] = new String[7];
+        int[] ScheduleIDs = new int[7];
 
         // Calendar to keep track of the date the first day of the weekShifts
         int temp = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
@@ -162,6 +163,8 @@ public class Schedule extends Fragment {
         //--------------- Add  shifts to arrays here -----------------------------------
         for(int i = 0; i < mine.length; i++){
 
+            if(myStart < 0)
+                break;
             // Change to 'mine[start]' later
             if(mine[myStart] != null)
                 days[i] = mine[myStart].StartTime.substring(5,7)+"/"+ (temp+i);
@@ -174,6 +177,7 @@ public class Schedule extends Fragment {
                 shifts = Home.Time( new JSONObject(gson.toJson(mine[i]) ), 0);
                 am_shifts[i] = shifts[0];
                 pm_shifts[i] = shifts[1];
+                ScheduleIDs[i] = mine[i].ScheduleID;
             }catch (Exception e){
                 Log.d("SCHEDULE_catch", e.getMessage());
             }
@@ -183,7 +187,7 @@ public class Schedule extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         // 'weekShifts' holds all shifts for week, placed into right days
-        Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext(), weekShifts);
+        Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext(), weekShifts, ScheduleIDs);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);

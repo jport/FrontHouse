@@ -75,7 +75,7 @@ public class ShiftView extends AppCompatActivity {
         Shift[] send = new Shift[everyone.size()];
         for(int i = 0; i < send.length; i++)
             send[i] = everyone.get(i);
-        adapter = new Adapter3(send, state.getText().toString(), this);
+        adapter = new Adapter3(send, state.getText().toString(), this, getIntent().getIntExtra("MyShiftID", -1));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
