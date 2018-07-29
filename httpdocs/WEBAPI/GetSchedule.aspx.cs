@@ -24,7 +24,7 @@ public partial class WISAAPI_GetSchedule : System.Web.UI.Page
 
 	public struct Schedule
 	{
-		public int ScheduleID, EmployeeID;
+		public int ScheduleID, EmployeeID, ShiftStatus;
 		public String EmpFirstName, EmpLastName;
 		public DateTime StartOfShift, EndOfShift;
 	}
@@ -54,7 +54,7 @@ public partial class WISAAPI_GetSchedule : System.Web.UI.Page
 		{
 			connection.Open();
 
-			string sql = "SELECT s.ScheduleID,s.StartOfShift,s.EndOfShift,s.EmployeeID,e.FirstName EmpFirstName,e.LastName EmpLastName FROM Schedule s LEFT JOIN Employee e ON s.EmployeeID = e.EmployeeID WHERE s.StoreID = @StoreID";
+			string sql = "SELECT s.ScheduleID,s.StartOfShift,s.EndOfShift,s.EmployeeID,e.FirstName EmpFirstName,e.LastName EmpLastName,s.ShiftStatus FROM Schedule s LEFT JOIN Employee e ON s.EmployeeID = e.EmployeeID WHERE s.StoreID = @StoreID";
 			SqlCommand command = new SqlCommand(sql, connection);
 			command.Parameters.Add("@StoreID", SqlDbType.Int);
 			command.Parameters["@StoreID"].Value = req.StoreID;
@@ -68,6 +68,7 @@ public partial class WISAAPI_GetSchedule : System.Web.UI.Page
 					Schedule s = new Schedule();
 					s.ScheduleID = Convert.ToInt32(reader["ScheduleID"]);
 					s.EmployeeID = Convert.ToInt32(reader["EmployeeID"]);
+					s.ShiftStatus = Convert.ToInt32(reader["ShiftStatus"]);
 					s.EmpFirstName = Convert.ToString(reader["EmpFirstName"]);
 					s.EmpLastName = Convert.ToString(reader["EmpLastName"]);
 					DateTime.TryParse(Convert.ToString(reader["StartOfShift"]), out s.StartOfShift);
