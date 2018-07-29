@@ -26,6 +26,7 @@ class Shift implements Comparable<Shift> {
     @SerializedName("EndOfShift")
     String EndTime;
     String Name;
+    String shift = "NOT SET YET";
 
     Shift(int ScheduleID, int EmployeeID, int ShiftStatus, String EmpFirstName, String EmpLastName, String StartOfShift, String EndOfShift){
         this.ScheduleID = ScheduleID;

@@ -37,10 +37,18 @@ public class ShiftView extends AppCompatActivity {
         name = findViewById(R.id.MyShift);
 
         name.setText(getSharedPreferences(Home.pref,0).getString("Name", "DIDN'T RECEIVE A NAME"));
-        state.setText(getIntent().getStringExtra("State"));
 
         // Grab your shift
         String yours = getIntent().getStringExtra("MyShift");
+
+        if(yours.length()>11) {
+            state.setText("AM/\nPM");
+            yours = yours.substring(0,6) + yours.substring(12);
+        }
+        else {
+            state.setText(getIntent().getStringExtra("State"));
+        }
+
         time.setText(yours);
 
         // Deserialize everyone else's shift; 'temp' entire list of shifts,
@@ -53,8 +61,11 @@ public class ShiftView extends AppCompatActivity {
         for(int i = 0; i < temp.length; i++) {
             try {
                 String shifts[] = Home.Time(new JSONObject(gson.toJson(temp[i])), 0);
-                if (shifts[0].equals(yours) || shifts[1].equals(yours))
-                    everyone.add(temp[i]);
+                if (yours.equals("") || (!shifts[0].equals(yours) && !shifts[1].equals(yours))) {
+                    Log.d("IFs", "Came in");
+                    if (shifts[0].length() == 0 || shifts[1].length() == 0 || !(shifts[0].substring(0, 6) + shifts[1].substring(12)).equals(yours))
+                        everyone.add(temp[i]);
+                }
             }catch(Exception e){
                 Log.d("ShiftView_ERROR", e.getMessage());
             }

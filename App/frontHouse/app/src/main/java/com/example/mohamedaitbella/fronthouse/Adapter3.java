@@ -54,9 +54,15 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
         }catch (Exception e){
             Log.d("Adapter3", e.getMessage());
         }
-        viewHolder.shift.setText(state.equals("AM")? shifts[0] : shifts[1]);
 
-        viewHolder.click.setText((list[viewHolder.getAdapterPosition()].ShiftStatus == 1)? "SWAP":"PICK-UP");
+        if(shifts[0].equals(""))
+            viewHolder.shift.setText(shifts[1]);
+        else if(shifts[1].equals(""))
+            viewHolder.shift.setText(shifts[0]);
+        else
+            viewHolder.shift.setText(shifts[0].substring(0,5) +"-"+ shifts[1].substring(6));
+
+        viewHolder.click.setText((list[viewHolder.getAdapterPosition()].ShiftStatus == 0)? "PICK-UP" : "SWAP");
         viewHolder.click.setOnClickListener(new View.OnClickListener() {
             @Override
             // Should open swap/pickup dialog box, with cancel button
@@ -71,11 +77,38 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 AlertDialog dialog;
-                Bundle args = new Bundle();
                 switch (cases){
 
+
+                    // Pickup Shift
+                    case 0:
+                        builder.setMessage("Are you sure you would like to PICK-UP this shift?");
+
+                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                int scheID = list[viewHolder.getAdapterPosition()].ScheduleID;
+                                SharedPreferences share = context.getSharedPreferences(Home.pref,0);
+                                // ShiftID still needed for firebase request
+
+                                // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                                // Sends to constant url and Manager's app takes care of rest
+                                String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
+                                        shift = viewHolder.shift.getText().toString();
+                                Send.pickup(accepter, giver, shift, scheID );
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                dialog.cancel();
+                            }
+                        });
+                        dialog = builder.create();
+                        break;
+
                     // Swap, job not currently on request
-                    case 1:
+                    default:
                         builder.setMessage("Are you sure you would like to SWAP? Employee must have already agreed to SWAP.");
 
                         // If yes, send API call for swap
@@ -104,33 +137,6 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                         });
                         dialog = builder.create();
                         dialog.show();
-                        break;
-
-                    // Pickup Shift
-                    default:
-                        builder.setMessage("Are you sure you would like to PICK-UP this shift?");
-
-                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                int scheID = list[viewHolder.getAdapterPosition()].ScheduleID;
-                                SharedPreferences share = context.getSharedPreferences(Home.pref,0);
-                                // ShiftID still needed for firebase request
-
-                                // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
-                                // Sends to constant url and Manager's app takes care of rest
-                                String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
-                                        shift = viewHolder.shift.getText().toString();
-                                Send.pickup(accepter, giver, shift, scheID );
-                            }
-                        });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int i) {
-                                dialog.cancel();
-                            }
-                        });
-                        dialog = builder.create();
                         break;
 
                 }

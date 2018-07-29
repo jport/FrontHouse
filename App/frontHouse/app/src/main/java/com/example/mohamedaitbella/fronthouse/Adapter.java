@@ -62,7 +62,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
                 Intent intent = new Intent(context, ShiftView.class);
                 intent.putExtra("State", "AM");
-                intent.putExtra("MyShift", am_shifts[viewHolder.getAdapterPosition()]);
+                intent.putExtra("MyShift", (am_shifts[viewHolder.getAdapterPosition()]== null)?
+                        "":
+                        am_shifts[viewHolder.getAdapterPosition()] + pm_shifts[viewHolder.getAdapterPosition()]);
                 // Send all shifts for the day and have ShiftView control the ones to be displayed
                 // by using Home.Time() and [String].equals()
                 intent.putExtra("Others", new Gson().toJson(weekShifts[viewHolder.getAdapterPosition()]));
@@ -76,7 +78,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
                 Intent intent = new Intent(context, ShiftView.class);
                 intent.putExtra("State", "PM");
-                intent.putExtra("MyShift", pm_shifts[viewHolder.getAdapterPosition()]);
+                intent.putExtra("MyShift", (pm_shifts[viewHolder.getAdapterPosition()] == null)?
+                        "":
+                        am_shifts[viewHolder.getAdapterPosition()] + pm_shifts[viewHolder.getAdapterPosition()]);
                 // Send all shifts for the day and have ShiftView control the ones to be displayed
                 // by using Home.Time() and [String].equals()
                 intent.putExtra("Others", new Gson().toJson(weekShifts[viewHolder.getAdapterPosition()]));
