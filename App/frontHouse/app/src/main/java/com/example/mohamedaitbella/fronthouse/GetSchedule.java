@@ -19,20 +19,23 @@ public class GetSchedule{
 
 class Shift implements Comparable<Shift> {
 
-    int ScheduleID, EmployeeID;
+    int ScheduleID, EmployeeID, ShiftStatus;
     String EmpFirstName, EmpLastName;
     @SerializedName("StartOfShift")
     String StartTime;
     @SerializedName("EndOfShift")
     String EndTime;
+    String Name;
 
-    Shift(int ScheduleID, int EmployeeID, String EmpFirstName, String EmpLastName, String StartOfShift, String EndOfShift){
+    Shift(int ScheduleID, int EmployeeID, int ShiftStatus, String EmpFirstName, String EmpLastName, String StartOfShift, String EndOfShift){
         this.ScheduleID = ScheduleID;
         this.EmployeeID = EmployeeID;
         this.EmpFirstName = EmpFirstName;
         this.EmpLastName = EmpLastName;
         StartTime = StartOfShift;
         EndTime = EndOfShift;
+        this.ShiftStatus = ShiftStatus;
+        Name = EmpFirstName + " " +EmpLastName;
     }
 
     @Override

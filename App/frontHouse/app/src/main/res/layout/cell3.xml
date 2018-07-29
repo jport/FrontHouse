@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         app:layout_constraintEnd_toStartOf="@id/request2"
         android:paddingVertical="10dp"
-        android:paddingRight="150dp"
+        android:paddingRight="100dp"
         android:paddingLeft="10dp">
 
         <TextView

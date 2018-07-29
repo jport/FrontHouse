@@ -52,7 +52,8 @@ public class ShiftView extends AppCompatActivity {
 
         for(int i = 0; i < temp.length; i++) {
             try {
-                if (Home.Time(new JSONObject(gson.toJson(temp[i])), 0).equals(yours))
+                String shifts[] = Home.Time(new JSONObject(gson.toJson(temp[i])), 0);
+                if (shifts[0].equals(yours) || shifts[1].equals(yours))
                     everyone.add(temp[i]);
             }catch(Exception e){
                 Log.d("ShiftView_ERROR", e.getMessage());

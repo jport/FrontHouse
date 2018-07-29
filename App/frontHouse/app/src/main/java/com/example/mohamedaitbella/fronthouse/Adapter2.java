@@ -296,9 +296,9 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
         StringBuilder sb = new StringBuilder();
         share = context.getApplicationContext().getSharedPreferences(Home.pref, 0);
 
-        sb.append("{EmployeeID:");
+        sb.append("{EmployeeID:\"");
         sb.append(share.getInt("EmployeeID",-1));
-        sb.append(",\"days\":[");
+        sb.append("\", \"days\":[");
 
         for(int i=0; i<days.length; i++){
             String hardcoded = "1900-01-01T";

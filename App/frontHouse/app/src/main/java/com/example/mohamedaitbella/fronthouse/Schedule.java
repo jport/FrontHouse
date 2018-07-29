@@ -1,7 +1,9 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -103,7 +105,7 @@ public class Schedule extends Fragment {
                 Integer.parseInt(json[0].StartTime.substring(5,7)) -1,
                 Integer.parseInt(json[0].StartTime.substring(8,10) )+0);
 
-        // Get first day of work
+        // Get first SHIFTS for that week
         // ------------------- CHANGE LATER!! ----------------------------
         /*-------------*/  int start = 0; //cal.DAY_OF_WEEK-1; -----------
         // ---------------------------------------------------------------
@@ -111,11 +113,27 @@ public class Schedule extends Fragment {
 
         // Sort shifts into days  and store the current employee's shifts(in order)
         weekShifts[start].add(json[0]);
+        int myStart = -1;
         for(int i = 1, j = start; i < json.length; i++){
+
+            Log.d("LOOP", "i " + i + ", j " + j);
+
+
             if(!json[i-1].StartTime.substring(0,10).equals(json[i].StartTime.substring(0,10)))
                 j++;
-            if(json[i].EmployeeID == share.getInt("EmployeeID", 0))
+            if(j == 7) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setMessage("Still haven't restricted the sending of schedules to one week");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
+            }
+            if(json[i].EmployeeID == share.getInt("EmployeeID", 0)) {
                 mine[j] = json[i];
+                if(myStart == -1)
+                    myStart = j;
+            }
 
             weekShifts[j].add(json[i]);
         }
@@ -128,8 +146,8 @@ public class Schedule extends Fragment {
         int temp = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
         Log.d("CAL", "temp = " + temp);
 
-        // Will be changed to 'mine[start]'
-        if(mine[1] == null){
+        // If Employee doesn't have a schedule yet
+        if(myStart == -1){
             Log.d("NO_SHIFTS", "Came in");
             //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = Home.fragmentManager.beginTransaction();
@@ -145,8 +163,8 @@ public class Schedule extends Fragment {
         for(int i = 0; i < mine.length; i++){
 
             // Change to 'mine[start]' later
-            if(mine[1] != null)
-                days[i] = mine[1].StartTime.substring(5,7)+"/"+ (temp+i);
+            if(mine[myStart] != null)
+                days[i] = mine[myStart].StartTime.substring(5,7)+"/"+ (temp+i);
 
             if(mine[i] == null) continue;
             try {

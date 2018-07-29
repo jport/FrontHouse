@@ -206,7 +206,7 @@ class Send extends AsyncTask<String, String, Boolean>{
 
     Send(){}
 
-    static public void sending(String to, String page, String token){
+    static public void sending(String to, String page){
 
         Send send = new Send();
         String url = "https://fcm.googleapis.com/fcm/send";
@@ -216,7 +216,32 @@ class Send extends AsyncTask<String, String, Boolean>{
                         "\",\"notification\": {\"title\": \"This is the title\",\"text\": \"Did you make it?!\",\"click_action\": \""
                         +page+ "\"}}";
 
-        send.execute(url, payload , token );
+        send.execute(url, payload);
+    }
+
+    public static void pickup(String accepter, String giver, String shift, int scheID){
+
+        String page = "Home", frag = "Schedule";
+
+        Send send = new Send();
+        String url = "https://fcm.googleapis.com/fcm/send";
+
+        String payload =
+                "{\"to\":\"/topics/Managers"+"\"," +
+                "\"notification\":{" +
+                    "\"title\": \"NEW EMPLOYEE REQUEST\"," +
+                    "\"text\": \"An employee has requested to pick-up a shift.\"," +
+                    "\"click_action\": \" "+page+ "\"" +
+                "},"+
+                "\"data\": {"+
+                    "action :\""+ frag + "\""+
+                    "Employee1 :\""+ accepter + "\""+
+                    "Employee2 :\""+ giver + "\""+
+                    "Shift :\""+ shift + "\""+
+                    "ScheduleID :\""+ scheID + "\"" +
+                "} }";
+
+        send.execute(url, payload);
     }
 
     @Override

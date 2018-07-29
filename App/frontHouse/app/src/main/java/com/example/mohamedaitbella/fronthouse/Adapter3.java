@@ -56,7 +56,86 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
         }
         viewHolder.shift.setText(state.equals("AM")? shifts[0] : shifts[1]);
 
+        viewHolder.click.setText((list[viewHolder.getAdapterPosition()].ShiftStatus == 1)? "SWAP":"PICK-UP");
+        viewHolder.click.setOnClickListener(new View.OnClickListener() {
+            @Override
+            // Should open swap/pickup dialog box, with cancel button
+            // Button determined by employee shift status
+            // Send to firebase on completion (for pickup)
+            public void onClick(View view) {
 
+                int cases = list[viewHolder.getAdapterPosition()].ShiftStatus;
+
+                // Do buttons. Link:
+                // https://stackoverflow.com/questions/17622622/how-to-pass-data-from-a-fragment-to-a-dialogfragment
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                AlertDialog dialog;
+                Bundle args = new Bundle();
+                switch (cases){
+
+                    // Swap, job not currently on request
+                    case 1:
+                        builder.setMessage("Are you sure you would like to SWAP? Employee must have already agreed to SWAP.");
+
+                        // If yes, send API call for swap
+                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                SharedPreferences share = context.getSharedPreferences(Home.pref,0);
+                                int send1 = list[viewHolder.getAdapterPosition()].ScheduleID,
+                                        send2 = list[viewHolder.getAdapterPosition()].EmployeeID;
+
+                                APICall apicall = new APICall();
+                                String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
+                                        payload = "{\"StoreID\" :\""+ share.getInt("StoreID", -1) + "\", " +
+                                                "\"EmployeeID\": \""+share.getInt("EmployeeID", -1)+"\"," +
+                                                "\"RequestType\" :\"3\","+
+                                                "\"ScheduleID\": \"" +send1+ "\", \"ScheduleID\": \""+send2+"\"," +
+                                                "\"RequestText\":\"\"}";
+                                apicall.execute(url, payload);
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                dialog.cancel();
+                            }
+                        });
+                        dialog = builder.create();
+                        dialog.show();
+                        break;
+
+                    // Pickup Shift
+                    default:
+                        builder.setMessage("Are you sure you would like to PICK-UP this shift?");
+
+                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                int scheID = list[viewHolder.getAdapterPosition()].ScheduleID;
+                                SharedPreferences share = context.getSharedPreferences(Home.pref,0);
+                                // ShiftID still needed for firebase request
+
+                                // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                                // Sends to constant url and Manager's app takes care of rest
+                                String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
+                                        shift = viewHolder.shift.getText().toString();
+                                Send.pickup(accepter, giver, shift, scheID );
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                dialog.cancel();
+                            }
+                        });
+                        dialog = builder.create();
+                        break;
+
+                }
+            }
+        });
     }
 
     @Override
@@ -78,78 +157,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
             click = view.findViewById(R.id.request2);
 
 
-            //click.setText((list.JobStatus == 0)? "SWAP":"PICK-UP");
-            click.setOnClickListener(new View.OnClickListener() {
-                @Override
-                // Should open swap/pickup dialog box, with cancel button
-                // Button determined by employee shift status
-                // Send to firebase on completion (for pickup)
-                public void onClick(View view) {
 
-                    int cases = 1;//list[i].JobStatus
-
-                    // Do buttons. Link:
-                    // https://stackoverflow.com/questions/17622622/how-to-pass-data-from-a-fragment-to-a-dialogfragment
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    AlertDialog dialog;
-                    Bundle args = new Bundle();
-                    switch (cases){
-
-                        // Swap, job not currently on request
-                        case 0:
-                            builder.setMessage("Are you sure you would like to SWAP? Employee must have already agreed to SWAP.");
-
-                            // If yes, send API call for swap
-                            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    SharedPreferences share = context.getSharedPreferences(Home.pref,0);
-                                    int send = list[getAdapterPosition()].ScheduleID,
-                                            id = list[getAdapterPosition()].EmployeeID;
-
-                                    APICall apicall = new APICall();
-                                    String url = "http://knightfinder.com/WEBAPI/Swap.aspx",
-                                            payload = "{\"EmployeeID\": \""+share.getInt("EmployeeID", -1)+"\"," +
-                                                    "\"EmployeeID\": \"" +id+ ", \"ScheduleID\": \""+send+"\"}";
-                                    apicall.execute(url, payload);
-                                }
-                            });
-                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int i) {
-                                    dialog.cancel();
-                                }
-                            });
-                            dialog = builder.create();
-                            break;
-
-                        // Pickup Shift
-                        default:
-                            builder.setMessage("Are you sure you would like to PICK-UP this shift?");
-
-                            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    int send = list[getAdapterPosition()].ScheduleID;
-                                    // ShiftID still needed for firebase request
-
-                                    // Firebase request(new function needed): sendRequest(Employee1ID, Employee2ID, ScheduleID).
-                                    // Sends to constant url and Manager's app takes care of rest
-                                }
-                            });
-                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int i) {
-                                    dialog.cancel();
-                                }
-                            });
-                            dialog = builder.create();
-                            break;
-
-                    }
-                }
-            });
         }
     }
 }
