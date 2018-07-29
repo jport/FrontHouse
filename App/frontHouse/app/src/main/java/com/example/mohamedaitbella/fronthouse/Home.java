@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -136,8 +137,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         // Clause for showing the manager or employee. 
         if(jobtype==0){
             hideManager();
+            FirebaseMessaging.getInstance().subscribeToTopic("Employee");
         } else{
             hideEmployee();
+            FirebaseMessaging.getInstance().subscribeToTopic("Manager");
         }
 
 
