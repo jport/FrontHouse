@@ -107,20 +107,29 @@ public class Schedule extends Fragment {
 
         // Get first SHIFTS for that week
         // ------------------- CHANGE LATER!! ----------------------------
-        /*-------------*/  int start = 0; //cal.DAY_OF_WEEK-1; -----------
+        /*-------------*/  int start = cal.get(Calendar.DAY_OF_WEEK)-1;
         // ---------------------------------------------------------------
+        Log.d("CAL", "start = " + start);
 
+        // Calendar to keep track of the date the first day of the weekShifts
+        int date = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
+        Log.d("CAL", "date = " + date);
 
         // Sort shifts into days  and store the current employee's shifts(in order)
         weekShifts[start].add(json[0]);
-        int myStart = -1;
+        int myStart = (json[0].EmployeeID == share.getInt("EmployeeID", 0))? start: -1;
         for(int i = 1, j = start; i < json.length; i++){
 
             Log.d("LOOP", "i " + i + ", j " + j);
 
 
             if(!json[i-1].StartTime.substring(0,10).equals(json[i].StartTime.substring(0,10)))
-                j++;
+            // --------------- Have to change to -------------------------- //
+            // --------------- Should be increasing by differnce in days ---//
+            /*------------*/       j++;             //-------------------------//
+            // --------------------------------------------------------------//
+
+            // To be deleted after completion of task
             if(j == 7) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -131,6 +140,16 @@ public class Schedule extends Fragment {
             }
             if(json[i].EmployeeID == share.getInt("EmployeeID", 0)) {
                 mine[j] = json[i];
+                try {
+                    String shifts[];
+
+                    // For now, use '0' for Schedule and '1' for MyAvailability
+                    shifts = Home.Time( new JSONObject(gson.toJson(mine[j]) ), 0);
+                    Log.d("MINE1", shifts[0]);
+                    Log.d("MINE2", shifts[1]);
+                }catch (Exception e){
+                    Log.d("SCHEDULE_catch", e.getMessage());
+                }
                 if(myStart == -1)
                     myStart = j;
             }
@@ -143,9 +162,7 @@ public class Schedule extends Fragment {
         String days[] = new String[7];
         int[] ScheduleIDs = new int[7];
 
-        // Calendar to keep track of the date the first day of the weekShifts
-        int temp = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
-        Log.d("CAL", "temp = " + temp);
+
 
         // If Employee doesn't have a schedule yet
         if(myStart == -1){
@@ -160,14 +177,14 @@ public class Schedule extends Fragment {
         }
 
         Log.d("TESTY", Arrays.toString(mine));
-        //--------------- Add  shifts to arrays here -----------------------------------
+        //--------------- Add work shifts to respective arrays -----------------------------------
         for(int i = 0; i < mine.length; i++){
 
             if(myStart < 0)
                 break;
             // Change to 'mine[start]' later
             if(mine[myStart] != null)
-                days[i] = mine[myStart].StartTime.substring(5,7)+"/"+ (temp+i);
+                days[i] = mine[myStart].StartTime.substring(5,7)+"/"+ (date+i);
 
             if(mine[i] == null) continue;
             try {

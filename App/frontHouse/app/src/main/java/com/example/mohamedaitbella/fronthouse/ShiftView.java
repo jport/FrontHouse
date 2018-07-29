@@ -61,6 +61,7 @@ public class ShiftView extends AppCompatActivity {
         for(int i = 0; i < temp.length; i++) {
             try {
                 String shifts[] = Home.Time(new JSONObject(gson.toJson(temp[i])), 0);
+                Log.d("ShiftView", "yours: " + yours + ", theirs: " +shifts[0] + ", " + shifts[1]);
                 if (yours.equals("") || (!shifts[0].equals(yours) && !shifts[1].equals(yours))) {
                     Log.d("IFs", "Came in");
                     if (shifts[0].length() == 0 || shifts[1].length() == 0 || !(shifts[0].substring(0, 6) + shifts[1].substring(12)).equals(yours))
