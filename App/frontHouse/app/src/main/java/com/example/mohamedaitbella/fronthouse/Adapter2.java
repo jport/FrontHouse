@@ -322,9 +322,9 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             sb.append("\"EndTime\":");
             sb.append("\""+hardcoded);
             if(pm_shifts[i].equals("")){
-                sb.append(am_shifts[i].substring(6,11));
+                sb.append(am_shifts[i].substring(6));
             }else{
-                sb.append(pm_shifts[i].substring(6,11));
+                sb.append(pm_shifts[i].substring(6));
             }
             sb.append(":00\"");
             sb.append("}");
