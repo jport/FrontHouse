@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,44 +82,58 @@ public class Login extends AppCompatActivity {
             public void run() {
                 Log.d("LOAD", "OPENING");
                 load.setVisibility(View.VISIBLE);
+
+                Context context = getApplicationContext();
+
+                Home.authen(userName.getText().toString(), password.getText().toString(), context, Login.this, load);
+
+                Log.d("MyLogin", "After authen()");
             }
         });
 
-        Context context = getApplicationContext();
 
-        Home.authen(userName.getText().toString(), password.getText().toString(), context, Login.this, load);
 
-        Log.d("MyLogin", "After authen()");
+        new CountDownTimer(2000, 1000){
 
-        SharedPreferences share = context.getSharedPreferences(Home.pref, 0);
+            @Override
+            public void onTick(long l) {
 
-        if(share.contains("userId")) Log.d("Login", "got it.");
-        else Log.d("Login", "DAMN");
+            }
 
-        if(share.getInt("userId", -1) > 0) {
-            Intent intent = new Intent(Login.this, Home.class);
-            startActivity(intent);
-        }
-        else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            @Override
+            public void onFinish() {
+                SharedPreferences share = getApplication().getSharedPreferences(Home.pref, 0);
 
-            builder.setMessage("Incorrect user/password. Please try again.");
-            AlertDialog dialog = builder.create();
-            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    getCurrentFocus().post(new Runnable() {
+                if(share.contains("EmployeeID")) Log.d("Login", "got it.");
+                else Log.d("Login", "DAMN");
+                Log.d("FUCK", "Let's see");
+
+                if(share.getInt("EmployeeID", -1) > 0) {
+                    Intent intent = new Intent(Login.this, Home.class);
+                    startActivity(intent);
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+
+                    builder.setMessage("Incorrect user/password. Please try again.");
+                    AlertDialog dialog = builder.create();
+                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
-                        public void run() {
-                            Log.d("LOAD", "CLOSING");
-                            load.setVisibility(View.INVISIBLE);
+                        public void onCancel(DialogInterface dialogInterface) {
+                            getCurrentFocus().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.d("LOAD", "CLOSING");
+                                    load.setVisibility(View.INVISIBLE);
+                                }
+                            });
                         }
                     });
+                    dialog.show();
                 }
-            });
-            dialog.show();
+            }
+        }.start();
 
-        }
     }
 
 }
@@ -150,7 +165,6 @@ class APICall extends AsyncTask<String, String, JSONArray> {
             urlConnection.setRequestProperty("Content-Type", "application/json");   //Self explanatory
             urlConnection.setRequestProperty("Accept", "application/json");         //"               "
             urlConnection.setRequestMethod("POST");                                 //"               "
-            Log.i("message","hello world");
             //---------------- JSON Post Sequence -------------------------------------------
             OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
             wr.write(data);
@@ -171,7 +185,6 @@ class APICall extends AsyncTask<String, String, JSONArray> {
                 br.close();
             }
 
-            Log.i("traffic", "here");
             // Returning what is wanted from executing of the AsyncTask
             return json;
         }catch (Exception e){

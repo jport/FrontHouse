@@ -296,9 +296,9 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
         StringBuilder sb = new StringBuilder();
         share = context.getApplicationContext().getSharedPreferences(Home.pref, 0);
 
-        sb.append("EmployeeID:");
+        sb.append("{EmployeeID:");
         sb.append(share.getInt("EmployeeID",-1));
-        sb.append("[");
+        sb.append(",\"days\":[");
 
         for(int i=0; i<days.length; i++){
             String hardcoded = "1900-01-01T";
@@ -312,32 +312,28 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             sb.append(",");
             sb.append("\"StartTime\":");
             sb.append("\""+hardcoded);
-            if(am_shifts[i]==null){
-                sb.append(pm_shifts[i].substring(0,4));
+            if(am_shifts[i].equals("")){
+                sb.append(pm_shifts[i].substring(0,5));
             }else{
-                sb.append(am_shifts[i].substring(0,4));
+                sb.append(am_shifts[i].substring(0,5));
             }
             sb.append(":00\"");
             sb.append(",");
             sb.append("\"EndTime\":");
             sb.append("\""+hardcoded);
-            if(pm_shifts[i]==null){
-                sb.append(am_shifts[i].substring(6,9));
+            if(pm_shifts[i].equals("")){
+                sb.append(am_shifts[i].substring(6,1));
             }else{
-                sb.append(pm_shifts[i].substring(6,9));
+                sb.append(pm_shifts[i].substring(6,11));
             }
             sb.append(":00\"");
-            sb.append(",");
             sb.append("}");
-
-            if(i!=6) {
-            sb.append(",");
+            if(i<days.length-1) {
+                sb.append(",");
             }
-
-
         }
 
-        sb.append("]");
+        sb.append("]}");
 
         load = sb.toString();
 

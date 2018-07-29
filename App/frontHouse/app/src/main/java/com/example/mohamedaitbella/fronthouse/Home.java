@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -42,6 +43,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     static ProgressBar load;
     SharedPreferences share;
     static NavigationView navigationView;
+    static FragmentManager fragmentManager;
     Menu menu;
     MenuItem hello;
 
@@ -88,6 +90,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        fragmentManager = getSupportFragmentManager();
+
         // Redirects if called from notification
         if(getIntent().hasExtra("action")){
 
@@ -124,6 +128,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Log.d("Frag", "Ends toolbar");
 
 
+
         // Getting the job type int from shared preferences.
         int jobtype = getApplicationContext().getSharedPreferences(Home.pref, 0).getInt("JobType", 0);
 
@@ -134,6 +139,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         } else{
             hideEmployee();
         }
+
 
     }
 
@@ -156,21 +162,17 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_Settings:
                 Toast.makeText(this, "You clicked settings", Toast.LENGTH_SHORT).show();
-
-
-                menu = navigationView.getMenu();
-                hello = menu.findItem(R.id.nav_AvailabilityRequests);
-                hello.setVisible(false);
                 break;
             case R.id.nav_Logout:
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
                 getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("EmployeeID").commit();
                 getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("StoreID").commit();
+                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("JobType").commit();
                 getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("Name").commit();
+
                 finish();
                 startActivity(new Intent(this, Login.class));
                 break;
-            //
 
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -218,7 +220,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
 
         try {
-            editor.putInt("EmployeeID", result.getInt("EmployeeID"));
+            editor.putInt("EmployeeID", result.getInt("EmployeeID")).commit();
         }
         catch (Exception e){
             Log.d("Debug: Get Emp ID", e.getMessage());
@@ -227,8 +229,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         if(share.getInt("EmployeeID", -1) > 0){
             try {
-                editor.putInt("StoreID", result.getInt("StoreID"));
-                editor.putString("Name", result.getString("FirstName")+" " + result.getString("LastName"));
+                editor.putInt("StoreID", result.getInt("StoreID")).commit();
+                editor.putString("Name", result.getString("FirstName")+" " + result.getString("LastName")).commit();
             }catch(Exception e){
                 Log.d("SHARE", e.getMessage());
             }
@@ -244,6 +246,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 }
             });
         }
+
 
         Log.d("EDITOR:", "Commit returned - " + editor.commit());
 
@@ -313,12 +316,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
 
             if (time < 1200) {
-                shifts[0] = sdf.format(date) + " - 12:00";
+                shifts[0] = sdf.format(date) + "-12:00";
                 Log.d("AMShift", shifts[0]);
             }
             else {
                 int converted = time - 1200;
-                shifts[1] = "12:00 - " + pm_test.substring(0,5);
+                shifts[1] = "12:00-" + pm_test.substring(0,5);
                 Log.d("PMShift", shifts[1]);
             }
         }catch(Exception e){

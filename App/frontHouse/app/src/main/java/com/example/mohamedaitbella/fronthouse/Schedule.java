@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -124,11 +128,25 @@ public class Schedule extends Fragment {
         int temp = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
         Log.d("CAL", "temp = " + temp);
 
+        // Will be changed to 'mine[start]'
+        if(mine[1] == null){
+            Log.d("NO_SHIFTS", "Came in");
+            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = Home.fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container,
+                    new MyAvailability()).commit();
+            Log.d("NO_SHIFTS", "Before Commit");
+            Toast.makeText(getActivity(), "NO SHIFTS SCHEDULED YET", Toast.LENGTH_LONG).show();
+            Home.navigationView.setCheckedItem(R.id.nav_availability);
+        }
+
         Log.d("TESTY", Arrays.toString(mine));
         //--------------- Add  shifts to arrays here -----------------------------------
         for(int i = 0; i < mine.length; i++){
 
-            days[i] = mine[1].StartTime.substring(5,7)+"/"+ (temp+i);
+            // Change to 'mine[start]' later
+            if(mine[1] != null)
+                days[i] = mine[1].StartTime.substring(5,7)+"/"+ (temp+i);
 
             if(mine[i] == null) continue;
             try {
