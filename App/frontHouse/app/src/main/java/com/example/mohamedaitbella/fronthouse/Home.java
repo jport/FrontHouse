@@ -305,28 +305,45 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         try {
             String am_test = data.getString(Start).substring(11);
             String pm_test = data.getString(End).substring(11);
+
+            // 'Start' parse
             String[] split_array_am = am_test.split(":", 2);
             String str_am = split_array_am[0] + split_array_am[1].substring(0,2);
             int time = Integer.parseInt(str_am);
 
-            Date date = new Date();
+            // 'End' parse
+            String[] split_array_pm = pm_test.split(":", 2);
+            String str_pm = split_array_pm[0] + split_array_pm[1].substring(0,2);
+            int test = Integer.parseInt(str_pm);
+
+            Date date = new Date(), date2 = new Date();
             try {
                 date = new SimpleDateFormat("hhmm").parse(String.format("%04d", time));
+                date2 = new SimpleDateFormat("hhmm").parse(String.format("%04d", test));
             } catch (Exception e) {
                 Log.d("TIME", e.getMessage());
             }
 
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
 
+            // Start before 12
             if (time < 1200) {
-                shifts[0] = sdf.format(date) + "-12:00";
+                // Stays in AM
+                if(test < 1200)
+                    shifts[0] = sdf.format(date)+"-"+sdf.format(date2);
+
+                // Goes into PM
+                else {
+                    shifts[0] = sdf.format(date) + "-12:00";
+                    shifts[1] = "12:00-" + pm_test.substring(0,5);
+                }
                 Log.d("AMShift", shifts[0]);
             }
+            // Start after 12
             else {
-                int converted = time - 1200;
-                shifts[1] = "12:00-" + pm_test.substring(0,5);
-                Log.d("PMShift", shifts[1]);
+                shifts[1] = sdf.format(date)+"-"+sdf.format(date2);
             }
+            Log.d("PMShift", shifts[1]);
         }catch(Exception e){
             Log.d("TIME-ERROR", e.getMessage());
         }
