@@ -4,17 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.google.gson.Gson;
@@ -43,6 +38,7 @@ public class ShiftView extends AppCompatActivity {
         name.setText(getSharedPreferences(Home.pref,0).getString("Name", "DIDN'T RECEIVE A NAME"));
         drop = findViewById(R.id.Drop);
 
+        // Open AlertDialog on press. Pressing 'YES' send API and Firebase call
         drop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,12 +82,14 @@ public class ShiftView extends AppCompatActivity {
             }
         });
 
-        if(getIntent().getIntExtra("ShiftStatus",-1) == 0)
-            drop.setEnabled(false);
-
         // Grab your shift
         String yours = getIntent().getStringExtra("MyShift");
 
+        // Disable 'drop' conditions
+        if(getIntent().getIntExtra("ShiftStatus",-1) == 0 || yours.equals(""))
+            drop.setEnabled(false);
+
+        // Picking 'state' value
         if(yours.length()>11) {
             state.setText("AM/\nPM");
             yours = yours.substring(0,6) + yours.substring(12);
@@ -108,7 +106,7 @@ public class ShiftView extends AppCompatActivity {
         Shift[] temp = gson.fromJson(getIntent().getStringExtra("Others"), Shift[].class);
         ArrayList<Shift> everyone = new ArrayList<>();
 
-
+        // Picking whether or not to show a shift from 'Others'
         for(int i = 0; i < temp.length; i++) {
             try {
                 String shifts[] = Home.Time(new JSONObject(gson.toJson(temp[i])), 0);

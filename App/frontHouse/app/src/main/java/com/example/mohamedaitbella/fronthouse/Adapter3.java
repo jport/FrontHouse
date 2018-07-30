@@ -53,7 +53,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
         String shifts[] = {"", ""};
         try{
             Gson gson = new Gson();
-            Home.Time(new JSONObject(gson.toJson(list[i])), 0);
+            shifts = Home.Time(new JSONObject(gson.toJson(list[i])), 0);
         }catch (Exception e){
             Log.d("Adapter3", e.getMessage());
         }
@@ -73,93 +73,92 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
             // Send to firebase on completion (for pickup)
             public void onClick(View view) {
 
-                int cases = list[viewHolder.getAdapterPosition()].ShiftStatus;
+            int cases = list[viewHolder.getAdapterPosition()].ShiftStatus;
 
-                // Do buttons. Link:
-                // https://stackoverflow.com/questions/17622622/how-to-pass-data-from-a-fragment-to-a-dialogfragment
+            // Do buttons. Link:
+            // https://stackoverflow.com/questions/17622622/how-to-pass-data-from-a-fragment-to-a-dialogfragment
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                AlertDialog dialog;
-                switch (cases){
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog dialog;
+            switch (cases){
 
+                // Pickup Shift
+                case 0:
+                    builder.setMessage("Are you sure you would like to PICK-UP this shift?");
 
-                    // Pickup Shift
-                    case 0:
-                        builder.setMessage("Are you sure you would like to PICK-UP this shift?");
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            int scheID = list[viewHolder.getAdapterPosition()].ScheduleID;
+                            SharedPreferences share = context.getSharedPreferences(Home.pref,0);
 
-                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                int scheID = list[viewHolder.getAdapterPosition()].ScheduleID;
-                                SharedPreferences share = context.getSharedPreferences(Home.pref,0);
+                            // Firebase request: sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                            // Sends to constant url and Manager's app takes care of rest
+                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
+                                    shift = viewHolder.shift.getText().toString();
+                            Send.pickup(accepter, giver, shift, scheID );
 
-                                // Firebase request: sendRequest(Employee1, Employee2, Shift, ScheduleID).
-                                // Sends to constant url and Manager's app takes care of rest
-                                String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
-                                        shift = viewHolder.shift.getText().toString();
-                                Send.pickup(accepter, giver, shift, scheID );
+                            // API call
+                            int send1 = myShiftID;
 
-                                // API call
-                                int send1 = myShiftID;
+                            APICall apicall = new APICall();
+                            String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
+                                    payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
+                                            "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
+                                            "\"RequestType\":\"2\", "+
+                                            "\"ScheduleID1\": \"" +send1+ "\", " +
+                                            "\"RequestText\":\"\"}";
+                            apicall.execute(url, payload);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                        }
+                    });
+                    dialog = builder.create();
+                    break;
 
-                                APICall apicall = new APICall();
-                                String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
-                                        payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
-                                                "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
-                                                "\"RequestType\":\"2\", "+
-                                                "\"ScheduleID1\": \"" +send1+ "\", " +
-                                                "\"RequestText\":\"\"}";
-                                apicall.execute(url, payload);
-                            }
-                        });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int i) {
-                                dialog.cancel();
-                            }
-                        });
-                        dialog = builder.create();
-                        break;
+                // Swap, job not currently on request
+                default:
+                    builder.setMessage("Are you sure you would like to SWAP? Employee must have already agreed to SWAP.");
 
-                    // Swap, job not currently on request
-                    default:
-                        builder.setMessage("Are you sure you would like to SWAP? Employee must have already agreed to SWAP.");
+                    // If yes, send API call for swap
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            SharedPreferences share = context.getSharedPreferences(Home.pref,0);
 
-                        // If yes, send API call for swap
-                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                SharedPreferences share = context.getSharedPreferences(Home.pref,0);
+                            // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
+                                    shift2 = viewHolder.shift.getText().toString(), shift = yours;
+                            Send.swap(accepter, giver, shift, shift2, myShiftID, list[viewHolder.getAdapterPosition()].ScheduleID);
 
-                                // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
-                                String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
-                                        shift2 = viewHolder.shift.getText().toString(), shift = yours;
-                                Send.swap(accepter, giver, shift, shift2, myShiftID, list[viewHolder.getAdapterPosition()].ScheduleID);
+                            int send1 = myShiftID;
+                            int send2 = list[viewHolder.getAdapterPosition()].ScheduleID;
 
-                                int send1 = myShiftID;
-                                int send2 = list[viewHolder.getAdapterPosition()].ScheduleID;
+                            APICall apicall = new APICall();
+                            String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
+                                    payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
+                                            "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
+                                            "\"RequestType\":\"3\", "+
+                                            "\"ScheduleID1\": \"" +send1+ "\", \"ScheduleID2\":\""+send2+"\", " +
+                                            "\"RequestText\":\"\"}";
+                            apicall.execute(url, payload);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.cancel();
+                        }
+                    });
+                    dialog = builder.create();
+                    dialog.show();
+                    break;
 
-                                APICall apicall = new APICall();
-                                String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
-                                        payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
-                                                "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
-                                                "\"RequestType\":\"3\", "+
-                                                "\"ScheduleID1\": \"" +send1+ "\", \"ScheduleID2\":\""+send2+"\", " +
-                                                "\"RequestText\":\"\"}";
-                                apicall.execute(url, payload);
-                            }
-                        });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int i) {
-                                dialog.cancel();
-                            }
-                        });
-                        dialog = builder.create();
-                        dialog.show();
-                        break;
-
-                }
+            }
             }
         });
 

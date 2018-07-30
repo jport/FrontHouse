@@ -19,7 +19,7 @@ public class GetSchedule{
 
 class Shift implements Comparable<Shift> {
 
-    int ScheduleID, EmployeeID, ShiftStatus;
+    int ScheduleID = -1, EmployeeID, ShiftStatus = -1;
     String EmpFirstName, EmpLastName;
     @SerializedName("StartOfShift")
     String StartTime;
