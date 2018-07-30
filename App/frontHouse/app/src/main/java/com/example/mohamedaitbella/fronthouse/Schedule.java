@@ -122,12 +122,18 @@ public class Schedule extends Fragment {
 
             Log.d("LOOP", "i " + i + ", j " + j);
 
+            Log.d("LOOP", "i-1: " + json[i-1].StartTime +
+                    ", i: " + json[i].StartTime);
+            Log.d("LOOP", "Saved Employee: " + share.getInt("EmployeeID", -1) + ", currentID: " + json[i].EmployeeID);
 
-            if(!json[i-1].StartTime.substring(0,10).equals(json[i].StartTime.substring(0,10)))
-            // --------------- Have to change to -------------------------- //
-            // --------------- Should be increasing by differnce in days ---//
-            /*------------*/       j++;             //-------------------------//
-            // --------------------------------------------------------------//
+            // Increase 'j' if starting a new day
+            if(!json[i-1].StartTime.substring(0,10).equals(json[i].StartTime.substring(0,10))) {
+                // --------------- Have to change to -------------------------- //
+                // --------------- Should be increasing by differnce in days ---//
+                /*------------*/j++;             //-------------------------//
+                // --------------------------------------------------------------//
+                Log.d("LOOP", "'j' hit");
+            }
 
             // To be deleted after completion of task
             if(j == 7) {
@@ -160,7 +166,6 @@ public class Schedule extends Fragment {
         String am_shifts[] = new String[7];
         String pm_shifts[] = new String[7];
         String days[] = new String[7];
-        int[] ScheduleIDs = new int[7];
 
 
 
@@ -194,7 +199,6 @@ public class Schedule extends Fragment {
                 shifts = Home.Time( new JSONObject(gson.toJson(mine[i]) ), 0);
                 am_shifts[i] = shifts[0];
                 pm_shifts[i] = shifts[1];
-                ScheduleIDs[i] = mine[i].ScheduleID;
             }catch (Exception e){
                 Log.d("SCHEDULE_catch", e.getMessage());
             }
@@ -204,7 +208,7 @@ public class Schedule extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         // 'weekShifts' holds all shifts for week, placed into right days
-        Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext(), weekShifts, ScheduleIDs);
+        Adapter adapter = new Adapter(am_shifts, pm_shifts, days, getContext(), weekShifts, mine);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);

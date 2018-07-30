@@ -22,16 +22,17 @@ import org.json.JSONObject;
 public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
 
     Shift[] list;
-    String state;
+    String state, yours;
     Context context;
     int myShiftID;
 
-    Adapter3(Shift[] list, String state, Context context, int myShiftID){
+    Adapter3(Shift[] list, String state, Context context, int myShiftID, String yours){
 
         this.list = list;
         this.state = state;
         this.context = context;
         this.myShiftID = myShiftID;
+        this.yours = yours;
     }
 
     @NonNull
@@ -91,9 +92,8 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 int scheID = list[viewHolder.getAdapterPosition()].ScheduleID;
                                 SharedPreferences share = context.getSharedPreferences(Home.pref,0);
-                                // ShiftID still needed for firebase request
 
-                                // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                                // Firebase request: sendRequest(Employee1, Employee2, Shift, ScheduleID).
                                 // Sends to constant url and Manager's app takes care of rest
                                 String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
                                         shift = viewHolder.shift.getText().toString();
@@ -106,7 +106,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                                 String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
                                         payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
                                                 "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
-                                                "\"RequestType\":\"3\", "+
+                                                "\"RequestType\":\"2\", "+
                                                 "\"ScheduleID1\": \"" +send1+ "\", " +
                                                 "\"RequestText\":\"\"}";
                                 apicall.execute(url, payload);
@@ -130,6 +130,12 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 SharedPreferences share = context.getSharedPreferences(Home.pref,0);
+
+                                // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                                String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
+                                        shift2 = viewHolder.shift.getText().toString(), shift = yours;
+                                Send.swap(accepter, giver, shift, shift2, myShiftID, list[viewHolder.getAdapterPosition()].ScheduleID);
+
                                 int send1 = myShiftID;
                                 int send2 = list[viewHolder.getAdapterPosition()].ScheduleID;
 

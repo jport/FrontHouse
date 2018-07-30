@@ -221,7 +221,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             return;
         }
 
-
         try {
             editor.putInt("EmployeeID", result.getInt("EmployeeID")).commit();
         }
@@ -324,7 +323,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 Log.d("TIME", e.getMessage());
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+            SimpleDateFormat sdf = new SimpleDateFormat("kk:mm a");
 
             // Start before 12
             if (time < 1200) {

@@ -1,6 +1,9 @@
 package com.example.mohamedaitbella.fronthouse;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -25,6 +29,7 @@ public class ShiftView extends AppCompatActivity {
 
     TextView time, state, name;
     RecyclerView recyclerView;
+    Button drop;
     Adapter3 adapter;
 
     @Override
@@ -35,8 +40,54 @@ public class ShiftView extends AppCompatActivity {
         time = findViewById(R.id.Time);
         state = findViewById(R.id.State);
         name = findViewById(R.id.MyShift);
-
         name.setText(getSharedPreferences(Home.pref,0).getString("Name", "DIDN'T RECEIVE A NAME"));
+        drop = findViewById(R.id.Drop);
+
+        drop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ShiftView.this);
+                AlertDialog dialog;
+                builder.setMessage("Are you sure you would like to DROP this shift?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPreferences share = getApplicationContext().getSharedPreferences(Home.pref,0);
+                        int myShiftID = getIntent().getIntExtra("MyShiftID", -1);
+
+                        // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                        String accepter = share.getString("Name", "DefaultVaue"), shift = time.getText().toString();
+                        Send.drop(accepter, shift,  myShiftID);
+
+                        int scheID = getIntent().getIntExtra("MyShiftID", -1);
+
+                        // API call
+                        APICall apicall = new APICall();
+                        String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
+                                payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
+                                        "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
+                                        "\"RequestType\":\"1\", "+
+                                        "\"ScheduleID1\": \"" +scheID+ "\", " +
+                                        "\"RequestText\":\"\"}";
+                        apicall.execute(url, payload);
+
+                        drop.setEnabled(false);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.cancel();
+                    }
+                });
+                dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        if(getIntent().getIntExtra("ShiftStatus",-1) == 0)
+            drop.setEnabled(false);
 
         // Grab your shift
         String yours = getIntent().getStringExtra("MyShift");
@@ -76,12 +127,9 @@ public class ShiftView extends AppCompatActivity {
         Shift[] send = new Shift[everyone.size()];
         for(int i = 0; i < send.length; i++)
             send[i] = everyone.get(i);
-        adapter = new Adapter3(send, state.getText().toString(), this, getIntent().getIntExtra("MyShiftID", -1));
+        adapter = new Adapter3(send, state.getText().toString(), this, getIntent().getIntExtra("MyShiftID", -1), yours);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
 
         getIncomingIntentAndSet();
 

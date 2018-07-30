@@ -219,6 +219,57 @@ class Send extends AsyncTask<String, String, Boolean>{
         send.execute(url, payload);
     }
 
+    public static void drop(String accepter, String shift, int scheID){
+
+        String page = "ManagerHome", frag = "Schedule";
+
+        Send send = new Send();
+        String url = "https://fcm.googleapis.com/fcm/send";
+
+        String payload =
+                "{\"to\":\"/topics/Managers"+"\"," +
+                        "\"notification\":{" +
+                        "\"title\": \"NEW EMPLOYEE REQUEST\"," +
+                        "\"text\": \"An employee has requested to pick-up a shift.\"," +
+                        "\"click_action\": \" "+page+ "\"" +
+                        "},"+
+                        "\"data\": {"+
+                        //"action :\""+ frag + "\""+
+                        "Employee1 :\""+ accepter + "\""+
+                        "Shift :\""+ shift + "\""+
+                        "ScheduleID :\""+ scheID + "\"" +
+                        "} }";
+
+        send.execute(url, payload);
+    }
+
+    public static void swap(String accepter, String giver, String shift, String shift2, int scheID, int scheID2){
+
+        String page = "ManagerHome", frag = "Schedule";
+
+        Send send = new Send();
+        String url = "https://fcm.googleapis.com/fcm/send";
+
+        String payload =
+                "{\"to\":\"/topics/Managers"+"\"," +
+                        "\"notification\":{" +
+                        "\"title\": \"NEW EMPLOYEE REQUEST\"," +
+                        "\"text\": \"An employee has requested to pick-up a shift.\"," +
+                        "\"click_action\": \" "+page+ "\"" +
+                        "},"+
+                        "\"data\": {"+
+                        //"action :\""+ frag + "\""+
+                        "Employee1 :\""+ accepter + "\""+
+                        "Employee2 :\""+ giver + "\""+
+                        "Shift :\""+ shift + "\""+
+                        "Shift2 :\""+ shift2 + "\""+
+                        "ScheduleID :\""+ scheID + "\"" +
+                        "ScheduleID2 :\""+ scheID2 + "\"" +
+                        "} }";
+
+        send.execute(url, payload);
+    }
+
     public static void pickup(String accepter, String giver, String shift, int scheID){
 
         String page = "Home", frag = "Schedule";
@@ -234,7 +285,7 @@ class Send extends AsyncTask<String, String, Boolean>{
                     "\"click_action\": \" "+page+ "\"" +
                 "},"+
                 "\"data\": {"+
-                    "action :\""+ frag + "\""+
+                    //"action :\""+ frag + "\""+
                     "Employee1 :\""+ accepter + "\""+
                     "Employee2 :\""+ giver + "\""+
                     "Shift :\""+ shift + "\""+
