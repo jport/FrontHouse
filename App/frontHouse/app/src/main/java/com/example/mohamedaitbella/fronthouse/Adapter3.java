@@ -162,7 +162,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
             }
         });
 
-        if(viewHolder.shift.getText().toString().equals(""))
+        if(viewHolder.click.getText().toString().equals("SWAP") && yours.equals(""))
             viewHolder.click.setEnabled(false);
     }
 
