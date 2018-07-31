@@ -54,7 +54,7 @@ public partial class WISAAPI_GetSchedule : System.Web.UI.Page
 		{
 			connection.Open();
 
-			string sql = "SELECT s.ScheduleID,s.StartOfShift,s.EndOfShift,s.EmployeeID,e.FirstName EmpFirstName,e.LastName EmpLastName,s.ShiftStatus FROM Schedule s LEFT JOIN Employee e ON s.EmployeeID = e.EmployeeID WHERE s.StoreID = @StoreID";
+			string sql = "SELECT s.ScheduleID,s.StartOfShift,s.EndOfShift,s.EmployeeID,e.FirstName EmpFirstName,e.LastName EmpLastName,s.ShiftStatus FROM Schedule s LEFT JOIN Employee e ON s.EmployeeID = e.EmployeeID WHERE s.StoreID = @StoreID AND DATEPART(WEEK, s.StartOfShift) = DATEPART(WEEK, getdate()) AND DATEPART(YEAR, s.StartOfShift) = DATEPART(YEAR, getdate())";
 			SqlCommand command = new SqlCommand(sql, connection);
 			command.Parameters.Add("@StoreID", SqlDbType.Int);
 			command.Parameters["@StoreID"].Value = req.StoreID;

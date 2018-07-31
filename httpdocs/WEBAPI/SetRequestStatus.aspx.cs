@@ -136,10 +136,29 @@ public partial class WISAAPI_SetRequestStatus : System.Web.UI.Page
 					doRequest.Parameters["@EmployeeID2"].Value = emp2;
 					doRequest.ExecuteNonQuery();
 				}
-				else if(requestType == 4) //accept availability
+				else if(requestType == 4) //Accept Availability Change
 				{
-					
+					//Delete real
+					string delSql = "DELETE FROM AvailabilityTbl WHERE EmloyeeID = @EmployeeID AND Status = 1";
+					SqlCommand delCmd = new SqlCommand(delSql, connection);
+					delCmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
+					delCmd.Parameters["@EmployeeID"].Value = empId;
+					delCmd.ExecuteNonQuery();
+
+					string updateSql = "UPDATE AvailabilityTbl SET Status = 1 WHERE EmployeeID = @EmployeeID AND Status = 0";
+					SqlCommand updateCmd = new SqlCommand(updateSql, connection);
+					updateCmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
+					updateCmd.Parameters["@EmployeeID"].Value = empId;
 				}
+			}
+			else if(requestType == 4) //Denied Availability Change
+			{
+				//Delete pending
+				string delSql = "DELETE FROM AvailabilityTbl WHERE EmloyeeID = EmployeeID AND Status = 0";
+				SqlCommand delCmd = new SqlCommand(delSql, connection);
+				delCmd.Parameters.Add("@EmployeeID", SqlDbType.Int);
+				delCmd.Parameters["@EmployeeID"].Value = empId;
+				delCmd.ExecuteNonQuery();
 			}
 		}
 		catch(Exception ex)
