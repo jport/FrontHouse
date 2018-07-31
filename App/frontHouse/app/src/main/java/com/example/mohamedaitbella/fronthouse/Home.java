@@ -143,11 +143,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
 
         // Clause for showing the manager or employee. 
-        if(jobtype==0){
+        if(jobtype==1){
             hideManager();
+            Log.d("JOBTYPE", "ASSIGNED TO EMPLOYEE");
             FirebaseMessaging.getInstance().subscribeToTopic("Employee");
         } else{
             hideEmployee();
+            Log.d("JOBTYPE", "ASSIGNED TO MANAGER");
             FirebaseMessaging.getInstance().subscribeToTopic("Manager");
         }
 
@@ -177,11 +179,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_Logout:
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
                 logout();
-
                 finish();
                 startActivity(new Intent(this, Login.class));
                 break;
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -206,7 +206,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         share.edit().remove("JobType").commit();
         share.edit().remove("Name").commit();
 
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(share.getInt("JobType", 0) == 0? "Employee" : "Manager");
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(share.getInt("JobType", 0) == 1? "Employee" : "Manager");
     }
 
     // Authorizes sign in to hide results from login page
@@ -349,7 +349,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
                 // Goes into PM
                 else {
-                    shifts[0] = am_test + "-12:00";
+                    shifts[0] = am_test.substring(0,5) + "-12:00";
                     shifts[1] = "12:00-" + pm_test.substring(0,5);
                 }
                 Log.d("AMShift", shifts[0]);

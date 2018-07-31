@@ -88,7 +88,7 @@ public class Schedule extends Fragment {
 
         Gson gson = new Gson();
 
-        Shift[] json = gson.fromJson(result.toString(), GetSchedule.class).schedules;
+        Shift[] json = gson.fromJson(result.toString(), Shift[].class);
 
         // Sort all shifts by day
         Log.d("JSON", Arrays.toString(json));

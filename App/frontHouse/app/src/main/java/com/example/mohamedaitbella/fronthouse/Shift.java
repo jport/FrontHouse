@@ -5,18 +5,6 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-public class GetSchedule{
-
-    Shift[] schedules;
-    String error;
-
-    GetSchedule(Shift[] schedules){
-        this.schedules = schedules;
-    }
-
-}
-
-
 class Shift implements Comparable<Shift> {
 
     int ScheduleID = -1, EmployeeID, ShiftStatus = -1;
