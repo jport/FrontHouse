@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="NextWeek.js"></script>
+    <title>Next week schedule</title>
+  </head>
+  <body>
+
+
+
+    <p id="Sunday"align= "center">Sunday</p>
+    <div id="SundayLine"style="text-align:center">
+        <button type="button" id="AddSunday">Add shift</button>
+    </div>
+    <p id=Monday align= "center">Monday</p>
+    <div id="MondayLine" style="text-align:center">
+        <button type="button" id="AddMonday">Add shift</button>
+    </div>
+    <p id="Tuesday"align= "center">Tuesday</p>
+    <div id="TuesdayLine" style="text-align:center">
+        <button type="button" id="AddTuesday">Add shift</button>
+    </div>
+    <p id= "Wednesday"align= "center">Wednesday</p>
+    <div id="WednesdayLine"style="text-align:center">
+        <button type="button" id="AddWednesday">Add shift</button>
+    </div>
+    <p id="Thursday" align= "center">Thursday</p>
+    <div id="ThursdayLine"style="text-align:center">
+        <button type="button" id="AddThursday">Add shift</button>
+    </div>
+    <p id="Friday" align= "center">Friday</p>
+    <div id="FridayLine"style="text-align:center">
+        <button type="button" id="AddFriday">Add shift</button>
+    </div>
+    <p id="Saturday"align= "center">Saturday</p>
+    <div id="SaturdayLine"style="text-align:center">
+        <button type="button" id="AddSaturday">Add shift</button>
+    </div>
+
+  </body>
+
+<script type="text/javascript">
+
+//Table Table
+var date = new Date();
+var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+alert("hello");
+var mon,tue,wed,thurs,fri,sat,sun;
+
+var day =date.getDay();
+var damn=date.getDate();
+
+
+
+
+function ThisWeek(a){
+  var salt = new Date();
+  var ThisDay = salt.getDay();
+  var ThisDate = salt.getDate();
+  var real=0;
+  var space=0;
+  if(ThisDay>=a){
+    space=ThisDay-a;
+    real=ThisDate-space;
+  }
+  else if (ThisDay<a) {
+    space=a-ThisDay;
+    real=ThisDate+space;
+  }
+   return real+7;
+}
+
+
+var z=ThisWeek(0);
+var y=ThisWeek(1);
+if(day>=0)
+{
+  alert("yes " + z);
+}
+
+mon=ThisWeek(1);
+if(mon>31){
+  mon=mon-31;
+}
+tue=ThisWeek(2);
+if(tue>31){
+  tue=tue-31;
+}
+wed=ThisWeek(3);
+if(wed>31){
+  wed=wed-31;
+}
+thurs=ThisWeek(4);
+if(thurs>31){
+  thurs=thurs-31;
+}
+fri=ThisWeek(5);
+if(fri>31){
+  fri=fri-31;
+}
+sat=ThisWeek(6);
+if(sat>31){
+  sat=sat-31;
+}
+sun=ThisWeek(0);
+if(sun>31){
+  sun=sun-31;
+}
+
+document.getElementById("Tuesday").innerHTML="Tuesday "+ tue;
+document.getElementById("Wednesday").innerHTML="Wednesday "+ wed;
+document.getElementById("Thursday").innerHTML="Thursday "+ thurs;
+document.getElementById("Friday").innerHTML="Friday "+ fri;
+document.getElementById("Saturday").innerHTML= "Saturday "+ sat;
+document.getElementById("Sunday").innerHTML="Sunday " +  sun;
+document.getElementById("Monday").innerHTML="Monday "+ mon;
+
+
+$(document).ready(function(){
+    $("#AddMonday").click(function(){
+        $("#MondayLine").append(" <p>Appended text</>.");
+    });
+
+});
+
+</script>
+
+</html>
