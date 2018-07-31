@@ -22,6 +22,9 @@
 
     <group android:checkableBehavior="single">
 
+        <item android:icon="@drawable/ic_schedule"
+            android:title="Schedule"/>
+
         <item android:id="@+id/nav_AvailabilityRequests"
             android:icon="@drawable/ic_requests"
             android:title="Requests"/>

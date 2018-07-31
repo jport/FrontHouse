@@ -92,7 +92,7 @@ public class ShiftView extends AppCompatActivity {
         // Picking 'state' value
         if(yours.length()>11) {
             state.setText("AM/\nPM");
-            yours = yours.substring(0,6) + yours.substring(12);
+            yours = yours.substring(0,6) + yours.substring(17);
         }
         else {
             state.setText(getIntent().getStringExtra("State"));

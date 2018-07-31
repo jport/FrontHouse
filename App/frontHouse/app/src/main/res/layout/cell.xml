@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="wrap_content"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:background="@drawable/border">
 
 
     <TextView
@@ -46,7 +47,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:hint="Current status"
+            android:hint="      No Shift"
+            android:textAlignment="center"
             app:layout_constraintLeft_toRightOf="@id/am_button"
             app:layout_constraintTop_toBottomOf="@id/day" />
     </LinearLayout>
@@ -63,10 +65,10 @@
             android:layout_height="19dp"
             android:layout_marginLeft="25dp"
             android:layout_toEndOf="@+id/am_button"
-            android:background="#000000"
+            android:background="#00B3B3"
             android:text="PM"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="#FFFFFF"
             app:layout_constraintLeft_toLeftOf="@id/cell_layout"
             app:layout_constraintTop_toBottomOf="@+id/am_button" />
 
@@ -76,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:hint="Current status"
+            android:hint="      No Shift"
             app:layout_constraintLeft_toRightOf="@id/pm_button"
             app:layout_constraintTop_toBottomOf="@id/am_button" />
     </LinearLayout>

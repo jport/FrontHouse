@@ -9,14 +9,18 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#00B3B3">
 
         <TextView
             android:id="@+id/ShiftTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="15dp"
-            android:text="MY SHIFT" />
+            android:text="MY SHIFT"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"/>
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -70,14 +74,18 @@
     </android.support.constraint.ConstraintLayout>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#00B3B3">
 
         <TextView
             android:id="@+id/EveryoneElse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="EVERYONE ELSE"
-            android:padding="20dp"/>
+            android:textSize="13dp"
+            android:padding="13dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="italic"/>
     </android.support.constraint.ConstraintLayout>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
