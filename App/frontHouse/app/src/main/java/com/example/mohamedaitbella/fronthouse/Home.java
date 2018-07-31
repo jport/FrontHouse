@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +27,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,7 +48,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     static NavigationView navigationView;
     static FragmentManager fragmentManager;
     Menu menu;
-    MenuItem hello;
+    TextView name;
 
     @Override
     protected void onStart() {
@@ -90,6 +92,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+
+        name = navigationView.getHeaderView(0).findViewById(R.id.nav_Text);
+        if(name == null) Log.d("Name", "FUUUCK!!");
+        name.setText(share.getString("Name", "NO NAME DETECTED"));
+
 
         fragmentManager = getSupportFragmentManager();
 
@@ -168,10 +176,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_Logout:
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
-                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("EmployeeID").commit();
-                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("StoreID").commit();
-                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("JobType").commit();
-                getApplicationContext().getSharedPreferences(Home.pref, 0).edit().remove("Name").commit();
+                logout();
 
                 finish();
                 startActivity(new Intent(this, Login.class));
@@ -191,6 +196,17 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             finish();
             super.onBackPressed();
         }
+    }
+
+    private void logout(){
+        SharedPreferences share = getApplicationContext().getSharedPreferences(Home.pref, 0);
+
+        share.edit().remove("EmployeeID").commit();
+        share.edit().remove("StoreID").commit();
+        share.edit().remove("JobType").commit();
+        share.edit().remove("Name").commit();
+
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(share.getInt("JobType", 0) == 0? "Employee" : "Manager");
     }
 
     // Authorizes sign in to hide results from login page
@@ -329,18 +345,18 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             if (time < 1200) {
                 // Stays in AM
                 if(test < 1200)
-                    shifts[0] = sdf.format(date)+"-"+sdf.format(date2);
+                    shifts[0] = am_test.substring(0,5)+"-"+pm_test.substring(0,5);
 
                 // Goes into PM
                 else {
-                    shifts[0] = sdf.format(date) + "-12:00";
+                    shifts[0] = am_test + "-12:00";
                     shifts[1] = "12:00-" + pm_test.substring(0,5);
                 }
                 Log.d("AMShift", shifts[0]);
             }
             // Start after 12
             else {
-                shifts[1] = sdf.format(date)+"-"+sdf.format(date2);
+                shifts[1] = am_test.substring(0,5)+"-"+pm_test.substring(0,5);
             }
             Log.d("PMShift", shifts[1]);
         }catch(Exception e){

@@ -100,7 +100,12 @@ public class Schedule extends Fragment {
             weekShifts[i] = new ArrayList<Shift>();
         Shift[] mine = new Shift[7];
 
+
+        int myStart = -1, date = 0;
+
+        if(json.length > 0){
         Calendar cal = Calendar.getInstance();
+
         cal.set(Integer.parseInt(json[0].StartTime.substring(0,4))+0,
                 Integer.parseInt(json[0].StartTime.substring(5,7)) -1,
                 Integer.parseInt(json[0].StartTime.substring(8,10) )+0);
@@ -112,62 +117,65 @@ public class Schedule extends Fragment {
         Log.d("CAL", "start = " + start);
 
         // Calendar to keep track of the date the first day of the weekShifts
-        int date = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
+        date = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
         Log.d("CAL", "date = " + date);
 
+
         // Sort shifts into days  and store the current employee's shifts(in order)
-        weekShifts[start].add(json[0]);
-        int myStart = (json[0].EmployeeID == share.getInt("EmployeeID", 0))? start: -1;
-        for(int i = 1, j = start; i < json.length; i++){
 
-            Log.d("LOOP", "i " + i + ", j " + j);
+            weekShifts[start].add(json[0]);
+            myStart =(json[0].EmployeeID == share.getInt("EmployeeID", 0)) ? start : -1;
 
-            Log.d("LOOP", "i-1: " + json[i-1].StartTime +
-                    ", i: " + json[i].StartTime);
-            Log.d("LOOP", "Saved Employee: " + share.getInt("EmployeeID", -1) + ", currentID: " + json[i].EmployeeID);
+            for (int i = 1, j = start; i < json.length; i++) {
 
-            // Increase 'j' if starting a new day
-            if(!json[i-1].StartTime.substring(0,10).equals(json[i].StartTime.substring(0,10))) {
-                // --------------- Have to change to -------------------------- //
-                // --------------- Should be increasing by differnce in days ---//
-                /*------------*/j++;             //-------------------------//
-                // --------------------------------------------------------------//
-                Log.d("LOOP", "'j' hit");
-            }
+                Log.d("LOOP", "i " + i + ", j " + j);
 
-            // To be deleted after completion of task
-            if(j == 7) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                Log.d("LOOP", "i-1: " + json[i - 1].StartTime +
+                        ", i: " + json[i].StartTime);
+                Log.d("LOOP", "Saved Employee: " + share.getInt("EmployeeID", -1) + ", currentID: " + json[i].EmployeeID);
 
-                builder.setMessage("Still haven't restricted the sending of schedules to one week");
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                break;
-            }
-            if(json[i].EmployeeID == share.getInt("EmployeeID", 0)) {
-                mine[j] = json[i];
-                try {
-                    String shifts[];
-
-                    // For now, use '0' for Schedule and '1' for MyAvailability
-                    shifts = Home.Time( new JSONObject(gson.toJson(mine[j]) ), 0);
-                    Log.d("MINE1", shifts[0]);
-                    Log.d("MINE2", shifts[1]);
-                }catch (Exception e){
-                    Log.d("SCHEDULE_catch", e.getMessage());
+                // Increase 'j' if starting a new day
+                if (!json[i - 1].StartTime.substring(0, 10).equals(json[i].StartTime.substring(0, 10))) {
+                    // --------------- Have to change to -------------------------- //
+                    // --------------- Should be increasing by differnce in days ---//
+                    /*------------*/
+                    j++;             //-------------------------//
+                    // --------------------------------------------------------------//
+                    Log.d("LOOP", "'j' hit");
                 }
-                if(myStart == -1)
-                    myStart = j;
-            }
 
-            weekShifts[j].add(json[i]);
+                // To be deleted after completion of task
+                if (j == 7) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    builder.setMessage("Still haven't restricted the sending of schedules to one week");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    break;
+                }
+                if (json[i].EmployeeID == share.getInt("EmployeeID", 0)) {
+                    mine[j] = json[i];
+                    try {
+                        String shifts[];
+
+                        // For now, use '0' for Schedule and '1' for MyAvailability
+                        shifts = Home.Time(new JSONObject(gson.toJson(mine[j])), 0);
+                        Log.d("MINE1", shifts[0]);
+                        Log.d("MINE2", shifts[1]);
+                    } catch (Exception e) {
+                        Log.d("SCHEDULE_catch", e.getMessage());
+                    }
+                    if (myStart == -1)
+                        myStart = j;
+                }
+
+                weekShifts[j].add(json[i]);
+            }
         }
 
         String am_shifts[] = new String[7];
         String pm_shifts[] = new String[7];
         String days[] = new String[7];
-
-
 
         // If Employee doesn't have a schedule yet
         if(myStart == -1){
