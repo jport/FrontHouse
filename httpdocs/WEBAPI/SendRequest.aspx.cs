@@ -19,6 +19,7 @@ public partial class WISAAPI_SendRequest : System.Web.UI.Page
 
 	public struct SendRequestResponse
 	{
+		public int RequestID;
 		public string error;
 	}
 
@@ -69,6 +70,27 @@ public partial class WISAAPI_SendRequest : System.Web.UI.Page
 			createReq.Parameters["@ScheduleID1"].Value = req.ScheduleID1;
 			createReq.Parameters["@ScheduleID2"].Value = req.ScheduleID2 == 0 ? req.ScheduleID1 : req.ScheduleID2;
 			createReq.ExecuteNonQuery();
+			
+			string getSql = "SELECT TOP 1 RequestID FROM Request WHERE StoreID = @StoreID AND EmployeeID = @EmployeeID AND RequestType = @RequestType AND RequestText = @RequestText AND ScheduleID1 = @ScheduleID1 AND ScheduleID2 = @ScheduleID2 ORDER BY RequestID desc";
+			SqlCommand getReq = new SqlCommand(getSql, connection);
+			getReq.Parameters.Add("@StoreID", SqlDbType.Int);
+			getReq.Parameters.Add("@EmployeeID", SqlDbType.Int);
+			getReq.Parameters.Add("@RequestType", SqlDbType.Int);
+			getReq.Parameters.Add("@RequestText", SqlDbType.NVarChar);
+			getReq.Parameters.Add("@ScheduleID1", SqlDbType.Int);
+			getReq.Parameters.Add("@ScheduleID2", SqlDbType.Int);
+			getReq.Parameters["@StoreID"].Value = req.StoreID;
+			getReq.Parameters["@EmployeeID"].Value = req.EmployeeID;
+			getReq.Parameters["@RequestType"].Value = req.RequestType;
+			getReq.Parameters["@RequestText"].Value = req.RequestText;
+			getReq.Parameters["@ScheduleID1"].Value = req.ScheduleID1;
+			getReq.Parameters["@ScheduleID2"].Value = req.ScheduleID2 == 0 ? req.ScheduleID1 : req.ScheduleID2;
+			
+			SqlDataReader reader = getReq.ExecuteReader();
+			if(reader.Read())
+				res.RequestID = Convert.ToInt32(reader["RequestID"]);
+			else
+				res.error = "Something went wrong";
 		}
 		catch(Exception ex)
 		{
