@@ -12,37 +12,37 @@
 <style>
 body {font-family: "Lato", sans-serif}
 .mySlides {display: none}
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+    background-color: #3CBC8D;
+    color: white;
+}
 </style>
 <body>
-<title>Weekly schedule</title>
+<title>createEmployee</title>
 
 
 <!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-black w3-card">
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-    
     <div class="w3-dropdown-hover w3-hide-small">
-    <button class="w3-padding-large w3-button" title="More">Schedule <i class="fa fa-caret-down"></i></button>
+      <button class="w3-padding-large w3-button" title="More">Schedule <i class="fa fa-caret-down"></i></button>
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
         <a href="Homepage.html" class="w3-bar-item w3-button" id="ViewSchedule">View Schedule</a>
         <a href="MakeSchedule.html" class="w3-bar-item w3-button" id="MakeSchedule">Make Next Week's schedule</a>
       </div>
     </div>
-    
     <a href="AvailabilityT.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small"Id="Availability">Availability</a>
-
-    <div class="w3-dropdown-hover w3-hide-small">
-        <button class="w3-padding-large w3-button" title="More">My Info <i class="fa fa-caret-down"></i></button>
-          <div class="w3-dropdown-content w3-bar-block w3-card-4">
-            <a href="updateEmployee.html" class="w3-bar-item w3-button" id="ViewSchedule">Update Info</a>
-        </div>
-        </div>
-    
-    <div class="w3-dropdown-hover w3-hide-small" id="Employees">
+    <a href="MyInfo.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small"id="MyInfo">My info</a>
+	<div class="w3-dropdown-hover w3-hide-small" id="Employees">
       <button class="w3-padding-large w3-button" id="EmployeeBar"title="Actions">Employees<i class="fa fa-caret-down"></i></button>
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
-        <a href="createEmployee2.html" class="w3-bar-item w3-button w3-hover-green"><b>Create </b>Employee</a>
+        <a href="createEmployee.html" class="w3-bar-item w3-button w3-hover-green"><b>Create </b>Employee</a>
 
 
       </div>
@@ -71,61 +71,56 @@ body {font-family: "Lato", sans-serif}
     </div>
 </div>
 
-<!-- Page content -->
-<div class="w3-content" style="max-width:2000px;margin-top:46px">
-<!--
-  <!-- The Update Section or maybe show sched
-  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
-    <h2 class="w3-wide">FrontHouse</h2>
-    <p class="w3-opacity"><i>Scheduling Made Easy</i></p>
-    <p class="w3-justify"><center>We have revolutionized how scheduling works for those in the service industry</center></p>
-    <div class="w3-row w3-padding-32">
-      <div class="w3-third">
-        <p><em>Fast</em></p>
-        <img src="fast_img_2.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
-      </div>
-      <div class="w3-third">
-        <p><em>Easy</em></p>
-        <img src="easy_img_1.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
-      </div>
-      <div class="w3-third">
-        <p><em>Scheduling<em></p>
-        <img src="scheduling_img_5.png" class="w3-round" alt="Random Name" style="width:60%">
-      </div>
-    </div>
-  </div>
--->
-<!-- End Page Content -->
-</div>
 
 <!-- Add Google Maps
 <div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
 -->
-<!--Home page weekly table-->
-<div class="w3-content" style="max-width:2000px;margin-top:46px">
-<table id="OurTable"width="90%" class="table table-dark table-hover">
-  <thead>
-    <tr>
-      <!--
-      <td class="hello" >hello<td>-->
-      <td id="TableHead"colspan="8" align="center">This Week's schedule</td>
-    </tr>
-    </thead>
-<tbody>
-    <tr>
-      <td id="Name">Name</td>
-      <td id="Sunday"align="center">Sunday</td>
-      <td id="Monday"align="center">Monday</td>
-      <td id="Tuesday" align="center">Tuesday</td>
-      <td id="Wednesday"align="center">Wednesday</td>
-      <td id="Thursday"align="center">Thursday</td>
-      <td id="Friday"align="center">Friday</td>
-      <td id="Saturday"align="center">Saturday</td>
-    </tr>
+<br>
+<br>
+<div class="w3-content" style="max-width:2000px;margin-top:46px; " >
 
-</tbody>
 
-</table>
+
+<div class="modal-dialog text-center"  >
+<div class = "col-sml-8 main-section">
+  <div class="modal-content">
+
+    <form class="col-12" >
+      <div class="form-group">
+        <input type="text" class="form-control" id = "FirstName" placeholder="Enter First name">
+      </div>
+      <div class="form-group">
+          <input type="text" class="form-control" id = "LastName" placeholder="Enter employee last name">
+      </div>
+      <div class="form-group">
+            <input type="text" class="form-control" id = "UserName" placeholder="Enter employee UserName">
+      </div>
+
+      <div class="form-group">
+            <input type="password" class="form-control" id = "password" placeholder="Enter employee password">
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" id = "email" placeholder="Enter employee email">
+      </div>
+
+      <div class="form-group">
+          <input type="text" class="form-control" id = "phone" placeholder="Enter employee phone number">
+      </div>
+      <div class="form-group">
+          <button type="button" class"btn btn-secondary" id = "SignUp">Add employee</button>
+      </div>
+
+      <br>
+    </form>
+
+
+  </div><!---end of Modal content-->
+  <br>
+  <p id="message"></p>
+</div>
+</div>
+</div>
 </div>
 <!--
 
@@ -142,7 +137,8 @@ body {font-family: "Lato", sans-serif}
 
 
 </script>
-<script src="WeeklyTable.js"></script>
+
+<script src = "createEmployee.js"> </script>
 <script src="SeperateUsers.js"></script>
 <script src="logout.js"></script>
 

@@ -124,13 +124,13 @@ $("#Submit").on('click', function() {
 	}
 
 	payloadString = JSON.stringify(payload);
-	alert(payloadString);
+	//alert(payloadString);
 	$.ajax({
 		type: 'POST',
 		url: 'http://knightfinder.com/WEBAPI/SetSchedule.aspx',
 		data: payloadString,
 		success: function(data) {
-			alert("test: " + data.error);
+			//alert("test: " + data.error);
 		}
 	});
 });

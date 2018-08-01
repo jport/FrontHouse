@@ -1,4 +1,9 @@
+var urlBase = '/WEBAPI';
+var extension = "aspx";
+
 var userId = 0;
+var firstName = "";
+var lastName = "";
 
 function doLogin()
 {
@@ -12,11 +17,12 @@ function doLogin()
         password: $password.val(),
     }
 
+    var url = urlBase + '/Login.' + extension;
     var payloadString = JSON.stringify(jsonPayload);
 
 	$.ajax({
         type: 'POST',
-        url: 'http://knightfinder.com/WEBAPI/Login.aspx',
+        url: url,
         data: payloadString,
 
         success: function(data) {
@@ -32,11 +38,6 @@ function doLogin()
                 localStorage.setItem("EmployeeID", userId);
                 localStorage.setItem("StoreID", data.StoreID);
                 localStorage.setItem("JobType", data.JobType);
-                localStorage.setItem("FirstName", data.FirstName);
-                localStorage.setItem("LastName", data.LastName);
-                localStorage.setItem("Email", data.Email);
-                localStorage.setItem("Phone", data.Phone);
-                localStorage.setItem("Status", data.Status);
                 location.href = "homepage.html";
             }
         },
