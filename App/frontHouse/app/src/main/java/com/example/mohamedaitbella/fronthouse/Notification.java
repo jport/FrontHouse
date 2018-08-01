@@ -77,8 +77,8 @@ public class Notification extends FirebaseMessagingService {
                     intent.putExtra("Name1", rm.getData().get("Employee1"));
                     intent.putExtra("Shift1", rm.getData().get("Shift"));
                     intent.putExtra("RequestID", Integer.parseInt(rm.getData().get("RequestID")));
-                    if(rm.getData().get("Name2") != null) {
-                        intent.putExtra("Name2", rm.getData().get("Name2"));
+                    if(rm.getData().get("Employee2") != null) {
+                        intent.putExtra("Name2", rm.getData().get("Employee2"));
                         intent.putExtra("Shift2", rm.getData().get("Shift2"));
                     }
                 }

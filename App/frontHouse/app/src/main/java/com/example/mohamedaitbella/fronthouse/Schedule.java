@@ -47,6 +47,7 @@ public class Schedule extends Fragment {
 
     String url = "http://knightfinder.com/WEBAPI/GetSchedule.aspx";
     SharedPreferences share;
+    View view;
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -61,7 +62,18 @@ public class Schedule extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.schedule, container, false);
+        view = inflater.inflate(R.layout.schedule, container, false);
+
+
+        return view;
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+
         Log.d("Activity2", "Started");
 
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
@@ -146,15 +158,6 @@ public class Schedule extends Fragment {
                     Log.d("LOOP", "'j' hit");
                 }
 
-                // To be deleted after completion of task
-                if (j == 7) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                    builder.setMessage("Still haven't restricted the sending of schedules to one week");
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    break;
-                }
                 if (json[i].EmployeeID == share.getInt("EmployeeID", 0)) {
                     mine[j] = json[i];
                     try {
@@ -179,6 +182,7 @@ public class Schedule extends Fragment {
         String pm_shifts[] = new String[7];
         String days[] = new String[7];
 
+        /*
         // If Employee doesn't have a schedule yet
         if(myStart == -1){
             Log.d("NO_SHIFTS", "Came in");
@@ -190,6 +194,7 @@ public class Schedule extends Fragment {
             Toast.makeText(getActivity(), "NO SHIFTS SCHEDULED YET", Toast.LENGTH_LONG).show();
             Home.navigationView.setCheckedItem(R.id.nav_availability);
         }
+        */
 
         Log.d("TESTY", Arrays.toString(mine));
         Log.d("TESTY", "Max date: " + cal.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -227,11 +232,6 @@ public class Schedule extends Fragment {
         recyclerView.setAdapter(adapter);
         //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         Log.d("Activity2", "Recyclerview. List size = "+ am_shifts.length);
-
-
-
-        return view;
-
     }
 
     private void fakeNews(String[] am_shifts, String[] pm_shifts){

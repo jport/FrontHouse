@@ -232,9 +232,9 @@ class Send extends AsyncTask<String, String, Boolean>{
                     "\"text\": \"Your request has been "+((ans == 1)?"APPROVED":"DENIED")+".\", " +
                     "\"click_action\": \"Home\"" +
                 "}, "+
-                "\"data\":" +
+                "\"data\":{" +
                     //"action :\""+ frag + "\", "+
-                    "\"RequestID\": \""+requestID+"\", " +
+                    "\"RequestID\": \""+requestID+"\"} " +
                 "}";
 
         send.execute(url, payload);
@@ -296,7 +296,7 @@ class Send extends AsyncTask<String, String, Boolean>{
         send.execute(url, payload);
     }
 
-    public static void pickup(String accepter, String giver, String shift, int requestID, int storeID){
+    public static void pickup(String accepter, String shift, int requestID, int storeID){
 
         String page = "Manager", frag = "Schedule";
 
@@ -313,7 +313,6 @@ class Send extends AsyncTask<String, String, Boolean>{
                 "\"data\": {"+
                     //"action :\""+ frag + "\""+
                     "\"Employee1\": \""+accepter+"\", "+
-                    "\"Employee2\": \""+giver +"\", "+
                     "\"Shift\": \""+shift+"\", "+
                     "\"RequestID\": \""+requestID+"\", " +
                     "\"RequestType\": \"2\""+

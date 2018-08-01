@@ -73,8 +73,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         if(share.getInt("EmployeeID", -1) < 1 || share.getInt("StoreID", -1)< 1){
             Intent intent = new Intent(this, Login.class);
             logout();
-            finish();
             startActivity(intent);
+            finish();
         }
 
         load = findViewById(R.id.load2);
@@ -140,18 +140,18 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
 
         // Getting the job type int from shared preferences.
-        int jobtype = getApplicationContext().getSharedPreferences(Home.pref, 0).getInt("JobType", 0);
+        int jobtype = getApplicationContext().getSharedPreferences(Home.pref, 0).getInt("JobType", -1);
 
-
+        Log.d("JOBTPYE", "jobtype = " + jobtype);
         // Clause for showing the manager or employee. 
-        if(jobtype==1){
-            hideManager();
-            Log.d("JOBTYPE", "ASSIGNED TO EMPLOYEE");
-            FirebaseMessaging.getInstance().subscribeToTopic("Employee"+share.getInt("StoreID", -1));
-        } else{
+         if(jobtype == 0){
             hideEmployee();
             Log.d("JOBTYPE", "ASSIGNED TO MANAGER");
             FirebaseMessaging.getInstance().subscribeToTopic("Manager"+share.getInt("StoreID", -1));
+        }else{
+            hideManager();
+            Log.d("JOBTYPE", "ASSIGNED TO EMPLOYEE");
+            FirebaseMessaging.getInstance().subscribeToTopic("Employee"+share.getInt("StoreID", -1));
         }
 
 
@@ -207,7 +207,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         share.edit().remove("JobType").commit();
         share.edit().remove("Name").commit();
 
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(((share.getInt("JobType", 1) == 1)? "Employee" : "Manager") + share.getString("StoreID", "Empty"));
+        Log.d("JOBTYPE", "Removed from " + ((share.getInt("JobType", -1) == 1)? "Employee" : "Manager"));
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(((share.getInt("JobType", -1) == 1)? "Employee" : "Manager") + share.getString("StoreID", "Empty"));
     }
 
     // Authorizes sign in to hide results from login page
@@ -250,6 +251,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             try {
                 editor.putInt("StoreID", result.getInt("StoreID")).commit();
                 editor.putString("Name", result.getString("FirstName")+" " + result.getString("LastName")).commit();
+                editor.putInt("JobType", result.getInt("JobType")).commit();
             }catch(Exception e){
                 Log.d("SHARE", e.getMessage());
             }
@@ -382,7 +384,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.nav_availability).setVisible(false);
         menu.findItem(R.id.nav_myinfo).setVisible(false);
-        menu.findItem(R.id.nav_schedule).setVisible(false);
+        //menu.findItem(R.id.nav_schedule).setVisible(false);
     }
 
 

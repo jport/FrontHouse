@@ -93,7 +93,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
 
                             SharedPreferences share = context.getSharedPreferences(Home.pref,0);
                             // API call
-                            int send1 = myShiftID;
+                            int send1 = list[viewHolder.getAdapterPosition()].ScheduleID;
 
                             APICall apicall = new APICall();
                             String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
@@ -112,11 +112,12 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                                 Log.d("DROP_ERROR", e.getMessage());
                             }
 
+                            Log.d("REQUEST", "requestID = " +requestID);
+
                             // Firebase request: sendRequest(Employee1, Employee2, Shift, ScheduleID).
                             // Sends to constant url and Manager's app takes care of rest
-                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
-                                    shift = viewHolder.shift.getText().toString();
-                            Send.pickup(accepter, giver, shift, requestID, share.getInt("StoreID", -1) );
+                            String accepter = share.getString("Name", "DefaultVaue"), shift = viewHolder.shift.getText().toString();
+                            Send.pickup(accepter, shift, requestID, share.getInt("StoreID", -1) );
 
 
                             FirebaseMessaging.getInstance().subscribeToTopic(Integer.toString(requestID) );
@@ -165,7 +166,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                             }
 
                             // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
-                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
+                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name(),
                                     shift2 = viewHolder.shift.getText().toString(), shift = yours;
                             Send.swap(accepter, giver, shift, shift2, requestID, share.getInt("StoreID", -1));
 

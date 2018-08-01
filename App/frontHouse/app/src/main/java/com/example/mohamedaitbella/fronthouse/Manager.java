@@ -30,10 +30,12 @@ public class Manager extends AppCompatActivity {
         name2 = findViewById(R.id.Name_2);
         shift2 = findViewById(R.id.Shift_2);
         if(getIntent().getStringExtra("Name2") != null) {
+            Log.d("NAME", "HERE");
             name2.setText(getIntent().getStringExtra("Name2"));
             shift2.setText(getIntent().getStringExtra("Shift2"));
         }
         else{
+            Log.d("NAME", "DAMMIT!!");
             name2.setVisibility(View.INVISIBLE);
             shift2.setVisibility(View.INVISIBLE);
         }
