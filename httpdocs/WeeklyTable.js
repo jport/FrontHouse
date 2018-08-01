@@ -16,20 +16,24 @@ var startOfWeek = new Date(today.setDate(today.getDate()-today.getDay()));
 
 
 function ThisWeek(a){
-  var salt = new Date();
-  var ThisDay = salt.getDay();
-  var ThisDate = salt.getDate();
-  var real=0;
-  var space=0;
-  if(ThisDay>=a){
-    space=ThisDay-a;
-    real=ThisDate-space;
-  }
-  if (ThisDay<a) {
-    space=a-ThisDay;
-    real=ThisDate+space;
-  }
-  return real;
+  var salt = new Date(startOfWeek);
+  salt.setDate(salt.getDate()+a);
+	  /*var salt = new Date();
+	  var ThisDay = salt.getDay();
+	  var ThisDate = salt.getDate();
+	  var real=0;
+	  var space=0;
+
+	if(ThisDay>=a){
+		space=ThisDay-a;
+		real=ThisDate-space;
+	  }
+	  if (ThisDay<a) {
+		space=a-ThisDay;
+		real=ThisDate+space;
+	  }
+	  return real;*/
+  return salt.getDate();
 }
 
 function createRow(name, id, table){
@@ -52,7 +56,7 @@ function createRow(name, id, table){
 
 $(document).ready(function(){
 	startOfWeek.setHours(0,0,0,0);
-	alert("Start: " + startOfWeek);
+	//alert("Start: " + startOfWeek);
     //Table Table
 	var date = new Date();
 	var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -67,7 +71,9 @@ $(document).ready(function(){
 
 
 	function ThisWeek(a){
-	  var salt = new Date();
+	  var salt = new Date(startOfWeek);
+	  salt.setDate(salt.getDate()+a);
+	  /*var salt = new Date();
 	  var ThisDay = salt.getDay();
 	  var ThisDate = salt.getDate();
 	  var real=0;
@@ -81,7 +87,8 @@ $(document).ready(function(){
 		space=a-ThisDay;
 		real=ThisDate+space;
 	  }
-	  return real;
+	  return real;*/
+	  return salt.getDate();
 	}
 
 	var jsonPayLoad = {
