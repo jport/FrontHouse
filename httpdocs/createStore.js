@@ -26,7 +26,6 @@ $(document).ready(function() {
                 url: 'http://knightfinder.com/WEBAPI/CreateStore.aspx',
                 data: payLoadString,
                 success: function(newStore) {
-                    alert("Store : " + newStore.StoreID + " successfully Added to database");
                     localStorage.setItem("StoreID", newStore.StoreID);
                     location.href("makeManager.html");
                 },

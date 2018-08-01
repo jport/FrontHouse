@@ -30,8 +30,9 @@ $(document).ready(function() {
                 url: 'http://knightfinder.com/WEBAPI/CreateEmployee.aspx',
                 data: payLoadString,
                 success: function(newManager) {
-                    alert("Manager" + newManager.FirstName + " successfully Added to database");
-                    alert(newManager.error);
+                    location.href = "Homepage.html"
+                    localStorage.setItem("EmployeeID", newManager.EmployeeID)
+                    localStorage.setItem("JobType", newManager.JobType)
                 },
                 error: function() {
                     alert("error contacting the api \n error code: "+ error);

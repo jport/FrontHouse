@@ -1,47 +1,45 @@
 <!DOCTYPE html>
 <html>
-<title>FrontHouse</title>
+<title></title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="bootstrap.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <style>
 body {font-family: "Lato", sans-serif}
 .mySlides {display: none}
 </style>
 <body>
-
+<title>Weekly schedule</title>
 
 
 <!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-black w3-card">
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-    <a href="home.html" class="w3-bar-item w3-button w3-padding-large">HOME</a>
-    <a href="#Managers" class="w3-bar-item w3-button w3-padding-large w3-hide-small">MANAGERS</a>
-    <a href="#Employees" class="w3-bar-item w3-button w3-padding-large w3-hide-small">EMPLOYEES</a>
-    <a href="m1test_scheduleView_1.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">SCHEDULE</a>
-	<div class="w3-dropdown-hover w3-hide-small">
-      <button class="w3-padding-large w3-button" title="Actions">MANAGER ACTIONS<i class="fa fa-caret-down"></i></button>     
+    <div class="w3-dropdown-hover w3-hide-small">
+      <button class="w3-padding-large w3-button" title="More">Schedule <i class="fa fa-caret-down"></i></button>
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
-		<a href="#" class="w3-bar-item w3-button w3-hover-blue"><b>Edit</b> Store Info</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-blue"><b>View</b> Current Employees</a>
-		<a href="#" class="w3-bar-item w3-button w3-hover-blue"><b>Manage</b> Schedule</a>
-        <a href="createNewEmployee.html" class="w3-bar-item w3-button w3-hover-green"><b>Create</b> Employee</a>
+        <a href="Homepage.html" class="w3-bar-item w3-button" id="ViewSchedule">View Schedule</a>
+        <a href="MakeSchedule.html" class="w3-bar-item w3-button" id="MakeSchedule">Make Next Week's schedule</a>
+      </div>
+    </div>
+    <a href="AvailabilityT.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small"Id="Availability">Availability</a>
+    <a href="MyInfo.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small"id="MyInfo">My info</a>
+	<div class="w3-dropdown-hover w3-hide-small" id="Employees">
+      <button class="w3-padding-large w3-button" id="EmployeeBar"title="Actions">Employees<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block w3-card-4">
+        <a href="createEmployee.html" class="w3-bar-item w3-button w3-hover-green"><b>Create </b>Employee</a>
 		<a href="#" class="w3-bar-item w3-button w3-hover-yellow"><b>Edit</b> Employee</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-red"><b>Delete</b> Employee</a>
+
       </div>
     </div>
     <div class="w3-dropdown-hover w3-hide-small">
-      <button class="w3-padding-large w3-button" title="More">OTHER STUFF <i class="fa fa-caret-down"></i></button>     
-      <div class="w3-dropdown-content w3-bar-block w3-card-4">
-        <a href="#" class="w3-bar-item w3-button">View All - MyRequests</a>
-		<a href="#" class="w3-bar-item w3-button" onclick="argTest(100,5.4)">Check Status</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-green"><b>Pickup</b> Shift</a>
-		<a href="#" class="w3-bar-item w3-button w3-hover-yellow"><b>Swap</b> Shift</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-red"><b>Drop</b> Shift</a>
-      </div>
+    <a  id="Logout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Logout</a>
     </div>
     <a href="javascript:void(0)" class="w3-padding-large w3-hover-blue w3-hide-small w3-right"><i class="fa fa-search"></i></a>
   </div>
@@ -53,12 +51,11 @@ body {font-family: "Lato", sans-serif}
   <a href="#Employees" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">EMPLOYEES</a>
   <a href="m1test_scheduleView_1.html" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">SCHEDULE</a>
   <div class="w3-dropdown-hover">
-      <button class="w3-padding-large w3-button" title="Actions" onclick="myFunction()">MANAGER ACTIONS <i class="fa fa-caret-down"></i></button>     
+      <button class="w3-padding-large w3-button" title="Actions" onclick="myFunction()">MANAGER ACTIONS <i class="fa fa-caret-down"></i></button>
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
-		<a href="#EditStore" class="w3-bar-item w3-button" onclick="myFunction()"><b>Edit</b> Store Info</a>
-        <a href="#ViewAllCurEmps" class="w3-bar-item w3-button w3-hover-blue" onclick="myFunction()"><b>View</b> Current Employees</a>
-		<a href="#ManagSched" class="w3-bar-item w3-button w3-hover-purple" onclick="myFunction()"><b>Manage</b> Schedule</a>
-        <a href="createNewEmployee.html" class="w3-bar-item w3-button w3-hover-green" onclick="myFunction()"><b>Create</b> Employee</a>
+        <a href="#ViewAllCurEmps" class="w3-bar-item w3-button" onclick="myFunction()">View Current Employees</a>
+		<a href="#Poptest" class="w3-bar-item w3-button" onclick="myFunction()">Add Employee</a>
+        <a href="m1test_manager_empSignUpCheck_1.html" class="w3-bar-item w3-button w3-hover-green" onclick="myFunction()"><b>Create</b> Employee</a>
 		<a href="#EditEmp" class="w3-bar-item w3-button w3-hover-yellow" onclick="myFunction()"><b>Edit</b> Employee</a>
         <a href="#DeleteEmp" class="w3-bar-item w3-button w3-hover-red" onclick="myFunction()"><b>Delete</b> Employee</a>
       </div>
@@ -67,8 +64,8 @@ body {font-family: "Lato", sans-serif}
 
 <!-- Page content -->
 <div class="w3-content" style="max-width:2000px;margin-top:46px">
-
-  <!-- The Update Section or maybe show sched-->
+<!--
+  <!-- The Update Section or maybe show sched
   <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
     <h2 class="w3-wide">FrontHouse</h2>
     <p class="w3-opacity"><i>Scheduling Made Easy</i></p>
@@ -76,21 +73,52 @@ body {font-family: "Lato", sans-serif}
     <div class="w3-row w3-padding-32">
       <div class="w3-third">
         <p><em>Fast</em></p>
-        <img src="img\fast_img_2.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+        <img src="fast_img_2.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
       </div>
       <div class="w3-third">
         <p><em>Easy</em></p>
-        <img src="img\easy_img_1.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
+        <img src="easy_img_1.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
       </div>
       <div class="w3-third">
         <p><em>Scheduling<em></p>
-        <img src="img\scheduling_img_5.png" class="w3-round" alt="Random Name" style="width:60%">
+        <img src="scheduling_img_5.png" class="w3-round" alt="Random Name" style="width:60%">
       </div>
     </div>
   </div>
-
+-->
 <!-- End Page Content -->
 </div>
+
+<!-- Add Google Maps
+<div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
+-->
+<!--Home page weekly table-->
+<div class="w3-content" style="max-width:2000px;margin-top:46px">
+<table id="OurTable"width="90%" class="table table-dark table-hover">
+  <thead>
+    <tr>
+      <!--
+      <td class="hello" >hello<td>-->
+      <td id="TableHead"colspan="8" align="center">This Week's schedule</td>
+    </tr>
+    </thead>
+<tbody>
+    <tr>
+      <td id="Name">Name</td>
+      <td id="Sunday"align="center">Sunday</td>
+      <td id="Monday"align="center">Monday</td>
+      <td id="Tuesday" align="center">Tuesday</td>
+      <td id="Wednesday"align="center">Wednesday</td>
+      <td id="Thursday"align="center">Thursday</td>
+      <td id="Friday"align="center">Friday</td>
+      <td id="Saturday"align="center">Saturday</td>
+    </tr>
+
+</tbody>
+
+</table>
+</div>
+<!--
 
 <!-- Footer -->
 <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
@@ -103,30 +131,13 @@ body {font-family: "Lato", sans-serif}
   <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
 </footer>
 
-	<script>
-		// Used to toggle the menu on small screens when clicking on the menu button
-		function myFunction() {
-			var x = document.getElementById("navDemo");
-			if (x.className.indexOf("w3-show") == -1) {
-				x.className += " w3-show";
-			} else { 
-				x.className = x.className.replace(" w3-show", "");
-			}
-		}
-	</script>
 
-	<script language = "javascript" type = "text/javascript">
-		<!-- Start hiding java script stuff and statements
-		function argTest()
-		{
-			var msgString = "That shift unavailable!! \n The function has been passed " + arguments.length + " arguments.\n";
-			
-			for (i = 0; i < arguments.length; i++)
-				msgString += "argument " + i + " = " + arguments[i] + " (" + typeof(arguments[i]) + ")\n";
-				window.alert(msgString);
-		}	
-		// end hiding JavaScript statements -->
-	</script>
+</script>
+<script src="WeeklyTable.js"></script>
+
+<script src="SeperateUsers.js"></script>
+<script src="logout.js"></script>
+
 
 </body>
 </html>
