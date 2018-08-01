@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Welcome to FrontHouse!</title>
+  <title>Update Your Information</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
   <script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-  <script src = "index.js"></script>
-
+  <script src = "updateEmployee.js"> </script>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -19,27 +18,42 @@
 <div class="modal-dialog text-center">
 <div class = "col-sml-8 main-section">
   <div class="modal-content">
-  <div class="col-12 user-img">
-  <img src="img/face.png">
+  <div class="col-12">
+
   </div>
     <form class="col-12">
       <div class="form-group">
-        <input type="text" class="form-control" id = "UserName" placeholder="Enter Username">
+        <input type="text" class="form-control" id = "FirstName" text="">
       </div>
       <div class="form-group">
-        <input type="password" id = "Password" class="form-control" placeholder="Enter Password">
+          <input type="text" class="form-control" id = "LastName" text="">
       </div>
-      <button type="submit" class="btn btn-secondary" id = "loginButton" onclick="return doLogin();"> login</button>
+
+      <div class="form-group">
+            <input type="password" class="form-control" id = "password" placeholder="Enter your new password">
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" id = "Email" text="">
+      </div>
+
+      <div class="form-group">
+          <input type="text" class="form-control" id = "Phone" text="">
+      </div>
+
+
+
+
+
+
+      <button type="button"class="btn btn-secondary" id = "SignUp">Update Information</button>
     </form>
-    <div class="col-12 forgot">
-      <a href="storeSignup.html">Sign up</a>
-    </div>
+
   </div><!---end of Modal content-->
 </div>
 </div>
 
-
 </body>
 
 
-</html
+</html>
