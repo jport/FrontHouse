@@ -63,8 +63,6 @@ public class ShiftView extends AppCompatActivity {
                                         "\"RequestText\":\"\"}";
                         apicall.execute(url, payload);
 
-                        int myShiftID = getIntent().getIntExtra("MyShiftID", -1);
-
                         int requestID = -1;
                         try {
                             Log.d("MILEY", apicall.get().toString());
@@ -123,9 +121,10 @@ public class ShiftView extends AppCompatActivity {
             try {
                 String shifts[] = Home.Time(new JSONObject(gson.toJson(temp[i])), 0);
                 Log.d("ShiftView", "yours: " + yours + ", theirs: " +shifts[0] + ", " + shifts[1]);
+                // If users has no shift/
                 if (yours.equals("") || (!shifts[0].equals(yours) && !shifts[1].equals(yours))) {
-                    Log.d("IFs", "Came in");
-                    if (shifts[0].length() == 0 || shifts[1].length() == 0 || !(shifts[0].substring(0, 6) + shifts[1].substring(12)).equals(yours))
+                    Log.d("IFs", "Came in" + shifts[0].substring(0, 6) + shifts[1].substring(6));
+                    if (shifts[0].length() == 0 || shifts[1].length() == 0 || !(shifts[0].substring(0, 6) + shifts[1].substring(6)).equals(yours))
                         everyone.add(temp[i]);
                 }
             }catch(Exception e){

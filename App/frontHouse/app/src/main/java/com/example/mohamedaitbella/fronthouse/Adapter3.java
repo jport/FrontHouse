@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
 
     Shift[] list;
@@ -34,6 +36,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
         this.context = context;
         this.myShiftID = myShiftID;
         this.yours = yours;
+        Log.d("LISTY", Arrays.toString(list));
     }
 
     @NonNull

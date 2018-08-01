@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     tools:context=".ShiftView"
-    android:paddingVertical="10dp"
+    android:paddingVertical="15dp"
     android:paddingHorizontal="10dp"
     android:background="@drawable/border">
 
@@ -17,22 +17,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="AM"
-            android:padding="15dp" />
+            android:padding="15dp"
+            android:layout_gravity="center_vertical"/>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/other_shift"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:layout_constraintEnd_toStartOf="@id/request2"
-        android:paddingVertical="10dp"
-        android:paddingRight="100dp"
-        android:paddingLeft="10dp">
+        android:paddingRight="80dp"
+        android:paddingLeft="10dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/MyShift"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:scrollHorizontally="false"
             android:hint="Employee"
             />
 
@@ -47,10 +49,11 @@
     </android.support.constraint.ConstraintLayout>
 
     <Button
+        android:id="@+id/request2"
+        android:text="Empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Empty"
-        android:paddingVertical="20dp"
-        android:id="@+id/request2"/>
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0"/>
 
 </LinearLayout>
