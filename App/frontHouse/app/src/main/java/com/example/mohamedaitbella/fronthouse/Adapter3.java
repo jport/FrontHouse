@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -89,15 +90,8 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            int scheID = list[viewHolder.getAdapterPosition()].ScheduleID;
+
                             SharedPreferences share = context.getSharedPreferences(Home.pref,0);
-
-                            // Firebase request: sendRequest(Employee1, Employee2, Shift, ScheduleID).
-                            // Sends to constant url and Manager's app takes care of rest
-                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
-                                    shift = viewHolder.shift.getText().toString();
-                            Send.pickup(accepter, giver, shift, scheID );
-
                             // API call
                             int send1 = myShiftID;
 
@@ -109,6 +103,24 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                                             "\"ScheduleID1\": \"" +send1+ "\", " +
                                             "\"RequestText\":\"\"}";
                             apicall.execute(url, payload);
+
+                            int requestID = -1;
+                            try {
+                                Log.d("MILEY", apicall.get().toString());
+                                 requestID = apicall.get().getJSONObject(0).getInt("RequestID");
+                            }catch(Exception e){
+                                Log.d("DROP_ERROR", e.getMessage());
+                            }
+
+                            // Firebase request: sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                            // Sends to constant url and Manager's app takes care of rest
+                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
+                                    shift = viewHolder.shift.getText().toString();
+                            Send.pickup(accepter, giver, shift, requestID, share.getInt("StoreID", -1) );
+
+
+                            FirebaseMessaging.getInstance().subscribeToTopic(Integer.toString(requestID) );
+                            viewHolder.click.setEnabled(false);
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -118,6 +130,7 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                         }
                     });
                     dialog = builder.create();
+                    dialog.show();
                     break;
 
                 // Swap, job not currently on request
@@ -128,16 +141,12 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+
                             SharedPreferences share = context.getSharedPreferences(Home.pref,0);
-
-                            // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
-                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
-                                    shift2 = viewHolder.shift.getText().toString(), shift = yours;
-                            Send.swap(accepter, giver, shift, shift2, myShiftID, list[viewHolder.getAdapterPosition()].ScheduleID);
-
                             int send1 = myShiftID;
                             int send2 = list[viewHolder.getAdapterPosition()].ScheduleID;
 
+                            // API call
                             APICall apicall = new APICall();
                             String url = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
                                     payload = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
@@ -146,6 +155,24 @@ public class Adapter3 extends RecyclerView.Adapter<Adapter3.ViewHolder> {
                                             "\"ScheduleID1\": \"" +send1+ "\", \"ScheduleID2\":\""+send2+"\", " +
                                             "\"RequestText\":\"\"}";
                             apicall.execute(url, payload);
+
+                            int requestID = -1;
+                            try {
+                                Log.d("MILEY", apicall.get().toString());
+                                requestID = apicall.get().getJSONObject(0).getInt("RequestID");
+                            }catch(Exception e){
+                                Log.d("DROP_ERROR", e.getMessage());
+                            }
+
+                            // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                            String accepter = share.getString("Name", "DefaultVaue"), giver = list[viewHolder.getAdapterPosition()].Name,
+                                    shift2 = viewHolder.shift.getText().toString(), shift = yours;
+                            Send.swap(accepter, giver, shift, shift2, requestID, share.getInt("StoreID", -1));
+
+                            FirebaseMessaging.getInstance().subscribeToTopic(Integer.toString(requestID) );
+                            viewHolder.click.setEnabled(false);
+
+
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

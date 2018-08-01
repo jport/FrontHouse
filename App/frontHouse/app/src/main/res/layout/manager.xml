@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".Manager"
+    android:orientation="vertical"
+    android:background="@drawable/border"
+    android:layout_gravity="center_vertical">
+
+    <LinearLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/Name_1"
+                android:text="Name:"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingVertical="10dp"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/Name_2"
+                android:text="Name2:"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingVertical="10dp"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/Shift_1"
+                android:text="Shift:"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingVertical="10dp"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/Shift_2"
+                android:text="Shift2:"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingVertical="10dp"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/border"
+        android:paddingVertical="15dp">
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="0.5"
+            android:text="Button"/>
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="0.5"
+            android:text="Button"/>
+    </LinearLayout>
+
+</LinearLayout>

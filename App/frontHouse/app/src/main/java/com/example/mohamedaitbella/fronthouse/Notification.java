@@ -11,6 +11,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -57,7 +58,10 @@ public class Notification extends FirebaseMessagingService {
         // If sent from JSON and in foreground
         if(rm.getNotification() != null) {
             if(rm.getNotification().getClickAction() != null) {
+                // This should be else statement (excluding the 'RequestID' portion)
                 if (rm.getNotification().getClickAction().equals("Home")) {
+                    if(rm.getData()!=null &&rm.getData().get("RequestID")!=null)
+                        FirebaseMessaging.getInstance().subscribeToTopic(rm.getData().get("RequestID") );
                     intent = new Intent(this, Home.class);
                     if(rm.getData().get("action") == null)
                         intent.putExtra("action", "Schedule");
@@ -66,9 +70,21 @@ public class Notification extends FirebaseMessagingService {
                 }
                 else if (rm.getNotification().getClickAction().equals("MyAvailability"))
                     intent = new Intent(this, MyAvailability.class);
-
+                else if(rm.getNotification().getClickAction().equals("Manager")){
+                    Log.d("NOTIFY", "HERE" );
+                    intent = new Intent(this, Manager.class);
+                    intent.putExtra("RequestType", rm.getData().get("RequestType"));
+                    intent.putExtra("Name1", rm.getData().get("Employee1"));
+                    intent.putExtra("Shift1", rm.getData().get("Shift"));
+                    intent.putExtra("RequestID", Integer.parseInt(rm.getData().get("RequestID")));
+                    if(rm.getData().get("Name2") != null) {
+                        intent.putExtra("Name2", rm.getData().get("Name2"));
+                        intent.putExtra("Shift2", rm.getData().get("Shift2"));
+                    }
+                }
                 else
-                    intent = new Intent(this, Login.class);
+                    intent = new Intent(this, Home.class);
+                Log.d("NOTIFY", "CLICK-ACTION = " + rm.getNotification().getClickAction());
             }
             else
                 Log.d("NOT_INENT", "Switching didn't work. Check for typos");

@@ -72,6 +72,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         // Stops unauthorized access to home
         if(share.getInt("EmployeeID", -1) < 1 || share.getInt("StoreID", -1)< 1){
             Intent intent = new Intent(this, Login.class);
+            logout();
             finish();
             startActivity(intent);
         }
@@ -146,11 +147,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         if(jobtype==1){
             hideManager();
             Log.d("JOBTYPE", "ASSIGNED TO EMPLOYEE");
-            FirebaseMessaging.getInstance().subscribeToTopic("Employee");
+            FirebaseMessaging.getInstance().subscribeToTopic("Employee"+share.getInt("StoreID", -1));
         } else{
             hideEmployee();
             Log.d("JOBTYPE", "ASSIGNED TO MANAGER");
-            FirebaseMessaging.getInstance().subscribeToTopic("Manager");
+            FirebaseMessaging.getInstance().subscribeToTopic("Manager"+share.getInt("StoreID", -1));
         }
 
 
@@ -206,7 +207,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         share.edit().remove("JobType").commit();
         share.edit().remove("Name").commit();
 
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(share.getInt("JobType", 0) == 1? "Employee" : "Manager");
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(((share.getInt("JobType", 1) == 1)? "Employee" : "Manager") + share.getString("StoreID", "Empty"));
     }
 
     // Authorizes sign in to hide results from login page

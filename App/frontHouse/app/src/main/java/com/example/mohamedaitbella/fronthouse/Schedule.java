@@ -88,7 +88,7 @@ public class Schedule extends Fragment {
 
         Gson gson = new Gson();
 
-        Shift[] json = gson.fromJson(result.toString(), Shift[].class);
+        Shift[] json = gson.fromJson(result.toString(), GetSchedule.class).schedules;
 
         // Sort all shifts by day
         Log.d("JSON", Arrays.toString(json));
@@ -103,28 +103,30 @@ public class Schedule extends Fragment {
 
         int myStart = -1, date = 0;
 
-        if(json.length > 0){
         Calendar cal = Calendar.getInstance();
+        if(json.length > 0){
 
-        cal.set(Integer.parseInt(json[0].StartTime.substring(0,4))+0,
-                Integer.parseInt(json[0].StartTime.substring(5,7)) -1,
-                Integer.parseInt(json[0].StartTime.substring(8,10) )+0);
+            cal.set(Integer.parseInt(json[0].StartTime.substring(0,4))+0,
+                    Integer.parseInt(json[0].StartTime.substring(5,7)) -1,
+                    Integer.parseInt(json[0].StartTime.substring(8,10) )+0);
 
-        // Get first SHIFTS for that week
-        // ------------------- CHANGE LATER!! ----------------------------
-        /*-------------*/  int start = cal.get(Calendar.DAY_OF_WEEK)-1;
-        // ---------------------------------------------------------------
-        Log.d("CAL", "start = " + start);
+            // Get first SHIFTS for that week
+            // ------------------- CHANGE LATER!! ----------------------------
+            /*-------------*/  int start = cal.get(Calendar.DAY_OF_WEEK)-1;
+            // ---------------------------------------------------------------
+            Log.d("CAL", "start = " + start);
 
-        // Calendar to keep track of the date the first day of the weekShifts
-        date = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
-        Log.d("CAL", "date = " + date);
+            // Calendar to keep track of the date the first day of the weekShifts
+            date = cal.get(Calendar.DAY_OF_MONTH) - cal.get(Calendar.DAY_OF_WEEK)+1;
+            Log.d("CAL", "date = " + date);
 
 
-        // Sort shifts into days  and store the current employee's shifts(in order)
-
+            // Sort shifts into days  and store the current employee's shifts(in order)
             weekShifts[start].add(json[0]);
-            myStart =(json[0].EmployeeID == share.getInt("EmployeeID", 0)) ? start : -1;
+            if(json[0].EmployeeID == share.getInt("EmployeeID", -1)) {
+                myStart = -1;
+                mine[0] = json[0];
+            }
 
             for (int i = 1, j = start; i < json.length; i++) {
 
@@ -190,6 +192,7 @@ public class Schedule extends Fragment {
         }
 
         Log.d("TESTY", Arrays.toString(mine));
+        Log.d("TESTY", "Max date: " + cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         //--------------- Add work shifts to respective arrays -----------------------------------
         for(int i = 0; i < mine.length; i++){
 
@@ -197,7 +200,9 @@ public class Schedule extends Fragment {
                 break;
             // Change to 'mine[start]' later
             if(mine[myStart] != null)
-                days[i] = mine[myStart].StartTime.substring(5,7)+"/"+ (date+i);
+                days[i] = mine[myStart].StartTime.substring(5,7)+"/"+ (
+                        ((date+i)%cal.getActualMaximum(Calendar.DAY_OF_MONTH) == 0)?
+                                cal.getActualMaximum(Calendar.DAY_OF_MONTH) : (date+i)%cal.getActualMaximum(Calendar.DAY_OF_MONTH));
 
             if(mine[i] == null) continue;
             try {

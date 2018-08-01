@@ -50,11 +50,6 @@ public class ShiftView extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SharedPreferences share = getApplicationContext().getSharedPreferences(Home.pref,0);
-                        int myShiftID = getIntent().getIntExtra("MyShiftID", -1);
-
-                        // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
-                        String accepter = share.getString("Name", "DefaultVaue"), shift = time.getText().toString();
-                        Send.drop(accepter, shift,  myShiftID);
 
                         int scheID = getIntent().getIntExtra("MyShiftID", -1);
 
@@ -68,6 +63,23 @@ public class ShiftView extends AppCompatActivity {
                                         "\"RequestText\":\"\"}";
                         apicall.execute(url, payload);
 
+                        int myShiftID = getIntent().getIntExtra("MyShiftID", -1);
+
+                        int requestID = -1;
+                        try {
+                            Log.d("MILEY", apicall.get().toString());
+                            requestID = apicall.get().getJSONObject(0).getInt("RequestID");
+                        }catch(Exception e){
+                            Log.d("DROP_ERROR", e.getMessage());
+                        }
+
+                        //Log.d("MANAGE", "requestID = " + requestID);
+
+                        // Firebase request(new function needed): sendRequest(Employee1, Employee2, Shift, ScheduleID).
+                        String accepter = share.getString("Name", "DefaultVaue"), shift = time.getText().toString();
+                        Send.drop(accepter, shift, requestID, share.getInt("StoreID", -1));
+
+                        FirebaseMessaging.getInstance().subscribeToTopic(Integer.toString(requestID) );
                         drop.setEnabled(false);
                     }
                 });

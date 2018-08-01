@@ -67,7 +67,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
+        //FirebaseMessaging.getInstance().subscribeToTopic("Bernardin");
 
         userName=(EditText)findViewById(R.id.userName);
         password=(EditText)findViewById(R.id.password);
@@ -186,6 +186,7 @@ class APICall extends AsyncTask<String, String, JSONArray> {
             }
 
             // Returning what is wanted from executing of the AsyncTask
+            Log.d("API_RETURN", json.toString());
             return json;
         }catch (Exception e){
             Log.d("CHECK CALL", e.getMessage());
@@ -219,77 +220,103 @@ class Send extends AsyncTask<String, String, Boolean>{
         send.execute(url, payload);
     }
 
-    public static void drop(String accepter, String shift, int scheID){
-
-        String page = "ManagerHome", frag = "Schedule";
+    public static void respond(int ans, int requestID){
 
         Send send = new Send();
         String url = "https://fcm.googleapis.com/fcm/send";
 
         String payload =
-                "{\"to\":\"/topics/Managers"+"\"," +
-                        "\"notification\":{" +
-                        "\"title\": \"NEW EMPLOYEE REQUEST\"," +
-                        "\"text\": \"An employee has requested to pick-up a shift.\"," +
-                        "\"click_action\": \" "+page+ "\"" +
-                        "},"+
-                        "\"data\": {"+
-                        //"action :\""+ frag + "\""+
-                        "Employee1 :\""+ accepter + "\""+
-                        "Shift :\""+ shift + "\""+
-                        "ScheduleID :\""+ scheID + "\"" +
-                        "} }";
+                "{\"to\": \"/topics/"+requestID+"\"," +
+                "\"notification\":{" +
+                    "\"title\": \"REPLY TO SHIFT REQUEST\"," +
+                    "\"text\": \"Your request has been "+((ans == 1)?"APPROVED":"DENIED")+".\", " +
+                    "\"click_action\": \"Home\"" +
+                "}, "+
+                "\"data\":" +
+                    //"action :\""+ frag + "\", "+
+                    "\"RequestID\": \""+requestID+"\", " +
+                "}";
 
         send.execute(url, payload);
+
+
     }
 
-    public static void swap(String accepter, String giver, String shift, String shift2, int scheID, int scheID2){
+    public static void drop(String accepter, String shift, int requestID, int storeID){
 
-        String page = "ManagerHome", frag = "Schedule";
+
+        String page = "Manager", frag = "Schedule";
 
         Send send = new Send();
         String url = "https://fcm.googleapis.com/fcm/send";
 
         String payload =
-                "{\"to\":\"/topics/Managers"+"\"," +
-                        "\"notification\":{" +
-                        "\"title\": \"NEW EMPLOYEE REQUEST\"," +
-                        "\"text\": \"An employee has requested to pick-up a shift.\"," +
-                        "\"click_action\": \" "+page+ "\"" +
-                        "},"+
-                        "\"data\": {"+
-                        //"action :\""+ frag + "\""+
-                        "Employee1 :\""+ accepter + "\""+
-                        "Employee2 :\""+ giver + "\""+
-                        "Shift :\""+ shift + "\""+
-                        "Shift2 :\""+ shift2 + "\""+
-                        "ScheduleID :\""+ scheID + "\"" +
-                        "ScheduleID2 :\""+ scheID2 + "\"" +
-                        "} }";
-
-        send.execute(url, payload);
-    }
-
-    public static void pickup(String accepter, String giver, String shift, int scheID){
-
-        String page = "Home", frag = "Schedule";
-
-        Send send = new Send();
-        String url = "https://fcm.googleapis.com/fcm/send";
-
-        String payload =
-                "{\"to\":\"/topics/Managers"+"\"," +
+                "{\"to\": \"/topics/Manager"+storeID+"\"," +
                 "\"notification\":{" +
                     "\"title\": \"NEW EMPLOYEE REQUEST\"," +
-                    "\"text\": \"An employee has requested to pick-up a shift.\"," +
-                    "\"click_action\": \" "+page+ "\"" +
+                    "\"text\": \"An employee has requested to DROP a shift.\"," +
+                    "\"click_action\": \""+page+"\"" +
+                    "},"+
+                "\"data\":{" +
+                    //"action :\""+ frag + "\", "+
+                    "\"Employee1\": \""+accepter+"\", " +
+                    "\"Shift\": \""+shift+"\", " +
+                    "\"RequestID\": \""+requestID+"\", " +
+                    "\"RequestType\": \"1\""+
+                    "} " +
+                "}";
+
+        send.execute(url, payload);
+    }
+
+    public static void swap(String accepter, String giver, String shift, String shift2, int requestID, int storeID){
+
+        String page = "Manager", frag = "Schedule";
+
+        Send send = new Send();
+        String url = "https://fcm.googleapis.com/fcm/send";
+
+        String payload =
+                "{\"to\":\"/topics/Manager"+storeID+"\", " +
+                "\"notification\":{" +
+                    "\"title\": \"NEW EMPLOYEE REQUEST\", " +
+                    "\"text\": \"An employee has requested to SWAP shifts.\", " +
+                    "\"click_action\": \""+page+"\" " +
+                    "},"+
+                "\"data\": {"+
+                    //"action :\""+ frag + "\", "+
+                    "\"Employee1\": \""+accepter+"\", " +
+                    "\"Employee2\": \""+giver+"\", " +
+                    "\"Shift\": \""+shift+"\", " +
+                    "\"Shift2\": \""+shift2+"\", " +
+                    "\"RequestID\": \""+requestID+"\", " +
+                    "\"RequestType\": \"3\""+
+                "} }";
+
+        send.execute(url, payload);
+    }
+
+    public static void pickup(String accepter, String giver, String shift, int requestID, int storeID){
+
+        String page = "Manager", frag = "Schedule";
+
+        Send send = new Send();
+        String url = "https://fcm.googleapis.com/fcm/send";
+
+        String payload =
+                "{\"to\":\"/topics/Manager"+storeID+"\", " +
+                "\"notification\":{" +
+                    "\"title\": \"NEW EMPLOYEE REQUEST\", " +
+                    "\"text\": \"An employee has requested to PICK-UP a shift.\", " +
+                    "\"click_action\": \""+page+"\"" +
                 "},"+
                 "\"data\": {"+
                     //"action :\""+ frag + "\""+
-                    "Employee1 :\""+ accepter + "\""+
-                    "Employee2 :\""+ giver + "\""+
-                    "Shift :\""+ shift + "\""+
-                    "ScheduleID :\""+ scheID + "\"" +
+                    "\"Employee1\": \""+accepter+"\", "+
+                    "\"Employee2\": \""+giver +"\", "+
+                    "\"Shift\": \""+shift+"\", "+
+                    "\"RequestID\": \""+requestID+"\", " +
+                    "\"RequestType\": \"2\""+
                 "} }";
 
         send.execute(url, payload);
