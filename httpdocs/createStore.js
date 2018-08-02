@@ -8,7 +8,7 @@ $(document).ready(function() {
         var zip = $('#Zip');
         //on click execute the stores signup
         $('#SignUp').on('click', function () {
-          
+
             //make the payload to send to the database
             var payLoad = {
                 StoreName: name.val(),
@@ -19,7 +19,7 @@ $(document).ready(function() {
                 Zip : zip.val(),
             };
             var payLoadString = JSON.stringify(payLoad);
-    
+
             //send the json payload using ajax
             $.ajax({
                 type: 'POST',
@@ -27,14 +27,14 @@ $(document).ready(function() {
                 data: payLoadString,
                 success: function(newStore) {
                     localStorage.setItem("StoreID", newStore.StoreID);
-                    location.href("makeManager.html");
+                    location.href="makeManager.html";
                 },
                 error: function() {
                     alert("error contacting the api \n error code: "+ error);
                 }
             });
-    
-    
+
+
     });
 
 });
