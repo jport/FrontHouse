@@ -22,6 +22,7 @@ public class Manager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manager);
 
+
         for(Object i : getIntent().getExtras().keySet())
             Log.d("EXTRAS", i.toString() +" -> " +getIntent().getExtras().get(i.toString()).toString());
 
@@ -30,7 +31,12 @@ public class Manager extends AppCompatActivity {
         name1 = findViewById(R.id.Name_1);
         name1.setText(getIntent().getStringExtra("Employee1"));
         shift1 = findViewById(R.id.Shift_1);
-        shift1.setText(getIntent().getStringExtra("Shift"));
+        shift1.setVisibility(View.INVISIBLE);
+
+        if(getIntent().getStringExtra("Shift") != null) {
+            shift1.setText(getIntent().getStringExtra("Shift"));
+            shift1.setVisibility(View.VISIBLE);
+        }
 
         name2 = findViewById(R.id.Name_2);
         shift2 = findViewById(R.id.Shift_2);

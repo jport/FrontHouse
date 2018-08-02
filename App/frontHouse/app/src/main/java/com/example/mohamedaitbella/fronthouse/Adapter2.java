@@ -114,8 +114,28 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
 
                 payLoad= getPayLoad(days, am_shifts,pm_shifts);
 
-                APICall apicall = new APICall();
+                APICall apicall = new APICall(), apicall2 = new APICall();
                 apicall.execute(url,payLoad);
+
+                String url2 = "http://knightfinder.com/WEBAPI/SendRequest.aspx",
+                        payload2 = "{\"StoreID\":\""+ share.getInt("StoreID", -1) + "\", " +
+                                "\"EmployeeID\": \""+share.getInt("EmployeeID", -1) + "\", " +
+                                "\"RequestType\":\"4\", "+
+                                "\"ScheduleID1\": \"\", " +
+                                "\"RequestText\":\"\"}";
+
+                apicall2.execute(url2, payload2);
+
+                int requestID = -1;
+                try {
+                    Log.d("MILEY", apicall.get().toString());
+                    requestID = apicall2.get().getJSONObject(0).getInt("RequestID");
+                }catch(Exception e){
+                    Log.d("SWITCH_ERROR", e.getMessage());
+                }
+
+                Send.switching(share.getString("Name", "No Name Sent"), requestID, share.getInt("StoreID", -1));
+
             }
         });
     }

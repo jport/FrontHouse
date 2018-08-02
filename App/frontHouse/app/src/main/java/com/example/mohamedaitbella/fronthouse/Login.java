@@ -243,6 +243,33 @@ class Send extends AsyncTask<String, String, Boolean>{
 
     }
 
+    public static void switching(String accepter, int requestID, int storeID){
+
+
+        String page = "Manager", frag = "Schedule";
+
+        Send send = new Send();
+        String url = "https://fcm.googleapis.com/fcm/send";
+
+        String payload =
+                "{\"to\": \"/topics/Manager"+storeID+"\"," +
+                        "\"notification\":{" +
+                        "\"title\": \"NEW EMPLOYEE REQUEST\"," +
+                        "\"text\": \"An employee has requested to UPDATE AVAILABILITY.\"," +
+                        "\"click_action\": \""+page+"\", " +
+                        "\"sound\": \"default\"" +
+                        "},"+
+                        "\"data\":{" +
+                        //"action :\""+ frag + "\", "+
+                        "\"Employee1\": \""+accepter+"\", " +
+                        "\"RequestID\": \""+requestID+"\", " +
+                        "\"RequestType\": \"4\""+
+                        "} " +
+                        "}";
+
+        send.execute(url, payload);
+    }
+
     public static void drop(String accepter, String shift, int requestID, int storeID){
 
 
