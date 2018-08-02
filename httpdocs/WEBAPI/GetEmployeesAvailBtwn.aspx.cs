@@ -66,7 +66,7 @@ public partial class WISAAPI_GetEmployeesAvailBtwn : System.Web.UI.Page
 					LEFT JOIN AvailabilityTbl a ON e.EmployeeID = a.EmployeeID
 					    AND a.DayOfWeek = DATEPART(WEEKDAY, @StartDate)
 					WHERE
-					    Cast(a.StartTime as time) >= Cast(@StartDate as time)
+					    Cast(@StartDate as time) >= Cast(a.StartTime as time)
 					    AND Cast(a.EndTime as time) >= Cast(@EndDate as time)
 				    )
 				    AND EmployeeID NOT IN
@@ -75,7 +75,7 @@ public partial class WISAAPI_GetEmployeesAvailBtwn : System.Web.UI.Page
 					FROM Employee e
 					LEFT JOIN Schedule s ON e.EmployeeID = s.EmployeeID
 					WHERE
-					    s.StartOfShift >= @StartDate
+					    @StartDate >= s.StartOfShift
 					    AND s.EndOfShift >= @EndDate
 				    )
 				    AND StoreID = @StoreID
