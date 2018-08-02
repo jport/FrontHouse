@@ -30,14 +30,14 @@ $(document).ready(function() {
                 url: 'http://knightfinder.com/WEBAPI/CreateEmployee.aspx',
                 data: payLoadString,
                 success: function(newManager) {
-                    localStorage.setItem("EmployeeID", userId);
-                    localStorage.setItem("StoreID", data.StoreID);
-                    localStorage.setItem("JobType", data.JobType);
-                    localStorage.setItem("FirstName", data.FirstName);
-                    localStorage.setItem("LastName", data.LastName);
-                    localStorage.setItem("Email", data.Email);
-                    localStorage.setItem("Phone", data.Phone);
-                    localStorage.setItem("Status", data.Status);
+                    localStorage.setItem("EmployeeID", newManager.EmployeeID);
+                    localStorage.setItem("StoreID", newManager.StoreID);
+                    localStorage.setItem("JobType", newManager.JobType);
+                    localStorage.setItem("FirstName", newManager.FirstName);
+                    localStorage.setItem("LastName", newManager.LastName);
+                    localStorage.setItem("Email", newManager.Email);
+                    localStorage.setItem("Phone", newManager.Phone);
+                    localStorage.setItem("Status", newManager.Status);
 
                     location.href = "Homepage.html"
                 },
