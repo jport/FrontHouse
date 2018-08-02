@@ -31,8 +31,14 @@ $(document).ready(function() {
                 data: payLoadString,
                 success: function(newManager) {
                     location.href = "Homepage.html"
-                    localStorage.setItem("EmployeeID", newManager.EmployeeID)
-                    localStorage.setItem("JobType", newManager.JobType)
+                    localStorage.setItem("EmployeeID", userId);
+                    localStorage.setItem("StoreID", data.StoreID);
+                    localStorage.setItem("JobType", data.JobType);
+                    localStorage.setItem("FirstName", data.FirstName);
+                    localStorage.setItem("LastName", data.LastName);
+                    localStorage.setItem("Email", data.Email);
+                    localStorage.setItem("Phone", data.Phone);
+                    localStorage.setItem("Status", data.Status);
                 },
                 error: function() {
                     alert("error contacting the api \n error code: "+ error);
