@@ -30,7 +30,6 @@ $(document).ready(function() {
                 url: 'http://knightfinder.com/WEBAPI/CreateEmployee.aspx',
                 data: payLoadString,
                 success: function(newManager) {
-                    location.href = "Homepage.html"
                     localStorage.setItem("EmployeeID", userId);
                     localStorage.setItem("StoreID", data.StoreID);
                     localStorage.setItem("JobType", data.JobType);
@@ -39,6 +38,8 @@ $(document).ready(function() {
                     localStorage.setItem("Email", data.Email);
                     localStorage.setItem("Phone", data.Phone);
                     localStorage.setItem("Status", data.Status);
+
+                    location.href = "Homepage.html"
                 },
                 error: function() {
                     alert("error contacting the api \n error code: "+ error);
