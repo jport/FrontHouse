@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<title></title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="bootstrap.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<style>
+body {font-family: "Lato", sans-serif}
+.mySlides {display: none}
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+    background-color:white;
+    color: black;
+}
+</style>
+<body>
+<title>Update info</title>
+
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-black w3-card">
+    <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+    <div class="w3-dropdown-hover w3-hide-small">
+      <button class="w3-padding-large w3-button" title="More">Schedule <i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block w3-card-4">
+        <a href="Homepage.html" class="w3-bar-item w3-button" id="ViewSchedule">View Schedule</a>
+        <a href="MakeSchedule.html" class="w3-bar-item w3-button" id="MakeSchedule">Make Next Week's schedule</a>
+      </div>
+    </div>
+    <a href="AvailabilityT.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small"Id="Availability">Availability</a>
+
+    <div class="w3-dropdown-hover w3-hide-small">
+        <button class="w3-padding-large w3-button" title="More">My Info <i class="fa fa-caret-down"></i></button>
+          <div class="w3-dropdown-content w3-bar-block w3-card-4">
+            <a href="updateinfo.html" class="w3-bar-item w3-button" id="ViewSchedule">Update Info</a>
+        </div>
+        </div>
+	<div class="w3-dropdown-hover w3-hide-small" id="Employees">
+      <button class="w3-padding-large w3-button" id="EmployeeBar"title="Actions">Employees<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block w3-card-4">
+        <a href="createEmployee2.html" class="w3-bar-item w3-button w3-hover-green"><b>Create </b>Employee</a>
+
+
+      </div>
+    </div>
+    <div class="w3-dropdown-hover w3-hide-small">
+    <a  id="Logout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Logout</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Navbar on small screens (remove onclick attribute to always show navbar on top of content when clicking the links) -->
+<div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+  <a href="#Managers" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">MANAGERS</a>
+  <a href="#Employees" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">EMPLOYEES</a>
+  <a href="m1test_scheduleView_1.html" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">SCHEDULE</a>
+  <div class="w3-dropdown-hover">
+      <button class="w3-padding-large w3-button" title="Actions" onclick="myFunction()">MANAGER ACTIONS <i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block w3-card-4">
+        <a href="#ViewAllCurEmps" class="w3-bar-item w3-button" onclick="myFunction()">View Current Employees</a>
+		<a href="#Poptest" class="w3-bar-item w3-button" onclick="myFunction()">Add Employee</a>
+        <a href="m1test_manager_empSignUpCheck_1.html" class="w3-bar-item w3-button w3-hover-green" onclick="myFunction()"><b>Create</b> Employee</a>
+		<a href="CreateEmployee2.html" class="w3-bar-item w3-button w3-hover-yellow" onclick="myFunction()"><b>Create</b> Employee</a>
+        <a href="#DeleteEmp" class="w3-bar-item w3-button w3-hover-red" onclick="myFunction()"><b>Delete</b> Employee</a>
+      </div>
+    </div>
+</div>
+
+
+<!-- Add Google Maps
+<div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
+-->
+
+<div class="w3-content" style="max-width:2000px;margin-top:46px;background-color:black" >
+
+
+
+<div class="modal-dialog text-center" style="background-color:black" >
+<div class = "col-sml-8 main-section">
+  <div class="modal-content" style="background-color:#c9c7c3">
+
+
+
+           <i class="w3-xxxlarge"><i class="material-icons w3-xxxlarge">refresh</i>
+           <i class="w3-xxxlarge"><i class="material-icons w3-xxxlarge">person</i>
+           <i class="w3-xxxlarge"><i class="material-icons w3-xxxlarge">refresh</i>
+    <form class="col-12" >
+      <div class="form-group">
+        <input type="text" class="form-control" id = "FirstName" placeholder="FirstName">
+      </div>
+      <div class="form-group">
+          <input type="text" class="form-control" id = "LastName" placeholder="FirstName">
+      </div>
+
+      <div class="form-group">
+            <input type="password" class="form-control" id = "password" placeholder="Enter your new password">
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" id = "Email" placeholder="Enter your email">
+      </div>
+
+      <div class="form-group">
+          <input type="text" class="form-control" id = "Phone" placeholder="Enter your phone number">
+      </div>
+
+      <button type="button"class="btn btn-secondary" id = "SignUp">Update Information</button>
+      <br>
+      <br>
+    </form>
+
+
+  </div><!---end of Modal content-->
+  <br>
+  <p style="color:white"id="message"></p>
+</div>
+</div>
+
+
+</div>
+</div>
+<!--
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+  <i class="fa fa-facebook-official w3-hover-opacity"></i>
+  <i class="fa fa-instagram w3-hover-opacity"></i>
+  <i class="fa fa-snapchat w3-hover-opacity"></i>
+  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+  <i class="fa fa-twitter w3-hover-opacity"></i>
+  <i class="fa fa-linkedin w3-hover-opacity"></i>
+  <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+
+
+</script>
+
+<script src = "updateEmployee.js"> </script>
+<script src="SeperateUsers.js"></script>
+<script src="logout.js"></script>
+
+
+</body>
+</html>
