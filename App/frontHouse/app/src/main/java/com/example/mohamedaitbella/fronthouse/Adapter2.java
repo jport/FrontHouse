@@ -176,7 +176,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
                     if(!hasFocus){
                         if(!validate(am.getText().toString())) {
                             am.setText(am_shifts[getAdapterPosition()]);
-                            am.setError("Incorrect format: (00:00-12:00)\nPlease try again");
+                            am.setError("Incorrect format: (00:00-11:59)\nPlease try again");
                         }
                         else {
                             am_shifts[getAdapterPosition()] = am.getText().toString();
@@ -303,7 +303,7 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
         for(int i=0; i<days.length; i++){
             String hardcoded = "1900-01-01T";
             String counter = Integer.toString(i);
-            if(am_shifts[i]== null && pm_shifts[i] == null ){
+            if(am_shifts[i]== null && pm_shifts[i] == null || am_shifts[i].equals("") && pm_shifts[i].equals("") ){
                 continue;
             }
             sb.append("{");
@@ -312,27 +312,27 @@ public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
             sb.append(",");
             sb.append("\"StartTime\":");
             sb.append("\""+hardcoded);
-            if(am_shifts[i].equals("")){
+            // '!= null' statements added as clean up, not thoroughly checked
+            if(am_shifts[i] != null && am_shifts[i].equals("")){
                 sb.append(pm_shifts[i].substring(0,5));
-            }else{
+            }else if(am_shifts[i]!= null){
                 sb.append(am_shifts[i].substring(0,5));
             }
             sb.append(":00\"");
             sb.append(",");
             sb.append("\"EndTime\":");
             sb.append("\""+hardcoded);
-            if(pm_shifts[i].equals("")){
+            if(pm_shifts[i]!= null && pm_shifts[i].equals("")){
                 sb.append(am_shifts[i].substring(6));
-            }else{
+            }else if(pm_shifts[i] != null){
                 sb.append(pm_shifts[i].substring(6));
             }
             sb.append(":00\"");
             sb.append("}");
-            if(i<days.length-1) {
-                sb.append(",");
-            }
-        }
+            sb.append(",");
 
+        }
+        sb.deleteCharAt(sb.length()-1);
         sb.append("]}");
 
         load = sb.toString();

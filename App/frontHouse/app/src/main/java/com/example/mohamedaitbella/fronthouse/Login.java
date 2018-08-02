@@ -220,7 +220,7 @@ class Send extends AsyncTask<String, String, Boolean>{
         send.execute(url, payload);
     }
 
-    public static void respond(int ans, int requestID){
+    public static void respond(int ans, String requestID){
 
         Send send = new Send();
         String url = "https://fcm.googleapis.com/fcm/send";
@@ -230,7 +230,8 @@ class Send extends AsyncTask<String, String, Boolean>{
                 "\"notification\":{" +
                     "\"title\": \"REPLY TO SHIFT REQUEST\"," +
                     "\"text\": \"Your request has been "+((ans == 1)?"APPROVED":"DENIED")+".\", " +
-                    "\"click_action\": \"Home\"" +
+                    "\"click_action\": \"Home\", " +
+                    "\"sound\": \"default\"" +
                 "}, "+
                 "\"data\":{" +
                     //"action :\""+ frag + "\", "+
@@ -255,8 +256,9 @@ class Send extends AsyncTask<String, String, Boolean>{
                 "\"notification\":{" +
                     "\"title\": \"NEW EMPLOYEE REQUEST\"," +
                     "\"text\": \"An employee has requested to DROP a shift.\"," +
-                    "\"click_action\": \""+page+"\"" +
-                    "},"+
+                    "\"click_action\": \""+page+"\", " +
+                    "\"sound\": \"default\"" +
+                "},"+
                 "\"data\":{" +
                     //"action :\""+ frag + "\", "+
                     "\"Employee1\": \""+accepter+"\", " +
@@ -281,8 +283,9 @@ class Send extends AsyncTask<String, String, Boolean>{
                 "\"notification\":{" +
                     "\"title\": \"NEW EMPLOYEE REQUEST\", " +
                     "\"text\": \"An employee has requested to SWAP shifts.\", " +
-                    "\"click_action\": \""+page+"\" " +
-                    "},"+
+                    "\"click_action\": \""+page+"\", " +
+                    "\"sound\": \"default\"" +
+                "},"+
                 "\"data\": {"+
                     //"action :\""+ frag + "\", "+
                     "\"Employee1\": \""+accepter+"\", " +

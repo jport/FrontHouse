@@ -15,23 +15,28 @@ public class Manager extends AppCompatActivity {
 
     TextView name1, name2, shift1, shift2;
     Button accept, deny;
-    int requestID;
+    String requestID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manager);
 
+        for(Object i : getIntent().getExtras().keySet())
+            Log.d("EXTRAS", i.toString() +" -> " +getIntent().getExtras().get(i.toString()).toString());
+
+        Log.d("EXTRAS", getIntent().getStringExtra("RequestID"));
+
         name1 = findViewById(R.id.Name_1);
-        name1.setText(getIntent().getStringExtra("Name1"));
+        name1.setText(getIntent().getStringExtra("Employee1"));
         shift1 = findViewById(R.id.Shift_1);
-        shift1.setText(getIntent().getStringExtra("Shift1"));
+        shift1.setText(getIntent().getStringExtra("Shift"));
 
         name2 = findViewById(R.id.Name_2);
         shift2 = findViewById(R.id.Shift_2);
         if(getIntent().getStringExtra("Name2") != null) {
             Log.d("NAME", "HERE");
-            name2.setText(getIntent().getStringExtra("Name2"));
+            name2.setText(getIntent().getStringExtra("Employee2"));
             shift2.setText(getIntent().getStringExtra("Shift2"));
         }
         else{
@@ -40,7 +45,7 @@ public class Manager extends AppCompatActivity {
             shift2.setVisibility(View.INVISIBLE);
         }
 
-        requestID = getIntent().getIntExtra("RequestID", -1);
+        requestID = getIntent().getStringExtra("RequestID");
         //Log.d("MANAGE", "RequestID: " + getIntent().getIntExtra("RequestID", -1) );
         //Log.d("MANAGE", "RequestID: " + requestID );
 
@@ -58,7 +63,7 @@ public class Manager extends AppCompatActivity {
                 APICall apiCall = new APICall();
                 apiCall.execute(url, payload);
 
-                FirebaseMessaging.getInstance().unsubscribeFromTopic(Integer.toString(requestID) );
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(requestID);
                 Send.respond(1, requestID);
                 leave();
             }
@@ -76,7 +81,7 @@ public class Manager extends AppCompatActivity {
                 APICall apiCall = new APICall();
                 apiCall.execute(url, payload);
 
-                FirebaseMessaging.getInstance().unsubscribeFromTopic(Integer.toString(requestID) );
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(requestID);
                 Send.respond(2, requestID);
                 leave();
             }

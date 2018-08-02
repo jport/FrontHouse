@@ -74,11 +74,11 @@ public class Notification extends FirebaseMessagingService {
                     Log.d("NOTIFY", "HERE" );
                     intent = new Intent(this, Manager.class);
                     intent.putExtra("RequestType", rm.getData().get("RequestType"));
-                    intent.putExtra("Name1", rm.getData().get("Employee1"));
-                    intent.putExtra("Shift1", rm.getData().get("Shift"));
-                    intent.putExtra("RequestID", Integer.parseInt(rm.getData().get("RequestID")));
+                    intent.putExtra("Employee1", rm.getData().get("Employee1"));
+                    intent.putExtra("Shift", rm.getData().get("Shift"));
+                    intent.putExtra("RequestID", rm.getData().get("RequestID") );
                     if(rm.getData().get("Employee2") != null) {
-                        intent.putExtra("Name2", rm.getData().get("Employee2"));
+                        intent.putExtra("Employee2", rm.getData().get("Employee2"));
                         intent.putExtra("Shift2", rm.getData().get("Shift2"));
                     }
                 }
@@ -117,7 +117,7 @@ public class Notification extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.app_icon)
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
