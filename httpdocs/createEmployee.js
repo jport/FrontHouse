@@ -33,7 +33,7 @@ $(document).ready(function() {
                 success: function(newManager) {
                   $('#FirstName').val("");
                   $('#LastName').val("");
-                  $('#userName').val("");
+                  $('#UserName').val("");
                   $('#password').val("");
                   $('#email').val("");
                   $('#phone').val("");
