@@ -8,17 +8,23 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="bootstrap.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!--
-<script src="WeeklyTable.js"></script>
-<script src="getschedule.js"></script>
--->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <style>
 body {font-family: "Lato", sans-serif}
 .mySlides {display: none}
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+    background-color:white;
+    color: black;
+}
 </style>
 <body>
-<title>My availability</title>
+<title>Update info</title>
 
 
 <!-- Navbar -->
@@ -32,23 +38,24 @@ body {font-family: "Lato", sans-serif}
         <a href="MakeSchedule.html" class="w3-bar-item w3-button" id="MakeSchedule">Make Next Week's schedule</a>
       </div>
     </div>
-    <a href="AvailabilityT.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small" Id="Availability">Availability</a>
+    <a href="AvailabilityT.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small"Id="Availability">Availability</a>
+
     <div class="w3-dropdown-hover w3-hide-small">
         <button class="w3-padding-large w3-button" title="More">My Info <i class="fa fa-caret-down"></i></button>
           <div class="w3-dropdown-content w3-bar-block w3-card-4">
             <a href="updateinfo.html" class="w3-bar-item w3-button" id="ViewSchedule">Update Info</a>
         </div>
         </div>
-	<div class="w3-dropdown-hover w3-hide-small">
-    <button class="w3-padding-large w3-button" id="EmployeeBar" title="Actions">Employees<i class="fa fa-caret-down"></i></button>
-    <div class="w3-dropdown-content w3-bar-block w3-card-4">
-      <a href="CreateEmployee2.html" class="w3-bar-item w3-button w3-hover-green"><b>Create</b>Employee</a>
+	<div class="w3-dropdown-hover w3-hide-small" id="Employees">
+      <button class="w3-padding-large w3-button" id="EmployeeBar"title="Actions">Employees<i class="fa fa-caret-down"></i></button>
+      <div class="w3-dropdown-content w3-bar-block w3-card-4">
+        <a href="createEmployee.html" class="w3-bar-item w3-button w3-hover-green"><b>Create </b>Employee</a>
 
 
-    </div>
+      </div>
     </div>
     <div class="w3-dropdown-hover w3-hide-small">
-    <a id="Logout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Logout</a>
+    <a  id="Logout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Logout</a>
     </div>
     <a href="javascript:void(0)" class="w3-padding-large w3-hover-blue w3-hide-small w3-right"><i class="fa fa-search"></i></a>
   </div>
@@ -65,62 +72,65 @@ body {font-family: "Lato", sans-serif}
         <a href="#ViewAllCurEmps" class="w3-bar-item w3-button" onclick="myFunction()">View Current Employees</a>
 		<a href="#Poptest" class="w3-bar-item w3-button" onclick="myFunction()">Add Employee</a>
         <a href="m1test_manager_empSignUpCheck_1.html" class="w3-bar-item w3-button w3-hover-green" onclick="myFunction()"><b>Create</b> Employee</a>
-		<a href="#EditEmp" class="w3-bar-item w3-button w3-hover-yellow" onclick="myFunction()"><b>Edit</b> Employee</a>
+		<a href="CreateEmployee2.html" class="w3-bar-item w3-button w3-hover-yellow" onclick="myFunction()"><b>Create</b> Employee</a>
         <a href="#DeleteEmp" class="w3-bar-item w3-button w3-hover-red" onclick="myFunction()"><b>Delete</b> Employee</a>
       </div>
     </div>
 </div>
 
-<!-- Page content -->
-<div class="w3-content" style="max-width:2000px;margin-top:46px">
-<!--
-  <!-- The Update Section or maybe show sched
-  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
-    <h2 class="w3-wide">FrontHouse</h2>
-    <p class="w3-opacity"><i>Scheduling Made Easy</i></p>
-    <p class="w3-justify"><center>We have revolutionized how scheduling works for those in the service industry</center></p>
-    <div class="w3-row w3-padding-32">
-      <div class="w3-third">
-        <p><em>Fast</em></p>
-        <img src="fast_img_2.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
-      </div>
-      <div class="w3-third">
-        <p><em>Easy</em></p>
-        <img src="easy_img_1.png" class="w3-round w3-margin-bottom" alt="Random Name" style="width:60%">
-      </div>
-      <div class="w3-third">
-        <p><em>Scheduling<em></p>
-        <img src="scheduling_img_5.png" class="w3-round" alt="Random Name" style="width:60%">
-      </div>
-    </div>
-  </div>
--->
-<!-- End Page Content -->
-</div>
 
 <!-- Add Google Maps
 <div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
 -->
-<!--Home page weekly table-->
-<div class="w3-content" style="max-width:2000px;margin-top:46px">
-  <table id="AvailabilityTable"class="table table-dark table-hover">
-    <thead>
-      <tr>
-        <td align="center" colspan="3">My availability</td>
-      </tr>
-      <tr>
-        <td id="Day"align="center">Day</td>
-        <td id="Am"align="center">Am</td>
-        <td id="Pm"align="center">Pm</td>
-      </tr>
-    </thead>
-    <tbody>
 
-    </tbody>
-  </table>
+<div class="w3-content" style="max-width:2000px;margin-top:46px;background-color:black" >
 
 
-  </body>
+
+<div class="modal-dialog text-center" style="background-color:black" >
+<div class = "col-sml-8 main-section">
+  <div class="modal-content" style="background-color:#c9c7c3">
+
+
+
+           <i class="w3-xxxlarge"><i class="material-icons w3-xxxlarge">refresh</i>
+           <i class="w3-xxxlarge"><i class="material-icons w3-xxxlarge">person</i>
+           <i class="w3-xxxlarge"><i class="material-icons w3-xxxlarge">refresh</i>
+    <form class="col-12" >
+      <div class="form-group">
+        <input type="text" class="form-control" id = "FirstName" placeholder="FirstName">
+      </div>
+      <div class="form-group">
+          <input type="text" class="form-control" id = "LastName" placeholder="FirstName">
+      </div>
+
+      <div class="form-group">
+            <input type="password" class="form-control" id = "password" placeholder="Enter your new password">
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" id = "Email" placeholder="Enter your email">
+      </div>
+
+      <div class="form-group">
+          <input type="text" class="form-control" id = "Phone" placeholder="Enter your phone number">
+      </div>
+
+      <button type="button"class="btn btn-secondary" id = "SignUp">Update Information</button>
+      <br>
+      <br>
+    </form>
+
+
+  </div><!---end of Modal content-->
+  <br>
+  <p style="color:white"id="message"></p>
+</div>
+</div>
+
+
+</div>
+</div>
 <!--
 
 <!-- Footer -->
@@ -136,10 +146,11 @@ body {font-family: "Lato", sans-serif}
 
 
 </script>
-<script src = "getAvailability.js"> </script>
-<script src= "SeperateUsers.js"></script>
 
+<script src = "updateEmployee.js"> </script>
+<script src="SeperateUsers.js"></script>
 <script src="logout.js"></script>
+
 
 </body>
 </html>

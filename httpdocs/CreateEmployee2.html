@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="bootstrap.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <style>
 body {font-family: "Lato", sans-serif}
@@ -18,8 +19,8 @@ input[type=text] {
     margin: 8px 0;
     box-sizing: border-box;
     border: none;
-    background-color: #3CBC8D;
-    color: white;
+    background-color:white;
+    color: black;
 }
 </style>
 <body>
@@ -38,7 +39,12 @@ input[type=text] {
       </div>
     </div>
     <a href="AvailabilityT.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small"Id="Availability">Availability</a>
-    <a href="MyInfo.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small"id="MyInfo">My info</a>
+    <div class="w3-dropdown-hover w3-hide-small">
+        <button class="w3-padding-large w3-button" title="More">My Info <i class="fa fa-caret-down"></i></button>
+          <div class="w3-dropdown-content w3-bar-block w3-card-4">
+            <a href="updateinfo.html" class="w3-bar-item w3-button" id="ViewSchedule">Update Info</a>
+        </div>
+        </div>
 	<div class="w3-dropdown-hover w3-hide-small" id="Employees">
       <button class="w3-padding-large w3-button" id="EmployeeBar"title="Actions">Employees<i class="fa fa-caret-down"></i></button>
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
@@ -75,16 +81,17 @@ input[type=text] {
 <!-- Add Google Maps
 <div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
 -->
-<br>
-<br>
-<div class="w3-content" style="max-width:2000px;margin-top:46px; " >
+
+<div class="w3-content" style="max-width:2000px;margin-top:46px;background-color:black" >
 
 
 
-<div class="modal-dialog text-center"  >
+<div class="modal-dialog text-center" style="background-color:black" >
 <div class = "col-sml-8 main-section">
-  <div class="modal-content">
+  <div class="modal-content" style="background-color:#c9c7c3">
 
+
+       <i class="w3-xxxlarge"><i class="material-icons w3-xxxlarge">person</i>
     <form class="col-12" >
       <div class="form-group">
         <input type="text" class="form-control" id = "FirstName" placeholder="Enter First name">
@@ -108,7 +115,7 @@ input[type=text] {
           <input type="text" class="form-control" id = "phone" placeholder="Enter employee phone number">
       </div>
       <div class="form-group">
-          <button type="button" class"btn btn-secondary" id = "SignUp">Add employee</button>
+          <button type="button" class="btn btn-secondary"  id = "SignUp">Add employee</button>
       </div>
 
       <br>
@@ -117,9 +124,11 @@ input[type=text] {
 
   </div><!---end of Modal content-->
   <br>
-  <p id="message"></p>
+  <p style="color:white"id="message"></p>
 </div>
 </div>
+
+
 </div>
 </div>
 <!--
