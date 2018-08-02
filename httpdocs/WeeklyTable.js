@@ -16,50 +16,37 @@ var startOfWeek = new Date(today.setDate(today.getDate()-today.getDay()));
 
 
 function ThisWeek(a){
-  var salt = new Date();
-  var ThisDay = salt.getDay();
-  var ThisDate = salt.getDate();
-  var real=0;
-  var space=0;
-  if(ThisDay>=a){
-    space=ThisDay-a;
-    real=ThisDate-space;
-    if (real<=31) {
-      real=real;
-      else if (real>31) {
-        real=real-31
+  var salt = new Date(startOfWeek);
+  salt.setDate(salt.getDate()+a);
+	  /*var salt = new Date();
+	  var ThisDay = salt.getDay();
+	  var ThisDate = salt.getDate();
+	  var real=0;
+	  var space=0;
 
-      }
-    }
-  }
-  else if (ThisDay<a) {
-    space=a-ThisDay;
-    real=ThisDate+space;
-    if (real<=31) {
-      real=real;
-      else if (real>31) {
-        real=real-31
-
-      }
-    }
-  }
-
-  return real;
-  }
-
+	if(ThisDay>=a){
+		space=ThisDay-a;
+		real=ThisDate-space;
+	  }
+	  if (ThisDay<a) {
+		space=a-ThisDay;
+		real=ThisDate+space;
+	  }
+	  return real;*/
+  return salt.getDate();
 }
 
 function createRow(name, id, table){
 	var row = table.insertRow(table.rows.length);
 	row.id = name+id;
-
+	
 	var curCell = row.insertCell(0);
 	curItem = document.createElement('text');
 	curItem.innerHTML = name;
 	curCell.appendChild(curItem);
-
-	for(i = 1; i <= 7; i++){
-		curCell = row.insertCell(i);
+	
+	for(j = 1; j <= 7; j++){
+		curCell = row.insertCell(j);
 		curItem = document.createElement('text');
 		curItem.innerHTML = "--";
 		curCell.appendChild(curItem)
@@ -69,7 +56,6 @@ function createRow(name, id, table){
 
 $(document).ready(function(){
 	startOfWeek.setHours(0,0,0,0);
-  alert("hello");
 	//alert("Start: " + startOfWeek);
     //Table Table
 	var date = new Date();
@@ -85,7 +71,9 @@ $(document).ready(function(){
 
 
 	function ThisWeek(a){
-	  var salt = new Date();
+	  var salt = new Date(startOfWeek);
+	  salt.setDate(salt.getDate()+a);
+	  /*var salt = new Date();
 	  var ThisDay = salt.getDay();
 	  var ThisDate = salt.getDate();
 	  var real=0;
@@ -99,7 +87,8 @@ $(document).ready(function(){
 		space=a-ThisDay;
 		real=ThisDate+space;
 	  }
-	  return real;
+	  return real;*/
+	  return salt.getDate();
 	}
 
 	var jsonPayLoad = {
@@ -116,6 +105,7 @@ $(document).ready(function(){
 
 		success:function(data) {
 			//alert(data.error)
+			//alert(data.schedules.length)
 			var table = document.getElementById("OurTable");
 
 			for(i = 0; i < data.schedules.length; i++ ) {
@@ -126,7 +116,7 @@ $(document).ready(function(){
 					createRow(cur.EmpFirstName + cur.EmpLastName,  cur.EmployeeID, table);
 					row = $('#' + cur.EmpFirstName + cur.EmpLastName + cur.EmployeeID);
 				}
-
+				
 				//alert(cur.EmpFirstName + cur.EmpLastName + cur.EmployeeID + " " + row.length)
 				curDate = new Date(cur.StartOfShift);
 				curDate.setHours(0, 0, 0, 0);
