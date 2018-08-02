@@ -31,12 +31,12 @@ $(document).ready(function() {
                 url: 'http://knightfinder.com/WEBAPI/CreateEmployee.aspx',
                 data: payLoadString,
                 success: function(newManager) {
-                  $('#FirstName').val()="";
-                  $('#LastName').val()="";
-                  $('#userName').val()="";
-                  $('#password').val()="";
-                  $('#email').val()="";
-                  $('#phone').val()="";
+                  $('#FirstName').val("");
+                  $('#LastName').val("");
+                  $('#userName').val("");
+                  $('#password').val("");
+                  $('#email').val("");
+                  $('#phone').val("");
                   onclick();
 
                     //location.href = "createEmployee.html"
