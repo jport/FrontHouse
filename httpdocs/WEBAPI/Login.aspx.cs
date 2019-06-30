@@ -53,7 +53,7 @@ public partial class WISAAPI_Login : System.Web.UI.Page
 			command.Parameters.Add("@userName", SqlDbType.NVarChar);
 			command.Parameters.Add("@Password", SqlDbType.NVarChar);
 			command.Parameters["@userName"].Value = req.login;
-			command.Parameters["@password"].Value = req.password;
+			command.Parameters["@Password"].Value = req.password;
 			
 			SqlDataReader reader = command.ExecuteReader();
 			if(reader.HasRows)
